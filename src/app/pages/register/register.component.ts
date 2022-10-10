@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IUser } from 'src/app/model/user/usuario.interface';
 import { UserService } from 'src/app/services/user/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -8,7 +10,7 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  user: IUser  = {
+  user: IUser = {
     id: undefined,
     name: '',
     userName: '',
@@ -20,23 +22,40 @@ export class RegisterComponent implements OnInit {
     phone: '',
   };
 
-  constructor(private userService: UserService) {
-  }
+  constructor(private userService: UserService, private snack: MatSnackBar) {}
 
   ngOnInit(): void {}
 
   formSubmit() {
-    debugger
+    debugger;
+    if (this.user.userName == '' || this.user.userName == null) {
+      this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+      });
+      return;
+    }
+
     this.userService.createUser(this.user).subscribe(
       (data) => {
-        debugger
         console.log(data);
-        alert('Usuario creado con exito!!');
+        Swal.fire(
+          'Usuario guardado',
+          'Usuario registrado con exito!!',
+          'success'
+        );
+        // alert('Usuario creado con exito!!');
       },
       (error) => {
-        debugger
-        console.error(error);
-        alert('Ha ocurrido un error en el sistema!!');
+        debugger;
+        // console.error(error);
+        // this.snack.open('Ha ocurrido un error en el sistema!!', 'Aceptar', {
+        //   duration: 3000,
+        //   verticalPosition: 'top',
+        //   horizontalPosition: 'right',
+        // });
+        Swal.fire('Error:', 'Ha ocurrido un error en el sistema!!', 'error');
       }
     );
   }
