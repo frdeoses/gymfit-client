@@ -13,7 +13,7 @@ export interface IUser {
     birthDate: Date;
     registrationDate?: Date;
     height?: number;
-    weight?: IWeight [];
-    fatPercentage?: IFatPercentage [];
+    listUserWeight?: IWeight [];
+    listFatPercentage?: IFatPercentage [];
 
 }
