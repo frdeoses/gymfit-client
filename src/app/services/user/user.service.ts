@@ -4,21 +4,13 @@ import { IUser } from 'src/app/model/user/usuario.interface';
 import baseUrlUser from '../helper';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class UserService  {
+export class UserService {
+  constructor(private httpClient: HttpClient) {}
 
-
-  constructor(
-    private httpClient: HttpClient
-  ) { }
-
-  public createUser(user: IUser){
-
-    debugger
-    return this.httpClient.post(`${baseUrlUser}/user`,user)
-
+  public createUser(user: IUser) {
+    debugger;
+    return this.httpClient.post(`${baseUrlUser}/api/gymfit/user`, user);
   }
-
-  
 }
