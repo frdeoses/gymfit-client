@@ -27,7 +27,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   formSubmit() {
-    debugger;
     if (this.user.userName == '' || this.user.userName == null) {
       this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
         duration: 3000,
@@ -48,7 +47,6 @@ export class RegisterComponent implements OnInit {
         // alert('Usuario creado con exito!!');
       },
       (error) => {
-        debugger;
         // console.error(error);
         // this.snack.open('Ha ocurrido un error en el sistema!!', 'Aceptar', {
         //   duration: 3000,

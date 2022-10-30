@@ -10,7 +10,6 @@ export class UserService {
   constructor(private httpClient: HttpClient) {}
 
   public createUser(user: IUser) {
-    debugger;
     return this.httpClient.post(`${baseUrlUser}/api/gymfit/user`, user);
   }
 }
