@@ -1,6 +1,7 @@
 import { tokenName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { IUser } from 'src/app/model/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 
@@ -15,14 +16,15 @@ export class LoginComponent implements OnInit {
     password: '',
   };
 
-  constructor(private snack: MatSnackBar, private loginService: LoginService) {}
+  constructor(
+    private snack: MatSnackBar,
+    private loginService: LoginService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
   formSubmit() {
-    debugger;
-    // console.log('Click botton de login');
-
     if (
       this.loginData.username == null ||
       this.loginData.username.trim() == ''
@@ -45,9 +47,34 @@ export class LoginComponent implements OnInit {
     this.loginService.generateToken(this.loginData).subscribe(
       (data: any) => {
         console.log(data);
+
+        this.loginService.loginUser(data.token);
+
+        this.loginService.getCurrentUser().subscribe((user: any) => {
+          this.loginService.setUser(user);
+          console.log(user);
+
+          if (this.loginService.getUserRoles() == 'ADMIN') {
+            // mostrar dashboard admin
+            // window.location.href = '/admin';
+            this.router.navigate(['admin']);
+          } else if (this.loginService.getUserRoles() == 'USER') {
+            // window.location.href = '/user-dashboard';
+            this.router.navigate(['user-dashboard']);
+          } else {
+            this.loginService.logout();
+          }
+        });
       },
       (error) => {
         console.error(error);
+        this.snack.open(
+          'Detalles invalidos, vuelva a intentarlo!!',
+          'Aceptar',
+          {
+            duration: 3000,
+          }
+        );
       }
     );
   }
