@@ -22,7 +22,6 @@ export class UserGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    debugger;
     if (
       this.loginService.isLoggedIn() &&
       this.loginService.getUserRoles() == 'USER'
