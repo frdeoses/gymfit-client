@@ -13,8 +13,9 @@ export class RegisterComponent implements OnInit {
   user: IUser = {
     id: undefined,
     name: '',
-    userName: '',
+    username: '',
     password: '',
+    userRols: [],
     surname: '',
     email: '',
     birthDate: new Date(),
@@ -27,7 +28,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   formSubmit() {
-    if (this.user.userName == '' || this.user.userName == null) {
+    if (this.user.username == '' || this.user.username == null) {
       this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
         duration: 3000,
         verticalPosition: 'top',
