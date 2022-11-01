@@ -1,18 +1,54 @@
 <mat-toolbar color="primary">
+  <a
+    [routerLink]="'/'"
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+  >
+    <mat-icon>sports_gymnastics</mat-icon>
+  </a>
 
-    <a [routerLink]="'/'" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-        <mat-icon>sports_gymnastics</mat-icon>
-    </a>
+  <span>GYMFIT!!</span>
+  <span class="example-spacer"></span>
+  <a
+    *ngIf="!login.isLoggedIn()"
+    [routerLink]="'/login'"
+    mat-icon-button
+    class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon"
+  >
+    Iniciar sesión
+  </a>
 
-    <span>GYMFIT!!</span>
-    <span class="example-spacer"></span>
-    <a [routerLink]="'/login'" mat-icon-button class="example-icon favorite-icon"
-        aria-label="Example icon-button with heart icon">
-        Iniciar sesión
-    </a>
-    <a [routerLink]="'/register'" mat-icon-button class="example-icon favorite-icon mr20 ml70"
-        aria-label="Example icon-button with heart icon">
-        Registrar
-    </a>
+  <a
+    *ngIf="!login.isLoggedIn()"
+    [routerLink]="'/register'"
+    mat-icon-button
+    class="example-icon favorite-icon mr20 ml70"
+    aria-label="Example icon-button with heart icon"
+  >
+    Registrar
+  </a>
 
+  <a
+    *ngIf="login.isLoggedIn()"
+    (click)="logout()"
+    mat-icon-button
+    style="margin-right: 50px"
+    class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon"
+  >
+    Cerrar sesión
+  </a>
+
+  <button
+    *ngIf="login.isLoggedIn()"
+    mat-button
+    mat-icon-button
+    style="margin-right: 10px"
+    class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon"
+  >
+    {{ login.getUser().username }}
+  </button>
 </mat-toolbar>

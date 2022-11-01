@@ -1,3 +1,3 @@
-const baseUrlUser = 'http://localhost:8001/api/gymfit';
+const baseUrlUser = 'http://localhost:8001';
 
 export default baseUrlUser;
