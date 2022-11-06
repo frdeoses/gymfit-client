@@ -17,6 +17,10 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2017",
+    "typeRoots": [
+      "node_modules/@types"
+     ],
+    "types" : ["lodash"],
     "module": "es2020",
     "lib": [
       "es2020",

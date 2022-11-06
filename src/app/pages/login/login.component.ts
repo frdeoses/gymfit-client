@@ -1,9 +1,8 @@
-import { tokenName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { IUser } from 'src/app/model/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-login',
@@ -26,8 +25,8 @@ export class LoginComponent implements OnInit {
 
   formSubmit() {
     if (
-      this.loginData.username == null ||
-      this.loginData.username.trim() == ''
+      _.isNull(this.loginData.username) ||
+      _.isEmpty(this.loginData.username)
     ) {
       this.snack.open('Introduce el usuario !!', 'Aceptar', {
         duration: 3000,
@@ -35,8 +34,8 @@ export class LoginComponent implements OnInit {
       return;
     }
     if (
-      this.loginData.password == null ||
-      this.loginData.password.trim() == ''
+      _.isNull(this.loginData.password) ||
+      _.isEmpty(this.loginData.password)
     ) {
       this.snack.open('Introduce la contraseña !!', 'Aceptar', {
         duration: 3000,
