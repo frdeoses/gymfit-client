@@ -5,16 +5,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard.component';
+import { AdminGuard } from './services/guards/admin/admin.guard';
 import { UserGuard } from './services/guards/user/user.guard';
-
 const routes: Routes = [
   {
     path: '',
-    component: RegisterComponent,
-    pathMatch: 'full',
-  },
-  {
-    path: 'home',
     component: HomeComponent,
     pathMatch: 'full',
   },
@@ -32,12 +27,18 @@ const routes: Routes = [
     path: 'admin',
     component: DashboardComponent,
     pathMatch: 'full',
+    canActivate: [AdminGuard],
   },
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,
     pathMatch: 'full',
     canActivate: [UserGuard],
+  },
+  {
+    path: '**',
+    component: HomeComponent,
+    pathMatch: 'full',
   },
 ];
 
