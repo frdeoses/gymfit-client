@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ILoginData } from 'src/app/model/login.interface';
+import { IUser } from 'src/app/model/user/usuario.interface';
 import baseUrlUser from '../helper';
 
 @Injectable({
@@ -13,13 +15,13 @@ export class LoginService {
 
   // Generar el token
 
-  public generateToken(loginData: any) {
+  public generateToken(loginData: ILoginData) {
     return this.http.post(`${baseUrlUser}/generate-token`, loginData);
   }
 
   // iniciamos sesión y establecemos el token en el localStorage
 
-  public loginUser(token: any) {
+  public loginUser(token: string) {
     localStorage.setItem('token', token);
   }
 
@@ -47,7 +49,7 @@ export class LoginService {
     return localStorage.getItem('token');
   }
 
-  public setUser(user: any) {
+  public setUser(user: IUser) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
