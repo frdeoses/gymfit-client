@@ -32,6 +32,8 @@ import { UserDashboardComponent } from './pages/user/user-dashboard.component';
     HomeComponent,
     DashboardComponent,
     UserDashboardComponent,
+    ProfileComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
