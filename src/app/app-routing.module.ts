@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { ViewTablesComponent } from './pages/admin/view-tables/view-tables.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -37,6 +39,14 @@ const routes: Routes = [
       {
         path: '',
         component: WelcomeComponent,
+      },
+      {
+        path: 'tables',
+        component: ViewTablesComponent,
+      },
+      {
+        path: 'create-table',
+        component: CreateTableComponent,
       },
     ],
   },

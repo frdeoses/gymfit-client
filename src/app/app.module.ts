@@ -26,6 +26,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard.component';
 import { authInterceptorProviders } from './services/auth.interceptor';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
+import { ViewTablesComponent } from './pages/admin/view-tables/view-tables.component';
+import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
     ProfileComponent,
     SidebarComponent,
     WelcomeComponent,
+    ViewTablesComponent,
+    CreateTableComponent,
   ],
   imports: [
     BrowserModule,
