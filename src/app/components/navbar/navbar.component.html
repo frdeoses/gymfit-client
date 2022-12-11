@@ -11,7 +11,7 @@
   <span>GYMFIT!!</span>
   <span class="example-spacer"></span>
   <a
-    *ngIf="!login.isLoggedIn()"
+    *ngIf="!loginService.isLoggedIn()"
     [routerLink]="'/login'"
     mat-icon-button
     class="example-icon favorite-icon"
@@ -21,7 +21,7 @@
   </a>
 
   <a
-    *ngIf="!login.isLoggedIn()"
+    *ngIf="!loginService.isLoggedIn()"
     [routerLink]="'/register'"
     mat-icon-button
     class="example-icon favorite-icon mr20 ml70"
@@ -31,7 +31,7 @@
   </a>
 
   <a
-    *ngIf="login.isLoggedIn()"
+    *ngIf="loginService.isLoggedIn()"
     (click)="logout()"
     mat-icon-button
     style="margin-right: 50px"
@@ -42,13 +42,14 @@
   </a>
 
   <button
-    *ngIf="login.isLoggedIn()"
+    *ngIf="loginService.isLoggedIn()"
     mat-button
     mat-icon-button
     style="margin-right: 10px"
     class="example-icon favorite-icon"
+    routerLink="'/admin/profile'"
     aria-label="Example icon-button with heart icon"
   >
-    {{ login.getUser().username }}
+    {{ user.username }}
   </button>
 </mat-toolbar>
