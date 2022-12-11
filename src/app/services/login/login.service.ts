@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ILoginData } from 'src/app/model/login.interface';
-import { IUser } from 'src/app/model/user/usuario.interface';
+import { ILoginData } from 'src/app/interfaces/login.interface';
+import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import baseUrlUser from '../helper';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class LoginService {
   // Generar el token
 
   public generateToken(loginData: ILoginData) {
-    return this.http.post(`${baseUrlUser}/generate-token`, loginData);
+    return this.http.post(`${baseUrlUser[0]}/generate-token`, loginData);
   }
 
   // iniciamos sesión y establecemos el token en el localStorage
@@ -58,10 +58,27 @@ export class LoginService {
 
     if (userStr != null) {
       return JSON.parse(userStr);
-    } else {
-      this.logout();
-      return null;
     }
+    this.logout();
+
+    let userEmpty = {
+      id: undefined,
+      name: '',
+      username: '',
+      password: '',
+      userRols: [],
+      surname: '',
+      email: '',
+      birthDate: new Date(),
+      height: undefined,
+      phone: '',
+      authorities: [
+        {
+          authority: ' ',
+        },
+      ],
+    };
+    return userEmpty;
   }
 
   public getUserRoles() {
@@ -71,6 +88,6 @@ export class LoginService {
   }
 
   public getCurrentUser() {
-    return this.http.get(`${baseUrlUser}/current-user`);
+    return this.http.get(`${baseUrlUser[0]}/current-user`);
   }
 }

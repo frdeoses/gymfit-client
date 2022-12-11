@@ -3,12 +3,11 @@ import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css'],
 })
-export class NavbarComponent implements OnInit {
-  isLoggedIn: boolean = false;
+export class ProfileComponent implements OnInit {
   user: IUser = {
     id: undefined,
     name: '',
@@ -27,18 +26,9 @@ export class NavbarComponent implements OnInit {
     ],
   };
 
-  constructor(public loginService: LoginService) {}
+  constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
-    this.loginService.loginStatusSubject.subscribe((data) => {
-      this.isLoggedIn = this.loginService.isLoggedIn();
-      this.user = this.loginService.getUser();
-    });
-  }
-
-  public logout() {
-    this.loginService.logout();
-    window.location.reload();
   }
 }

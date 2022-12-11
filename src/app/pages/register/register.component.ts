@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IUser } from 'src/app/model/user/usuario.interface';
+import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
 
@@ -21,6 +21,11 @@ export class RegisterComponent implements OnInit {
     birthDate: new Date(),
     height: undefined,
     phone: '',
+    authorities: [
+      {
+        authority: '',
+      },
+    ],
   };
 
   constructor(private userService: UserService, private snack: MatSnackBar) {}
