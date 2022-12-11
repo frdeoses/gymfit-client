@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-list>
+    <div mat-subheader>Todas las tablas</div>
+
+    <mat-list-item *ngFor="let t of tables">
+      <mat-icon mat-list-icon>description</mat-icon>
+      <div mat-line>{{ t.name }}</div>
+      <div mat-line>{{ t.description }}</div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="container text-center mt20">
+    <button routerLink="/admin/create-table" mat-raised-button color="primary">
+      Crear tabla
+    </button>
+  </div>
+</mat-card>
