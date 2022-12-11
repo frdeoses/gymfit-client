@@ -1,39 +1,39 @@
-<mat-card>
+<mat-card style="margin-left: 50px">
   <h1>Detalles del perfil</h1>
   <mat-card-content>
     <div class="bootstrap-wrapper">
       <div class="container">
         <div class="text-center">
           <img
-            src="https://www.unmc.edu/cihc/_images/faculty/default.jpg"
+            src="../../../assets/image/forma-de-persona-llena-de-usuario.png"
             alt=""
             class="profile-image"
           />
 
-          <h1 class="mt20">Franchesco</h1>
+          <h1 class="mt20">{{ user.name }} {{ user.surname }}</h1>
         </div>
         <div class="row">
           <div class="col-md-10 offset-md-1">
             <table class="table text-center">
               <tr>
                 <td>Nombre de usuario</td>
-                <td>Franchesco</td>
+                <td>{{ user.username }}</td>
               </tr>
               <tr>
                 <td>ID</td>
-                <td>1234</td>
+                <td>{{ user.id }}</td>
               </tr>
               <tr>
                 <td>Teléfono</td>
-                <td>658741258</td>
+                <td>{{ user.phone }}</td>
               </tr>
               <tr>
                 <td>Rol</td>
-                <td>Administrador</td>
+                <td>{{ user.authorities[0].authority }}</td>
               </tr>
               <tr>
                 <td>Estado</td>
-                <td>Activo</td>
+                <td>{{ user.enabled ? "Activo" : "No activo" }}</td>
               </tr>
             </table>
           </div>
