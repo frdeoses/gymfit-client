@@ -28,6 +28,16 @@
               ></textarea>
             </mat-form-field>
 
+            <!-- Combo que trae de BBDD los datos -->
+            <!-- <mat-form-field class="mt20 w100" appearance="fill">
+              <mat-label>Eventos</mat-label>
+              <mat-select name="eventos" [(ngModel)]="eventData.type.name">
+                <mat-option *ngFor="let e of events" [value]="e.title">
+                  {{ e.title }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field> -->
+
             <div class="container text-center mt15">
               <button mat-raised-button color="primary">Guardar</button>
             </div>
