@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CreateEventComponent } from './pages/admin/create-event/create-event.component';
 import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { EditEventComponent } from './pages/admin/edit-event/edit-event.component';
+import { ViewEventsComponent } from './pages/admin/view-events/view-events.component';
 import { ViewTablesComponent } from './pages/admin/view-tables/view-tables.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -47,6 +50,18 @@ const routes: Routes = [
       {
         path: 'create-table',
         component: CreateTableComponent,
+      },
+      {
+        path: 'events',
+        component: ViewEventsComponent,
+      },
+      {
+        path: 'create-event',
+        component: CreateEventComponent,
+      },
+      {
+        path: 'events/:eventId',
+        component: EditEventComponent,
       },
     ],
   },
