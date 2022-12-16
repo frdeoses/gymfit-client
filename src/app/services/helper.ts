@@ -1,3 +1,7 @@
-const baseUrlUser = ['http://localhost:8001', 'http://localhost:8002'];
+const baseUrl = [
+  'http://localhost:8001',
+  'http://localhost:8002',
+  'http://localhost:8003',
+];
 
-export default baseUrlUser;
+export default baseUrl;
