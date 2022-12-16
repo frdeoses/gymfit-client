@@ -28,6 +28,11 @@ import { authInterceptorProviders } from './services/auth.interceptor';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { ViewTablesComponent } from './pages/admin/view-tables/view-tables.component';
 import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
+import { ViewEventsComponent } from './pages/admin/view-events/view-events.component';
+import { CreateEventComponent } from './pages/admin/create-event/create-event.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
+import { EditEventComponent } from './pages/admin/edit-event/edit-event.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +48,9 @@ import { CreateTableComponent } from './pages/admin/create-table/create-table.co
     WelcomeComponent,
     ViewTablesComponent,
     CreateTableComponent,
+    ViewEventsComponent,
+    CreateEventComponent,
+    EditEventComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +69,8 @@ import { CreateTableComponent } from './pages/admin/create-table/create-table.co
     MatToolbarModule,
     MatIconModule,
     MatListModule,
+    MatSlideToggleModule,
+    MatSelectModule,
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
