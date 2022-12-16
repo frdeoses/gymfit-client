@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ILoginData } from 'src/app/interfaces/login.interface';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
-import baseUrlUser from '../helper';
+import baseUrl from '../helper';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class LoginService {
   // Generar el token
 
   public generateToken(loginData: ILoginData) {
-    return this.http.post(`${baseUrlUser[0]}/generate-token`, loginData);
+    return this.http.post(`${baseUrl[0]}/generate-token`, loginData);
   }
 
   // iniciamos sesión y establecemos el token en el localStorage
@@ -88,6 +88,6 @@ export class LoginService {
   }
 
   public getCurrentUser() {
-    return this.http.get(`${baseUrlUser[0]}/current-user`);
+    return this.http.get(`${baseUrl[0]}/current-user`);
   }
 }
