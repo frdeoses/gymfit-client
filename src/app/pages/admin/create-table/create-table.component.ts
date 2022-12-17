@@ -4,6 +4,7 @@ import { TablesService } from 'src/app/services/tables/tables.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 
 @Component({
   selector: 'app-create-table',
@@ -11,17 +12,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-table.component.css'],
 })
 export class CreateTableComponent implements OnInit {
-  table = {
-    idUser: '123',
+  table: ITrainingTable = {
+    id: '',
+    idUser: '',
     name: '',
     description: '',
     creationDate: new Date(),
     typeTraining: 'Pecho',
     initDate: new Date(),
-    endDate: undefined,
+    endDate: new Date(),
     trainingDuration: undefined,
     breakTime: undefined,
     observation: '',
+    listTraining: [],
   };
 
   constructor(
@@ -42,7 +45,7 @@ export class CreateTableComponent implements OnInit {
     }
 
     this.tableService.createTable(this.table).subscribe(
-      (data: any) => {
+      (data: ITrainingTable) => {
         this.table.name = '';
         this.table.description = '';
         Swal.fire(

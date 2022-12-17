@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { TablesService } from 'src/app/services/tables/tables.service';
 import Swal from 'sweetalert2';
 
@@ -47,13 +48,13 @@ export class ViewTablesComponent implements OnInit {
   //   },
   // ];
 
-  tables: any = [];
+  tables: ITrainingTable[] = [];
 
   constructor(private tableService: TablesService) {}
 
   ngOnInit(): void {
-    this.tableService.listTables().subscribe(
-      (data: any) => {
+    this.tableService.listTrainingTable().subscribe(
+      (data: ITrainingTable[]) => {
         this.tables = data;
         console.log(this.tables);
       },

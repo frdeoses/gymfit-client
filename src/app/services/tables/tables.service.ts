@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import baseUrl from '../helper';
 
 @Injectable({
@@ -12,8 +14,10 @@ export class TablesService {
    * Lista las tablas
    * @returns
    */
-  public listTables() {
-    return this.http.get(`${baseUrl[1]}/api/gymfit/training-tables`);
+  public listTrainingTable(): Observable<ITrainingTable[]> {
+    return this.http.get<ITrainingTable[]>(
+      `${baseUrl[1]}/api/gymfit/training-tables`
+    );
   }
 
   /**
@@ -21,7 +25,10 @@ export class TablesService {
    * @param table
    * @returns
    */
-  public createTable(table: any) {
-    return this.http.post(`${baseUrl[1]}/api/gymfit/training-table`, table);
+  public createTable(table: ITrainingTable): Observable<ITrainingTable> {
+    return this.http.post<ITrainingTable>(
+      `${baseUrl[1]}/api/gymfit/training-table`,
+      table
+    );
   }
 }
