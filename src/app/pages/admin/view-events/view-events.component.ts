@@ -7,13 +7,15 @@ import Swal from 'sweetalert2';
   templateUrl: './view-events.component.html',
   styleUrls: ['./view-events.component.css'],
 })
-export class ViewEventsComponent implements OnInit {
-  events: any = [];
-  constructor(private eventService: EventService) {}
+export class ViewEventsComponent implements OnInit, OnDestroy {
+  events: IEvent[] = [];
+  subscription: Subscription = new Subscription();
+
+  constructor(private eventService: EventService, private router: Router) {}
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(
-      (data: any) => {
+      (data: IEvent[]) => {
         this.events = data;
         console.log(data);
       },

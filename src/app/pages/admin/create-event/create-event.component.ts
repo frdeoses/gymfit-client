@@ -4,6 +4,7 @@ import { EventService } from 'src/app/services/event/event.service';
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
+import { IEvent } from 'src/app/interfaces/calendars/event.interface';
 
 @Component({
   selector: 'app-create-event',
@@ -11,15 +12,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-event.component.css'],
 })
 export class CreateEventComponent implements OnInit {
-  events: any = [];
+  events: IEvent[] = [];
 
-  eventData = {
+  eventData: IEvent = {
     title: '',
     description: '',
-    activo: true,
-    // type: {
-    //   name: '',
-    // },
+    published: true,
+    comments: undefined,
+    id: '',
   };
 
   constructor(
@@ -30,7 +30,7 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(
-      (data: any) => {
+      (data: IEvent[]) => {
         this.events = data;
         console.log(data);
       },
@@ -53,7 +53,7 @@ export class CreateEventComponent implements OnInit {
     }
 
     this.eventService.createEvent(this.eventData).subscribe(
-      (data: any) => {
+      (data: IEvent) => {
         console.log(data);
         Swal.fire(
           'Evento creado',
@@ -61,12 +61,11 @@ export class CreateEventComponent implements OnInit {
           'success'
         );
         this.eventData = {
-          activo: true,
+          id: '',
+          published: true,
           description: '',
           title: '',
-          // type: {
-          //   name: '',
-          // },
+          comments: undefined,
         };
 
         this.router.navigate(['/admin/events']);
