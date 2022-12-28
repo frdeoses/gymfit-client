@@ -1,0 +1,54 @@
+<mat-card class="mt10" *ngFor="let g of gymMachines">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title> {{ g.name }} </mat-card-title>
+    <mat-card-subtitle>
+      {{ g.description }}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-card-actions>
+      <button
+        [routerLink]="'/admin/gym-machines/' + g.id"
+        mat-flat-button
+        color="primary"
+        (click)="modeConsult()"
+      >
+        Consultar
+      </button>
+      <!-- <button mat-stroked-button color="primary" class="ml20">Eventos</button> -->
+      <button mat-icon-button color="warn" class="ml20">
+        <mat-icon matBadge="{{ g.like }}" matBadgeColor="primary"
+          >favorite</mat-icon
+        >
+      </button>
+      <button
+        [routerLink]="'/admin/gym-machines/' + g.id"
+        mat-flat-button
+        color="primary"
+        (click)="modeEdit()"
+        class="ml20"
+      >
+        Editar
+      </button>
+      <button
+        mat-flat-button
+        color="warn"
+        class="ml10"
+        (click)="deleteGymMachine(g.id)"
+      >
+        Eliminar
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>
+
+<div class="container text-center mt20">
+  <button
+    routerLink="/admin/create-gym-machines"
+    mat-raised-button
+    color="primary"
+  >
+    Crear maquina
+  </button>
+</div>
