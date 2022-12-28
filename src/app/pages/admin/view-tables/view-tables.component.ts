@@ -60,7 +60,7 @@ export class ViewTablesComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error!!', 'Error al cargar las tablas');
+        Swal.fire('Error!!', 'Error al cargar las tablas', 'error');
       }
     );
   }
