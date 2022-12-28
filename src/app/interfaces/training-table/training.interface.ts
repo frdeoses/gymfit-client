@@ -2,13 +2,16 @@ import { IGymMachine } from './gymMachine.interface';
 import { IWorkedWeights } from './workedWeights.interface';
 
 export interface ITraining {
-  id?: string;
+  id: string;
+  name: string;
   typeTraining?: string;
   numRepetitions?: number;
   numSeries?: number;
   exercisedArea?: string;
-  explication?: string;
+  description?: string;
   like?: number;
   listWorkedWeights?: IWorkedWeights[];
   gymMachine?: IGymMachine;
+  creationDate: Date;
+  lastUpdateDate: Date;
 }
