@@ -1,0 +1,21 @@
+.container{
+    display: flex;
+    width: 100%;
+}
+
+.headCol{
+    width: 50%;
+    margin: 1px;
+}
+
+
+.contenCol{
+    width: 50%;
+    margin: 1px;
+}
+
+.actionCol{
+    margin-left: 20px;
+    margin-top: 20px;
+
+}
