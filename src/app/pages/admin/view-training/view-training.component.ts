@@ -67,7 +67,7 @@ export class ViewTrainingComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error(error);
-            Swal.fire('Error!!', 'Error al eliminar el evento...', 'error');
+            Swal.fire('Error:', 'Error al eliminar el ejercicio...', 'error');
           }
         );
       }
