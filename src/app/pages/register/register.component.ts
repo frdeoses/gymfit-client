@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
@@ -21,14 +22,13 @@ export class RegisterComponent implements OnInit {
     birthDate: new Date(),
     height: undefined,
     phone: '',
-    authorities: [
-      {
-        authority: '',
-      },
-    ],
   };
 
-  constructor(private userService: UserService, private snack: MatSnackBar) {}
+  constructor(
+    private userService: UserService,
+    private snack: MatSnackBar,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -50,15 +50,10 @@ export class RegisterComponent implements OnInit {
           'Usuario registrado con exito!!',
           'success'
         );
-        // alert('Usuario creado con exito!!');
+        this.router.navigate(['/login']);
       },
       (error) => {
-        // console.error(error);
-        // this.snack.open('Ha ocurrido un error en el sistema!!', 'Aceptar', {
-        //   duration: 3000,
-        //   verticalPosition: 'top',
-        //   horizontalPosition: 'right',
-        // });
+        console.error(error);
         Swal.fire('Error:', 'Ha ocurrido un error en el sistema!!', 'error');
       }
     );
