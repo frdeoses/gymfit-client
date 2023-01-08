@@ -89,8 +89,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatBadgeModule,
     MatChipsModule,
     MatTooltipModule,
+    NgxChartsModule,
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
