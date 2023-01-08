@@ -79,12 +79,10 @@ export class ViewMachinesComponent implements OnInit {
   }
 
   modeEdit() {
-    debugger;
     this.machineService.modeEdit(true);
   }
 
   modeConsult() {
-    debugger;
     this.machineService.modeEdit(false);
   }
 }
