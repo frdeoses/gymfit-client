@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 
 @Component({
   selector: 'app-create-training',
@@ -29,6 +30,7 @@ export class CreateTrainingComponent implements OnInit {
   };
 
   trainingTypes: string[] = [];
+  gymMachines: IGymMachine[] = [];
 
   constructor(
     private trainingService: TrainingService,
@@ -45,7 +47,18 @@ export class CreateTrainingComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error!!', 'Error al cargar los tipos de ejercicios');
+        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
+      }
+    );
+
+    this.machineService.listGymMachines().subscribe(
+      (data: IGymMachine[]) => {
+        this.gymMachines = data;
+        console.log(this.gymMachines);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error:', 'Error al cargar las maquinas de ejercicios');
       }
     );
   }

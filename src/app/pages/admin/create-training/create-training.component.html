@@ -35,15 +35,27 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field
+          *ngIf="gymMachines.length != 0"
+          class="w100"
+          appearance="fill"
+        >
+          <mat-label>Máquinas de entrenamiento</mat-label>
+          <mat-select name="gymMachine" [(ngModel)]="training.gymMachine">
+            <mat-option *ngFor="let g of gymMachines" [value]="g">
+              {{ g.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
         <div class="row">
           <div class="col-md-6">
             <mat-form-field class="w100" appearance="fill">
               <mat-label>Número de repeticiones</mat-label>
               <input
                 [(ngModel)]="training.numRepetitions"
-                type="text"
+                type="number"
                 name="numRepetitions"
-                placeholder="Introduzca el título.."
                 matInput
               />
             </mat-form-field>
@@ -53,9 +65,8 @@
               <mat-label>Numero de series</mat-label>
               <input
                 [(ngModel)]="training.numSeries"
-                type="text"
+                type="number"
                 name="numSeries"
-                placeholder="Introduzca el título.."
                 matInput
               />
             </mat-form-field>
