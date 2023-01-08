@@ -29,7 +29,9 @@
               </tr>
               <tr>
                 <td>Rol</td>
-                <td>{{ user.authorities[0].authority }}</td>
+                <td *ngIf="user.authorities">
+                  {{ user.authorities[0].authority }}
+                </td>
               </tr>
               <tr>
                 <td>Estado</td>
