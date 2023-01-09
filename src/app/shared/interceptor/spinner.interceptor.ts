@@ -15,12 +15,14 @@ export class SpinnerInterceptor implements HttpInterceptor {
   constructor(private spinnerService: SpinnerService) {}
 
   intercept(
-    req: HttpRequest<any>,
+    request: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     this.spinnerService.show();
 
-    return next.handle(req).pipe(finalize(() => this.spinnerService.hide()));
+    return next
+      .handle(request)
+      .pipe(finalize(() => this.spinnerService.hide()));
   }
 }
 

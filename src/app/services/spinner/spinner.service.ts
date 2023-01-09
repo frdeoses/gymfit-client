@@ -5,18 +5,15 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class SpinnerService {
-  isLoading$ = new Subject<boolean>();
-  isLoading: boolean = false;
+  isLoading = new Subject<boolean>();
 
   constructor() {}
 
   show(): void {
-    // this.isLoading = true;
-    this.isLoading$.next(true);
+    this.isLoading.next(true);
   }
 
   hide(): void {
-    // this.isLoading = false;
-    this.isLoading$.next(false);
+    this.isLoading.next(false);
   }
 }
