@@ -62,8 +62,8 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
         this.eventService.deleteEvent(eventId).subscribe(
           (eventIdDeleted: string) => {
             Swal.fire(
-              'Examen eliminado',
-              'El examen ha sido eliminado correctamente...',
+              'Evento eliminado',
+              'El evento ha sido eliminado correctamente...',
               'success'
             );
           },

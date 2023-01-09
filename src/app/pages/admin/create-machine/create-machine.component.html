@@ -1,0 +1,49 @@
+<mat-card>
+  <h1>Crear Maquina</h1>
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <form (ngSubmit)="createMachine()">
+        <mat-form-field class="w100" appearance="fill">
+          <mat-label>Nombre</mat-label>
+          <input
+            [(ngModel)]="machine.name"
+            type="text"
+            name="name"
+            placeholder="Introduzca el título.."
+            required
+            matInput
+          />
+        </mat-form-field>
+        <mat-form-field class="w100" appearance="fill">
+          <mat-label>Descripción</mat-label>
+          <textarea
+            [(ngModel)]="machine.description"
+            type="text"
+            name="descripcion"
+            placeholder="Introduzca la descripción"
+            matInput
+            rows="8"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="mt20 w100" appearance="fill">
+          <mat-label>Zona ejercitada</mat-label>
+          <input
+            [(ngModel)]="machine.exercisedArea"
+            type="text"
+            name="exercisedArea"
+            placeholder="Introduzca la zona ejercitada.."
+            matInput
+          />
+        </mat-form-field>
+
+        <div class="container text-center">
+          <button mat-raised-button color="primary">Crear maquina</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</mat-card>
+
+<!-- Mirar el objeto  -->
+<!-- {{ machine | json }} -->

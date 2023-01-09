@@ -36,7 +36,6 @@ export class CreateTableComponent implements OnInit {
   ngOnInit(): void {}
 
   formSubmit() {
-    debugger;
     if (_.isEmpty(this.table.name) || _.isNull(this.table)) {
       this.snack.open('El titulo es obligatorio introducirlo!!', '', {
         duration: 3000,

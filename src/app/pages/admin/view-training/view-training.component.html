@@ -1,0 +1,64 @@
+<app-spinner></app-spinner>
+
+<mat-card>
+  <mat-list>
+    <div mat-subheader>Todas los ejercicios</div>
+
+    <mat-list-item *ngFor="let t of trainings">
+      <mat-icon mat-list-icon>description</mat-icon>
+      <div mat-line>{{ t.name }}</div>
+      <div mat-line>{{ t.description }}</div>
+
+      <button
+        *ngIf="t.listWorkedWeights && t.listWorkedWeights.length != 0"
+        mat-stroked-button
+        class="ml20"
+        [routerLink]="'/admin/trainings/' + t.id"
+        matTooltip="Ver listado de pesos del usuario"
+        color="warn"
+      >
+        Pesos ejercitados
+      </button>
+      <button
+        *ngIf="t.gymMachine"
+        mat-icon-button
+        matTooltip="Ver máquina"
+        class="ml20"
+        [routerLink]="'/admin/gym-machines/' + t.gymMachine.id"
+        color="black"
+      >
+        <mat-icon mat-list-icon>fitness_center</mat-icon>
+      </button>
+
+      <button
+        [routerLink]="'/admin/trainings/' + t.id"
+        mat-flat-button
+        matTooltip="Editar un entrenamiento"
+        color="primary"
+        class="ml20"
+      >
+        Editar
+      </button>
+      <button
+        mat-flat-button
+        matTooltip="Borrar un entrenamiento"
+        color="warn"
+        class="ml10"
+        (click)="deleteTraining(t.id)"
+      >
+        Eliminar
+      </button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="container text-center mt20">
+    <button
+      routerLink="/admin/create-training"
+      mat-raised-button
+      color="primary"
+    >
+      Crear ejercicio
+    </button>
+  </div>
+</mat-card>
