@@ -1,0 +1,46 @@
+<h1 class="text-center" mat-dialog-title>
+  <!-- Hola <span> {{ comment.userName }}</span> -->
+  Introducir peso trabajado
+</h1>
+<div mat-dialog-content>
+  <p>Introduce con que peso vas a trabajar...</p>
+  <form>
+    <mat-form-field class="w100" appearance="fill">
+      <mat-label>Serie</mat-label>
+      <input
+        required
+        name="serie"
+        type="number"
+        matInput
+        [(ngModel)]="workedWeights.serie"
+      />
+      <!-- <mat-error *ngIf="weightFormControl.hasError('required')">
+        Por favor introduce un peso correcto
+      </mat-error> -->
+    </mat-form-field>
+    <mat-form-field class="w100" appearance="fill">
+      <mat-label>Peso</mat-label>
+      <input
+        required
+        name="weight"
+        type="number"
+        matInput
+        [(ngModel)]="workedWeights.weight"
+      />
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="w100" mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <!-- cdkFocusInitial -->
+  <!-- disabled="validateFields()" -->
+  <button
+    class="ml90"
+    mat-button
+    (click)="validateFields()"
+    [mat-dialog-close]="workedWeights"
+  >
+    Añadir
+  </button>
+</div>
