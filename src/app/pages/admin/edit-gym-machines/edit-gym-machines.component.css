@@ -1,3 +1,16 @@
 .w100{
     width: 100%;
 }
+
+span{
+    color: crimson;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+.profile-image{
+    max-width: 150px;
+    max-height: 150px;
+    border: 2px solid gainsboro;
+    border-radius: 50%;
+}

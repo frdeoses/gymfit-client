@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class EditGymMachinesComponent implements OnInit, OnDestroy {
   gymMachineId: string = '';
-  editMode = true;
+  editMode: boolean | undefined;
   subscription: Subscription = new Subscription();
   gymMachine: IGymMachine = {
     id: '',
@@ -41,11 +41,12 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     );
-    this.editMode = this.machineService.viewEdit;
+    this.editMode = this.machineService.getModeEdit() === 'yes' ? true : false;
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.machineService.removeItem();
   }
 
   public editGymMachine() {

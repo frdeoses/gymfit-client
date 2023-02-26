@@ -2,41 +2,53 @@
 
 <div *ngIf="!editMode" class="bootstrap-wrapper">
   <mat-card>
-    <div class="row">
-      <div class="col-md-12">
-        <u>
-          <mat-card-title class="text-center mt20"> Máquina:</mat-card-title>
-        </u>
-      </div>
-      <br />
-
-      <div class="col-md-12">
-        <mat-card-subtitle class="mt20">Nombre</mat-card-subtitle>
-        <mat-card-content>
-          {{ gymMachine.name }}
-        </mat-card-content>
-      </div>
-      <div class="col-md-12">
-        <mat-card-subtitle class="mt20">Descripción</mat-card-subtitle>
-        <mat-card-content>
-          {{ gymMachine.description }}
-        </mat-card-content>
-      </div>
-      <div class="col-md-12">
-        <mat-card-subtitle class="mt20">Músculos ejercitados</mat-card-subtitle>
-        <mat-card-content>
-          {{ gymMachine.exercisedArea }}
-        </mat-card-content>
-      </div>
-
-      <div class="col-md-11">
-        <mat-card-actions align="end">
-          <button mat-icon-button color="warn">
-            <mat-icon matBadge="{{ gymMachine.like }}" matBadgeColor="primary"
-              >favorite</mat-icon
+    <div class="bootstrap-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mt20 text-center">
+            <img
+              src="../../../../assets/image/bench-press.png"
+              alt=""
+              class="profile-image"
+            />
+          </div>
+          <div class="col-md-12">
+            <mat-card-title class="text-center mt20">
+              <u> Máquina:</u>
+              <span> {{ gymMachine.name }}</span></mat-card-title
             >
-          </button>
-        </mat-card-actions>
+          </div>
+          <br />
+
+          <div class="col-md-12">
+            <mat-card-subtitle class="mt20">Nombre</mat-card-subtitle>
+            <mat-card-content>
+              {{ gymMachine.name }}
+            </mat-card-content>
+          </div>
+          <div class="col-md-12">
+            <mat-card-subtitle class="mt20">Descripción</mat-card-subtitle>
+            <mat-card-content>
+              {{ gymMachine.description }}
+            </mat-card-content>
+          </div>
+          <div class="col-md-12">
+            <mat-card-subtitle class="mt20"
+              >Músculos ejercitados</mat-card-subtitle
+            >
+            <mat-card-content>
+              {{ gymMachine.exercisedArea }}
+            </mat-card-content>
+          </div>
+          <div class="col-md-12">
+            <mat-card-subtitle class="mt20">Me gusta</mat-card-subtitle>
+            <mat-card-content>
+              <span>
+                {{ gymMachine.like }}
+              </span>
+            </mat-card-content>
+          </div>
+        </div>
       </div>
     </div>
   </mat-card>
