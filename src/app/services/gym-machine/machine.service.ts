@@ -102,7 +102,23 @@ export class MachineService {
       );
   }
 
-  modeEdit(modeView: boolean) {
-    this.viewEdit = modeView;
+  /**
+   * Cambiamos el valor de la var de la sesion
+   *  que nos permiten entrar en modo edicion o
+   * en modo consulta
+   * @param value
+   */
+  modeEdit(value: string) {
+    localStorage.setItem('modeView', value);
+  }
+
+  // Obtenemos en que modo estamos
+  public getModeEdit() {
+    return localStorage.getItem('modeView');
+  }
+
+  //  eliminamos el token
+  public removeItem() {
+    localStorage.removeItem('modeView');
   }
 }
