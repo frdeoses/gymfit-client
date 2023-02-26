@@ -5,6 +5,7 @@ import { CreateMachineComponent } from './pages/admin/create-machine/create-mach
 import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
 import { CreateTrainingComponent } from './pages/admin/create-training/create-training.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { EditConsultTableComponent } from './pages/admin/edit-consult-table/edit-consult-table.component';
 import { EditConsultUserComponent } from './pages/admin/edit-consult-user/edit-consult-user.component';
 import { EditEventComponent } from './pages/admin/edit-event/edit-event.component';
 import { EditGymMachinesComponent } from './pages/admin/edit-gym-machines/edit-gym-machines.component';
@@ -54,6 +55,10 @@ const routes: Routes = [
       {
         path: 'tables',
         component: ViewTablesComponent,
+      },
+      {
+        path: 'tables/:tableId',
+        component: EditConsultTableComponent,
       },
       {
         path: 'users',
