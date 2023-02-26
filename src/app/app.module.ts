@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -19,9 +20,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CommentDialogComponent } from './components/dialog/comment/comment-dialog.component';
+import { WeightDialogComponent } from './components/dialog/weight/weight-dialog.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CreateEventComponent } from './pages/admin/create-event/create-event.component';
@@ -29,6 +31,7 @@ import { CreateMachineComponent } from './pages/admin/create-machine/create-mach
 import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
 import { CreateTrainingComponent } from './pages/admin/create-training/create-training.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { EditConsultTableComponent } from './pages/admin/edit-consult-table/edit-consult-table.component';
 import { EditConsultUserComponent } from './pages/admin/edit-consult-user/edit-consult-user.component';
 import { EditEventComponent } from './pages/admin/edit-event/edit-event.component';
 import { EditGymMachinesComponent } from './pages/admin/edit-gym-machines/edit-gym-machines.component';
@@ -74,6 +77,9 @@ import { spinnerInterceptorProviders } from './shared/interceptor/spinner.interc
     ViewUsersComponent,
     EditConsultUserComponent,
     SpinnerComponent,
+    EditConsultTableComponent,
+    CommentDialogComponent,
+    WeightDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,7 +103,7 @@ import { spinnerInterceptorProviders } from './shared/interceptor/spinner.interc
     MatBadgeModule,
     MatChipsModule,
     MatTooltipModule,
-    NgxChartsModule,
+    MatDialogModule,
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],
