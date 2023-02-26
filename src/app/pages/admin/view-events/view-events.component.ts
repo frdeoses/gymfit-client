@@ -75,4 +75,18 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  /**
+   * Entrar en modo edicion
+   */
+  modeEdit() {
+    this.eventService.modeEdit('yes');
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.eventService.modeEdit('no');
+  }
 }
