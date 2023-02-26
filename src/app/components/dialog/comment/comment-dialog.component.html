@@ -1,0 +1,18 @@
+<h1 class="text-center" mat-dialog-title>
+  Hola <span> {{ comment.userName }}</span>
+</h1>
+<div mat-dialog-content>
+  <p>Escribe que es lo que opinas sobre el evento...</p>
+  <mat-form-field class="w100" appearance="fill">
+    <mat-label>Comment</mat-label>
+    <input required matInput [(ngModel)]="comment.text" />
+  </mat-form-field>
+</div>
+<div class="w100" mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button class="ml90" mat-button [mat-dialog-close]="comment" cdkFocusInitial>
+    Comment
+  </button>
+</div>
+
+<!-- {{ comment | json }} -->
