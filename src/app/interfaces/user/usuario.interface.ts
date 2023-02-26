@@ -17,7 +17,7 @@ export interface IUser {
   height?: number;
   weight?: number;
   enabled?: boolean;
-  authorities?: IAuthority[];
+  authorities: IAuthority[];
   userRols?: IRol[];
   listUserWeight?: IWeight[];
   listFatPercentage?: IFatPercentage[];
