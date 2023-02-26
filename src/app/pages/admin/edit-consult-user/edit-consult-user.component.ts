@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { IWeight } from 'src/app/interfaces/user/weight.interface';
 import { UserService } from 'src/app/services/user/user.service';
@@ -12,12 +11,12 @@ import Swal from 'sweetalert2';
   templateUrl: './edit-consult-user.component.html',
   styleUrls: ['./edit-consult-user.component.css'],
 })
-export class EditConsultUserComponent implements OnInit {
+export class EditConsultUserComponent implements OnInit, OnDestroy {
   userId: string = '';
 
   listUserWeight: IWeight[] | undefined;
+  editMode: boolean | undefined;
 
-  editMode: boolean = false;
   user: IUser = {
     id: '',
     authorities: [],
@@ -51,7 +50,12 @@ export class EditConsultUserComponent implements OnInit {
         console.error(error);
       }
     );
-    this.editMode = this.userService.viewEdit;
+
+    this.editMode = this.userService.getModeEdit() === 'yes' ? true : false;
+  }
+
+  ngOnDestroy(): void {
+    this.userService.removeItem();
   }
 
   formSubmit() {
@@ -66,7 +70,6 @@ export class EditConsultUserComponent implements OnInit {
 
     this.userService.editUser(this.user).subscribe(
       (data) => {
-        debugger;
         console.log(data);
         Swal.fire(
           'Usuario guardado:',

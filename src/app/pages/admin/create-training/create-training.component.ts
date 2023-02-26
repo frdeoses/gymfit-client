@@ -64,7 +64,6 @@ export class CreateTrainingComponent implements OnInit {
   }
 
   createTraining() {
-    debugger;
     if (_.isNull(this.training) || _.isEmpty(this.training.name)) {
       this.snack.open('El nombre es obligatorio introducirlo!!', '', {
         duration: 3000,
@@ -74,7 +73,6 @@ export class CreateTrainingComponent implements OnInit {
 
     this.trainingService.createTraining(this.training).subscribe(
       (data: ITraining) => {
-        debugger;
         this.training.name = '';
         this.training.description = '';
         this.training.typeTraining = '';
