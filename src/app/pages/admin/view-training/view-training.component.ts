@@ -73,4 +73,18 @@ export class ViewTrainingComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  /**
+   * Entrar en modo edicion
+   */
+  modeEdit() {
+    this.trainingService.modeEdit('yes');
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.trainingService.modeEdit('no');
+  }
 }
