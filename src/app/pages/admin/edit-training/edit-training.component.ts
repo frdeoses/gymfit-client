@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
+import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-dialog.component';
+import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { ITraining } from 'src/app/interfaces/training-table/training.interface';
+import { IWorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
+import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import { TrainingService } from 'src/app/services/training/training.service';
 import Swal from 'sweetalert2';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-edit-training',
@@ -11,6 +18,7 @@ import Swal from 'sweetalert2';
 })
 export class EditTrainingComponent implements OnInit {
   trainingId: string = '';
+  editMode: boolean | undefined;
   training: ITraining = {
     id: '',
     name: '',
@@ -26,8 +34,13 @@ export class EditTrainingComponent implements OnInit {
     lastUpdateDate: new Date(),
   };
 
+  trainingTypes: string[] = [];
+  gymMachines: IGymMachine[] = [];
+
   constructor(
     private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private machineService: MachineService,
     private trainingService: TrainingService,
     private router: Router
   ) {}
@@ -44,6 +57,30 @@ export class EditTrainingComponent implements OnInit {
         console.error(error);
       }
     );
+
+    this.machineService.allTrainingType().subscribe(
+      (data: string[]) => {
+        this.trainingTypes = data;
+        console.log(this.trainingTypes);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
+      }
+    );
+
+    this.machineService.listGymMachines().subscribe(
+      (data: IGymMachine[]) => {
+        this.gymMachines = data;
+        console.log(this.gymMachines);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error:', 'Error al cargar las maquinas de ejercicios');
+      }
+    );
+
+    this.editMode = this.trainingService.getModeEdit() === 'yes' ? true : false;
   }
 
   public editTraining() {
@@ -65,5 +102,55 @@ export class EditTrainingComponent implements OnInit {
         console.error(error);
       }
     );
+  }
+
+  createWorkedWeight() {
+    debugger;
+    let listWorkedWeights: IWorkedWeights[] | undefined = [];
+
+    if (!_.isUndefined(this.training.listWorkedWeights)) {
+      listWorkedWeights = this.training.listWorkedWeights;
+    }
+
+    const dialogRef = this.dialog.open(WeightDialogComponent, {
+      data: {
+        id: uuid.v4(),
+        date: new Date(),
+        serie: 0,
+        weight: 0,
+      } as IWorkedWeights,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      debugger;
+      console.log('The dialog was closed');
+      if (
+        !_.isUndefined(listWorkedWeights) &&
+        !_.isUndefined(result) &&
+        result.serie > 0 &&
+        result.weight > 0
+      )
+        listWorkedWeights.push(result);
+
+      debugger;
+      this.addWorkedWeight(listWorkedWeights);
+    });
+  }
+
+  addWorkedWeight(listWorkedWeight: IWorkedWeights[] | undefined) {
+    debugger;
+    // this.training.listWorkedWeights = [];
+
+    if (!_.isEqual(this.training, listWorkedWeight)) {
+      this.training.listWorkedWeights = listWorkedWeight;
+      this.trainingService.editTraining(this.training).subscribe(
+        (data: ITraining) => {
+          console.log(data);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    }
   }
 }
