@@ -74,11 +74,17 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Entrar en modo edicion
+   */
   modeEdit() {
-    this.userService.modeEdit(true);
+    this.userService.modeEdit('yes');
   }
 
+  /**
+   * Entrar en modo consulta
+   */
   modeConsult() {
-    this.userService.modeEdit(false);
+    this.userService.modeEdit('no');
   }
 }
