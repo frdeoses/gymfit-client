@@ -7,7 +7,6 @@ export interface IUser {
   id?: string;
   username: string;
   password: string;
-  // userRols: String[];
   name: string;
   surname: string;
   email: string;

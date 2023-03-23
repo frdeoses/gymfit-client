@@ -1,8 +1,8 @@
-import { IWorkedWeights } from './workedWeights.interface';
-
 export interface IGymMachine {
   id: string;
-  name?: string;
+  name: string;
+  model: string;
+  numMachine: number;
   exercisedArea?: string;
   description?: string;
   like: number;
