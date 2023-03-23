@@ -1,0 +1,44 @@
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    <!-- <h1>Ejercicios</h1> -->
+    <div class="row mt20">
+      <div class="col-md-6" *ngFor="let t of trainings">
+        <mat-card
+          [routerLink]="
+            '/user-dashboard/trainings/' + typeTraining + '/' + t.id
+          "
+          class="mb20 cursorHand"
+        >
+          <mat-list>
+            <div mat-subheader>Ejercicio</div>
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>description</mat-icon>
+              <div mat-line>{{ t.name }}</div>
+              <div mat-line>{{ t.description }}</div>
+
+              <button
+                *ngIf="t.gymMachine"
+                mat-icon-button
+                matTooltip="Consultar máquina"
+                class="ml20"
+                [routerLink]="'/user-dashboard/gym-machines/' + t.gymMachine.id"
+                color="black"
+              >
+                <mat-icon mat-list-icon>fitness_center</mat-icon>
+              </button>
+
+              <button
+                routerLink="/user-dashboard/instructions"
+                mat-button
+                color="accent"
+              >
+                Instrucciones
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

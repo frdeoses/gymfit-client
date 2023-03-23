@@ -1,0 +1,40 @@
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    <div class="row mt20">
+      <div class="col-md-6" *ngFor="let g of gymMachines">
+        <mat-card
+          [routerLink]="'/user-dashboard/gym-machines/' + g.id"
+          class="mb20 cursorHand"
+        >
+          <mat-card-header>
+            <div mat-card-avatar class="ml20 example-header-image"></div>
+            <mat-card-title> {{ g.name }} </mat-card-title>
+            <mat-card-subtitle>
+              {{ g.description }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-card-actions>
+              <!-- TODO: Realizar esto en el componente interno de consulta aqui es
+              una locura o no me sale -->
+              <!-- [disabled]="like != g.like" -->
+              <!-- (click)="likeMachine(g.id)" -->
+              <button mat-icon-button color="warn" class="ml20">
+                <mat-icon matBadge="{{ g.like }}" matBadgeColor="primary"
+                  >favorite</mat-icon
+                >
+              </button>
+              <button
+                routerLink="/user-dashboard/instructions"
+                mat-button
+                color="accent"
+              >
+                Instrucciones
+              </button>
+            </mat-card-actions>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    <h1>Tablas de entrenamiento</h1>
+    <div class="row mt20" *ngIf="tables">
+      <div class="col-md-6" *ngFor="let t of tables">
+        <mat-card class="mb20">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>
+              {{ t.name }}
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{ t.typeTraining }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ t.description }}</p>
+          </mat-card-content>
+          <mat-card-actions class="flex">
+            <button
+              [routerLink]="
+                '/user-dashboard/tables/' + typeTrainingTable + '/' + t.id
+              "
+              mat-button
+              color="primary"
+            >
+              Consultar
+            </button>
+            <button
+              routerLink="/user-dashboard/instructions"
+              mat-button
+              color="accent"
+            >
+              Instrucciones
+            </button>
+            <button *ngIf="t.listTraining" mat-button color="accent">
+              Nº de ejercicios: {{ t.listTraining.length }}
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div *ngIf="tables.length === 0" class="col-md-12">
+        <mat-card>
+          <mat-card-content>
+            <h1>No hay tablas de entrenamiento !!</h1>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
