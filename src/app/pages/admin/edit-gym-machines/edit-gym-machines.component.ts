@@ -17,11 +17,15 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
   gymMachine: IGymMachine = {
     id: '',
     name: '',
+    model: '',
+    numMachine: 0,
     like: 0,
     // listWorkedWeights: [],
     description: '',
     exercisedArea: '',
   };
+
+  panelOpenState: boolean = false;
 
   constructor(
     private route: ActivatedRoute,

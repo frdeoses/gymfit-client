@@ -113,8 +113,16 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   }
 
   formSubmit() {
+    debugger;
     // Para evitar problemas al guardar en el back
     this.trainingTable.user.authorities = [];
+
+    // Para evitar problemas al guardar en el back
+    if (
+      !_.isUndefined(this.trainingTable.listTraining) &&
+      this.trainingTable.listTraining.length > 0
+    )
+      this.checkUserListTrainings(this.trainingTable.listTraining);
 
     // TODO: Resivar ya que cuando falla al tener formateados los valores me suma dias sin sumar
     if (_.isFunction(this.trainingTable.initDate.getDate) && !this.initADD) {
@@ -182,7 +190,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
 
     if (_.isNull(this.trainingTable) || _.isNull(this.trainingTable.endDate)) {
       this.snack.open(
-        'La fecha de finalizacion de entrenamiento de la tabla de entrenamiento es obligatorio',
+        'La fecha de finalización de entrenamiento de la tabla de entrenamiento es obligatorio',
         'Aceptar',
         {
           duration: 3000,
@@ -228,7 +236,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
       this.initADD = true;
 
       this.snack.open(
-        'Las fechas introducidas no son correctas, por favor introducelas de nuevo.....',
+        'Las fechas introducidas no son correctas, por favor vuelve a introducirla de nuevo.....',
         'Aceptar',
         {
           duration: 3000,
@@ -255,7 +263,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
         console.log(data);
         Swal.fire(
           'Tabla de entrenamiento guardado:',
-          'La tabla de entrenamiento se ha actualizado con exito!!',
+          'La tabla de entrenamiento se ha actualizado con éxito!!',
           'success'
         );
         this.router.navigate(['/admin/tables']);
@@ -270,5 +278,16 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
         );
       }
     );
+  }
+
+  /**
+   * Borra los roles para evitar errores en el server
+   * @param listTraining
+   */
+  checkUserListTrainings(listTraining: ITraining[]) {
+    listTraining.forEach((training) => {
+      let user = this.trainingTable.user;
+      training.user = user;
+    });
   }
 }

@@ -29,6 +29,7 @@
         <mat-form-field class="w100" appearance="fill">
           <mat-label>Tipo de entrenamiento</mat-label>
           <mat-select name="trainingTypes" [(ngModel)]="training.typeTraining">
+            <mat-option></mat-option>
             <mat-option *ngFor="let t of trainingTypes" [value]="t">
               {{ t }}</mat-option
             >
@@ -42,9 +43,20 @@
         >
           <mat-label>Máquinas de entrenamiento</mat-label>
           <mat-select name="gymMachine" [(ngModel)]="training.gymMachine">
+            <mat-option></mat-option>
             <mat-option *ngFor="let g of gymMachines" [value]="g">
               {{ g.name }}</mat-option
             >
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w100 mt20" appearance="fill">
+          <mat-label>Seleccionar usuario</mat-label>
+          <mat-select [(ngModel)]="training.user" name="user">
+            <mat-option></mat-option>
+            <mat-option *ngFor="let user of users" [value]="user">{{
+              user.username
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
 

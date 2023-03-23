@@ -89,8 +89,4 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
       }
     );
   }
-
-  onSelect(event: any) {
-    console.log(event);
-  }
 }

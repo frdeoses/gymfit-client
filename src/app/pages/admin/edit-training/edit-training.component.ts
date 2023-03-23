@@ -6,8 +6,10 @@ import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-d
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { ITraining } from 'src/app/interfaces/training-table/training.interface';
 import { IWorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
+import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import { TrainingService } from 'src/app/services/training/training.service';
+import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
 
@@ -22,6 +24,19 @@ export class EditTrainingComponent implements OnInit {
   training: ITraining = {
     id: '',
     name: '',
+    user: {
+      id: '',
+      name: '',
+      username: '',
+      password: '',
+      userRols: [],
+      surname: '',
+      email: '',
+      birthDate: new Date(),
+      height: undefined,
+      phone: '',
+      authorities: [],
+    },
     description: '',
     exercisedArea: '',
     gymMachine: undefined,
@@ -30,16 +45,19 @@ export class EditTrainingComponent implements OnInit {
     numRepetitions: 0,
     numSeries: 0,
     typeTraining: '',
+
     creationDate: new Date(),
     lastUpdateDate: new Date(),
   };
 
   trainingTypes: string[] = [];
   gymMachines: IGymMachine[] = [];
+  users: IUser[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
+    private userService: UserService,
     private machineService: MachineService,
     private trainingService: TrainingService,
     private router: Router
@@ -80,15 +98,27 @@ export class EditTrainingComponent implements OnInit {
       }
     );
 
+    this.userService.listUser().subscribe(
+      (data: IUser[]) => {
+        this.users = data;
+        console.log(this.users);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
+      }
+    );
+
     this.editMode = this.trainingService.getModeEdit() === 'yes' ? true : false;
   }
 
   public editTraining() {
+    this.training.user.authorities = [];
     this.trainingService.editTraining(this.training).subscribe(
       (data: ITraining) => {
         Swal.fire(
           'Entrenamiento actualizado',
-          'El entrenamiento se ha modificado con exito...',
+          'El entrenamiento se ha modificado con éxito...',
           'success'
         );
         this.router.navigate(['/admin/trainings']);
@@ -96,7 +126,7 @@ export class EditTrainingComponent implements OnInit {
       (error) => {
         Swal.fire(
           'Error en el sistema',
-          'El entrenamiento no se ha modificado con exito...',
+          'El entrenamiento no se ha modificado con éxito...',
           'error'
         );
         console.error(error);

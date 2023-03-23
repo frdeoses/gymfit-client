@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IEvent } from 'src/app/interfaces/calendars/event.interface';
 import { EventService } from 'src/app/services/event/event.service';
@@ -14,7 +13,7 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
   events: IEvent[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private eventService: EventService, private router: Router) {}
+  constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(

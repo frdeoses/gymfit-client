@@ -7,6 +7,9 @@ import * as _ from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { LoginService } from 'src/app/services/login/login.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-create-training',
@@ -19,6 +22,19 @@ export class CreateTrainingComponent implements OnInit {
     name: '',
     description: '',
     exercisedArea: '',
+    user: {
+      id: '',
+      name: '',
+      username: '',
+      password: '',
+      userRols: [],
+      surname: '',
+      email: '',
+      birthDate: new Date(),
+      height: undefined,
+      phone: '',
+      authorities: [],
+    },
     gymMachine: undefined,
     like: 0,
     listWorkedWeights: [],
@@ -29,12 +45,30 @@ export class CreateTrainingComponent implements OnInit {
     lastUpdateDate: new Date(),
   };
 
+  users: IUser[] = [];
+
+  // userLogin: IUser = {
+  //   id: '',
+  //   name: '',
+  //   username: '',
+  //   password: '',
+  //   userRols: [],
+  //   surname: '',
+  //   email: '',
+  //   birthDate: new Date(),
+  //   height: undefined,
+  //   phone: '',
+  //   authorities: [],
+  // };
+
   trainingTypes: string[] = [];
   gymMachines: IGymMachine[] = [];
 
   constructor(
     private trainingService: TrainingService,
     private machineService: MachineService,
+    private userService: UserService,
+    private loginService: LoginService,
     private snack: MatSnackBar,
     private router: Router
   ) {}
@@ -61,9 +95,22 @@ export class CreateTrainingComponent implements OnInit {
         Swal.fire('Error:', 'Error al cargar las maquinas de ejercicios');
       }
     );
+
+    this.userService.listUser().subscribe(
+      (data: IUser[]) => {
+        this.users = data;
+        console.log(this.users);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
+      }
+    );
   }
 
   createTraining() {
+    this.training.user.authorities = [];
+
     if (_.isNull(this.training) || _.isEmpty(this.training.name)) {
       this.snack.open('El nombre es obligatorio introducirlo!!', '', {
         duration: 3000,

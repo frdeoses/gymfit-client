@@ -1,4 +1,3 @@
-<app-spinner></app-spinner>
 <div *ngIf="editMode" class="bootstrap-wrapper">
   <mat-card>
     <h1>Editar entrenamiento</h1>
@@ -34,7 +33,7 @@
               name="trainingTypes"
               [(ngModel)]="training.typeTraining"
             >
-              <mat-option>Clear</mat-option>
+              <mat-option></mat-option>
               <mat-option *ngFor="let t of trainingTypes" [value]="t">
                 {{ t }}</mat-option
               >
@@ -48,10 +47,20 @@
           >
             <mat-label>Máquinas de entrenamiento</mat-label>
             <mat-select name="gymMachine" [(ngModel)]="training.gymMachine">
-              <mat-option>Clear</mat-option>
+              <mat-option></mat-option>
               <mat-option *ngFor="let g of gymMachines" [value]="g">
                 {{ g.name }}</mat-option
               >
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Seleccionar usuario</mat-label>
+            <mat-select [(ngModel)]="training.user" name="user">
+              <mat-option></mat-option>
+              <mat-option *ngFor="let user of users" [value]="user">{{
+                user.username
+              }}</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -228,6 +237,3 @@
     </div>
   </mat-card>
 </div>
-
-<!-- Mirar el objeto  -->
-<!-- {{ training | json }} -->

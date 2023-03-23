@@ -37,6 +37,7 @@
                 name="trainingTypes"
                 [(ngModel)]="table.typeTraining"
               >
+                <mat-option></mat-option>
                 <mat-option *ngFor="let t of trainingTypes" [value]="t">
                   {{ t }}</mat-option
                 >
@@ -115,11 +116,12 @@
               <mat-datepicker #pickerEndDate></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field class="w100 mt20" appearance="outline">
+            <mat-form-field class="w100" appearance="outline">
               <mat-label>Seleccionar usuario</mat-label>
               <mat-select [(ngModel)]="table.user" name="user" required>
+                <mat-option></mat-option>
                 <mat-option *ngFor="let user of users" [value]="user">{{
-                  user.name
+                  user.username
                 }}</mat-option>
               </mat-select>
             </mat-form-field>

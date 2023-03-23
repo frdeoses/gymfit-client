@@ -1,5 +1,3 @@
-<app-spinner></app-spinner>
-
 <div *ngIf="editMode" class="bootstrap-wraper">
   <div class="row mt20">
     <div class="col-md-12">
@@ -47,6 +45,7 @@
             name="trainingTypes"
             [(ngModel)]="trainingTable.typeTraining"
           >
+            <mat-option></mat-option>
             <mat-option *ngFor="let t of trainingTypes" [value]="t">
               {{ t }}</mat-option
             >
@@ -127,8 +126,9 @@
         <mat-form-field class="w100 mt20" appearance="outline">
           <mat-label>Seleccionar usuario</mat-label>
           <mat-select [(ngModel)]="trainingTable.user" name="user" required>
+            <mat-option></mat-option>
             <mat-option *ngFor="let user of users" [value]="user">{{
-              user.name
+              user.username
             }}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -154,114 +154,117 @@
 <!-- modo consulta -->
 
 <div *ngIf="!editMode" class="bootstrap-wraper">
-  <div class="row mt20">
-    <div class="col-md-12">
-      <div class="head">
-        <h1>Consultar tabla de entrenamiento</h1>
+  <mat-card>
+    <div class="row ml10">
+      <div class="col-md-12">
+        <div class="head">
+          <h1>Consultar tabla de entrenamiento</h1>
+        </div>
+        <mat-divider></mat-divider>
       </div>
-      <mat-divider></mat-divider>
-    </div>
-    <div class="col-md-12">
-      <mat-card-title class="mt20"> Nombre:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.name }}
-      </mat-card-content>
-    </div>
+      <div class="col-md-12">
+        <mat-card-title class="mt20"> Nombre:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.name }}
+        </mat-card-content>
+      </div>
 
-    <div class="col-md-12">
-      <mat-card-title class="mt20"> Descripción:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.description }}
-      </mat-card-content>
-    </div>
+      <div class="col-md-12">
+        <mat-card-title class="mt20"> Descripción:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.description }}
+        </mat-card-content>
+      </div>
 
-    <div class="col-md-6">
-      <mat-card-title class="mt20"> Tipo de entrenamiento:</mat-card-title>
-      <mat-card-content>
-        <span>
-          {{ trainingTable.typeTraining }}
-        </span>
-      </mat-card-content>
-    </div>
+      <div class="col-md-6">
+        <mat-card-title class="mt20"> Tipo de entrenamiento:</mat-card-title>
+        <mat-card-content>
+          <span>
+            {{ trainingTable.typeTraining }}
+          </span>
+        </mat-card-content>
+      </div>
 
-    <div class="col-md-6">
-      <mat-card-title class="mt20"> Fecha de creacion:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.creationDate | date : "dd/MM/yy" }}
-      </mat-card-content>
-    </div>
+      <div class="col-md-6">
+        <mat-card-title class="mt20"> Fecha de creacion:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.creationDate | date : "dd/MM/yy" }}
+        </mat-card-content>
+      </div>
 
-    <div class="col-md-6">
-      <mat-card-title class="mt20"> Inicio de la tabla:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.initDate | date : "dd/MM/yy" }}
-      </mat-card-content>
-    </div>
-    <div class="col-md-6">
-      <mat-card-title class="mt20"> Finalizacion de la tabla:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.endDate | date : "dd/MM/yy" }}
-      </mat-card-content>
-    </div>
-    <div class="col-md-6">
-      <mat-card-title class="mt20"> Tiempo de descanso (seg):</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.breakTime }}
-      </mat-card-content>
-    </div>
-    <div class="col-md-6">
-      <mat-card-title class="mt20"> Tiempo de duración (días):</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.trainingDuration }}
-      </mat-card-content>
-    </div>
+      <div class="col-md-6">
+        <mat-card-title class="mt20"> Inicio de la tabla:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.initDate | date : "dd/MM/yy" }}
+        </mat-card-content>
+      </div>
+      <div class="col-md-6">
+        <mat-card-title class="mt20"> Finalizacion de la tabla:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.endDate | date : "dd/MM/yy" }}
+        </mat-card-content>
+      </div>
+      <div class="col-md-6">
+        <mat-card-title class="mt20"> Tiempo de descanso (seg):</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.breakTime }}
+        </mat-card-content>
+      </div>
+      <div class="col-md-6">
+        <mat-card-title class="mt20">
+          Tiempo de duración (días):</mat-card-title
+        >
+        <mat-card-content>
+          {{ trainingTable.trainingDuration }}
+        </mat-card-content>
+      </div>
 
-    <div
-      *ngIf="trainingTable.user.username"
-      [routerLink]="'/admin/users/' + trainingTable.user.id"
-      class="user cursorHand col-md-6"
-    >
-      <mat-card-title class="mt20"> Usuario asignado:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.user.username }}
-      </mat-card-content>
-    </div>
-
-    <div *ngIf="trainingTable.user.name" class="col-md-6">
-      <mat-card-title class="mt20">Nombre del usuario:</mat-card-title>
-      <mat-card-content>
-        {{ trainingTable.user.name }}
-      </mat-card-content>
-    </div>
-
-    <div
-      *ngIf="
-        trainingTable.listTraining && trainingTable.listTraining.length != 0
-      "
-      class="col-md-12 text-center"
-    >
-      <mat-card-title class="mt20">
-        Ejercicios de entrenamiento:</mat-card-title
+      <div
+        *ngIf="trainingTable.user.username"
+        [routerLink]="'/admin/users/' + trainingTable.user.id"
+        class="user cursorHand col-md-6"
       >
-    </div>
-    <div class="card" *ngFor="let t of trainingTable.listTraining">
-      <mat-card
-        [routerLink]="'/admin/trainings/' + t.id"
-        class="col-md-3 mt20 ml20 cursorHand box"
+        <mat-card-title class="mt20"> Usuario asignado:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.user.username }}
+        </mat-card-content>
+      </div>
+
+      <div *ngIf="trainingTable.user.name" class="col-md-6">
+        <mat-card-title class="mt20">Nombre del usuario:</mat-card-title>
+        <mat-card-content>
+          {{ trainingTable.user.name }}
+        </mat-card-content>
+      </div>
+      <div
+        *ngIf="
+          trainingTable.listTraining && trainingTable.listTraining.length != 0
+        "
+        class="col-md-12 text-center"
       >
-        <mat-list>
-          <mat-card-header class="headerTitle">
-            <mat-card-title> {{ t.name }} </mat-card-title>
-          </mat-card-header>
-          <span>{{ t.description }}</span>
-          <br />
-          <mat-card-content class="content">
-            {{ t.typeTraining }}
-          </mat-card-content>
-        </mat-list>
-      </mat-card>
+        <mat-card-title class="mt20">
+          <u> <b> Ejercicios de entrenamiento: </b></u>
+        </mat-card-title>
+      </div>
+      <div class="card" *ngFor="let t of trainingTable.listTraining">
+        <mat-card
+          [routerLink]="'/admin/trainings/' + t.id"
+          class="col-md-3 mt20 ml20 cursorHand box"
+        >
+          <mat-list>
+            <mat-card-header class="headerTitle">
+              <mat-card-title> {{ t.name }} </mat-card-title>
+            </mat-card-header>
+            <span>{{ t.description }}</span>
+            <br />
+            <mat-card-content class="content">
+              {{ t.typeTraining }}
+            </mat-card-content>
+          </mat-list>
+        </mat-card>
+      </div>
     </div>
-  </div>
+  </mat-card>
 </div>
 
 <!-- {{ trainingTable | json }} -->

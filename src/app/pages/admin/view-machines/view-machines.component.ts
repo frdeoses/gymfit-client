@@ -35,7 +35,11 @@ export class ViewMachinesComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          Swal.fire('Error!!', 'Error al cargar los eventos...', 'error');
+          Swal.fire(
+            'Error!!',
+            'Error al cargar las maquinas de ejercicios...',
+            'error'
+          );
         }
       );
     });
