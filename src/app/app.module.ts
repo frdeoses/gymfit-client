@@ -47,9 +47,19 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { UserDashboardComponent } from './pages/user/user-dashboard.component';
 import { authInterceptorProviders } from './services/auth.interceptor';
 import { spinnerInterceptorProviders } from './shared/interceptor/spinner.interceptor';
+import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
+import { SidebarComponent as UserSidebar } from './pages/user/sidebar/sidebar.component';
+import { LoadTableComponent } from './pages/user/load-table/load-table.component';
+import { InstructionsComponent } from './pages/user/instructions/instructions.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.component';
+import { LoadEventsComponent } from './pages/user/load-events/load-events.component';
+import { LoadMachineComponent } from './pages/user/load-machine/load-machine.component';
+import { LoadTrainingComponent } from './pages/user/load-training/load-training.component';
+import { ProfileUserComponent } from './pages/user/profile-user/profile-user.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +90,14 @@ import { spinnerInterceptorProviders } from './shared/interceptor/spinner.interc
     EditConsultTableComponent,
     CommentDialogComponent,
     WeightDialogComponent,
+    UserSidebar,
+    LoadTableComponent,
+    InstructionsComponent,
+    WelcomeUserComponent,
+    LoadEventsComponent,
+    LoadMachineComponent,
+    LoadTrainingComponent,
+    ProfileUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,6 +122,11 @@ import { spinnerInterceptorProviders } from './shared/interceptor/spinner.interc
     MatChipsModule,
     MatTooltipModule,
     MatDialogModule,
+    MatExpansionModule,
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true,
+    }),
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],
