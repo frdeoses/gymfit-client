@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ErrorNotFoundComponent } from './pages/404/error-not-found/error-not-found.component';
 import { CreateEventComponent } from './pages/admin/create-event/create-event.component';
 import { CreateMachineComponent } from './pages/admin/create-machine/create-machine.component';
 import { CreateTableComponent } from './pages/admin/create-table/create-table.component';
@@ -20,7 +21,14 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { UserDashboardComponent } from './pages/user/user-dashboard.component';
+import { InstructionsComponent } from './pages/user/instructions/instructions.component';
+import { LoadEventsComponent } from './pages/user/load-events/load-events.component';
+import { LoadMachineComponent } from './pages/user/load-machine/load-machine.component';
+import { LoadTableComponent } from './pages/user/load-table/load-table.component';
+import { LoadTrainingComponent } from './pages/user/load-training/load-training.component';
+import { ProfileUserComponent } from './pages/user/profile-user/profile-user.component';
+import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
+import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.component';
 import { AdminGuard } from './services/guards/admin/admin.guard';
 import { UserGuard } from './services/guards/user/user.guard';
 const routes: Routes = [
@@ -113,12 +121,65 @@ const routes: Routes = [
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,
-    pathMatch: 'full',
     canActivate: [UserGuard],
+    children: [
+      {
+        path: '',
+        component: WelcomeUserComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileUserComponent,
+      },
+      {
+        path: 'instructions',
+        component: InstructionsComponent,
+      },
+      {
+        path: 'gym-machines',
+        component: LoadMachineComponent,
+      },
+      {
+        path: 'gym-machines/:gymMachineId',
+        component: EditGymMachinesComponent,
+      },
+      {
+        path: 'trainings',
+        component: LoadTrainingComponent,
+      },
+      {
+        path: 'trainings/:typeTrainings',
+        component: LoadTrainingComponent,
+      },
+      {
+        path: 'trainings/:typeTrainings/:trainingId',
+        component: EditTrainingComponent,
+      },
+      {
+        path: 'events',
+        component: LoadEventsComponent,
+      },
+      {
+        path: 'events/:eventId',
+        component: EditEventComponent,
+      },
+      {
+        path: 'tables',
+        component: LoadTableComponent,
+      },
+      {
+        path: 'tables/:typeTrainingTable',
+        component: LoadTableComponent,
+      },
+      {
+        path: 'tables/:typeTrainingTable/:tableId',
+        component: EditConsultTableComponent,
+      },
+    ],
   },
   {
     path: '**',
-    component: HomeComponent,
+    component: ErrorNotFoundComponent,
     pathMatch: 'full',
   },
 ];

@@ -60,6 +60,7 @@ import { LoadEventsComponent } from './pages/user/load-events/load-events.compon
 import { LoadMachineComponent } from './pages/user/load-machine/load-machine.component';
 import { LoadTrainingComponent } from './pages/user/load-training/load-training.component';
 import { ProfileUserComponent } from './pages/user/profile-user/profile-user.component';
+import { ErrorNotFoundComponent } from './pages/404/error-not-found/error-not-found.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { ProfileUserComponent } from './pages/user/profile-user/profile-user.com
     LoadMachineComponent,
     LoadTrainingComponent,
     ProfileUserComponent,
+    ErrorNotFoundComponent,
   ],
   imports: [
     BrowserModule,
