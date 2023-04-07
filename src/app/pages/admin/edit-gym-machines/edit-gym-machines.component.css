@@ -14,3 +14,8 @@ span{
     border: 2px solid gainsboro;
     border-radius: 50%;
 }
+
+.letter{
+
+    font: oblique bold 120% cursive;
+}

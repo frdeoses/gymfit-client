@@ -14,6 +14,7 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
   gymMachineId: string = '';
   editMode: boolean | undefined;
   subscription: Subscription = new Subscription();
+  likeAdd: boolean = false;
   gymMachine: IGymMachine = {
     id: '',
     name: '',
@@ -46,11 +47,12 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
       }
     );
     this.editMode = this.machineService.getModeEdit() === 'yes' ? true : false;
+    this.likeAdd = this.machineService.getLikeAdd() === 'yes' ? true : false;
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    this.machineService.removeItem();
+    this.machineService.removeItems();
   }
 
   public editGymMachine() {
@@ -58,7 +60,7 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
       (data: IGymMachine) => {
         Swal.fire(
           'Máquina de entrenamiento actualizado',
-          'La máquina de entrenamiento se ha modificado con exito...',
+          'La máquina de entrenamiento se ha modificado con éxito...',
           'success'
         );
         this.router.navigate(['/admin/gym-machines']);
@@ -66,11 +68,30 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
       (error) => {
         Swal.fire(
           'Error en el sistema',
-          'La máquina de entrenamiento no se ha modificado con exito...',
+          'La máquina de entrenamiento no se ha modificado con éxito...',
           'error'
         );
         console.error(error);
       }
     );
+  }
+
+  like() {
+    this.gymMachine.like++;
+    this.machineService.likeAdd('yes');
+    this.likeAdd = true;
+    this.machineService.editGymMachine(this.gymMachine).subscribe(
+      (data: IGymMachine) => {
+        console.log('like add and update success');
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  modeEdit() {
+    this.machineService.modeEdit('yes');
+    this.editMode = true;
   }
 }
