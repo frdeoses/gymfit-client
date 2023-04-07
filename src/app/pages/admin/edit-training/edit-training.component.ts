@@ -113,7 +113,9 @@ export class EditTrainingComponent implements OnInit {
   }
 
   public editTraining() {
-    this.training.user.authorities = [];
+    if (!_.isUndefined(this.training.user) && !_.isNull(this.training.user))
+      this.training.user.authorities = [];
+
     this.trainingService.editTraining(this.training).subscribe(
       (data: ITraining) => {
         Swal.fire(
@@ -135,11 +137,14 @@ export class EditTrainingComponent implements OnInit {
   }
 
   createWorkedWeight() {
-    debugger;
-    let listWorkedWeights: IWorkedWeights[] | undefined = [];
+    let listWorkedWeights: IWorkedWeights[] = [];
 
+    debugger;
     if (!_.isUndefined(this.training.listWorkedWeights)) {
-      listWorkedWeights = this.training.listWorkedWeights;
+      // listWorkedWeights = this.training.listWorkedWeights;
+      this.training.listWorkedWeights.forEach((w) => {
+        listWorkedWeights.push(w);
+      });
     }
 
     const dialogRef = this.dialog.open(WeightDialogComponent, {
@@ -171,7 +176,7 @@ export class EditTrainingComponent implements OnInit {
     debugger;
     // this.training.listWorkedWeights = [];
 
-    if (!_.isEqual(this.training, listWorkedWeight)) {
+    if (!_.isEqual(this.training.listWorkedWeights, listWorkedWeight)) {
       this.training.listWorkedWeights = listWorkedWeight;
       this.trainingService.editTraining(this.training).subscribe(
         (data: ITraining) => {

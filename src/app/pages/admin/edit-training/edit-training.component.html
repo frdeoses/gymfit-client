@@ -20,7 +20,7 @@
             <textarea
               [(ngModel)]="training.description"
               type="text"
-              name="descripcion"
+              name="descripción"
               placeholder="Introduzca la descripción"
               matInput
               rows="8"
@@ -122,10 +122,30 @@
           <mat-divider></mat-divider>
           <!-- <br /> -->
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
               <mat-card-title class="mt20">Nombre:</mat-card-title>
               <mat-card-content>
                 {{ training.name }}
+              </mat-card-content>
+            </div>
+            <div class="col-md-2">
+              <mat-card-subtitle class="mt20"
+                >Fecha de creación:</mat-card-subtitle
+              >
+              <mat-card-content>
+                <b>
+                  {{ training.creationDate | date : "dd/MM/yy " }}
+                </b>
+              </mat-card-content>
+            </div>
+            <div *ngIf="training.gymMachine" class="col-md-2">
+              <mat-card-subtitle class="mt20"
+                >Última modificación:</mat-card-subtitle
+              >
+              <mat-card-content>
+                <b>
+                  {{ training.lastUpdateDate | date : "dd/MM/yy " }}
+                </b>
               </mat-card-content>
             </div>
             <div class="col-md-12">
@@ -182,17 +202,25 @@
                 </span>
               </mat-card-content>
             </div>
-            <div class="col-md-3">
-              <mat-card-title class="mt20">Fecha de creación:</mat-card-title>
-              <mat-card-content>
-                {{ training.creationDate | date : "dd/MM/yy HH:mm" }}
-              </mat-card-content>
-            </div>
-            <div *ngIf="training.gymMachine" class="col-md-3">
-              <mat-card-title class="mt20">Última modificación:</mat-card-title>
-              <mat-card-content>
-                {{ training.lastUpdateDate | date : "dd/MM/yy HH:mm" }}
-              </mat-card-content>
+
+            <div class="col-md-12 text-center">
+              <mat-card-title class="mt10">
+                <u> Video explicativo: </u>
+              </mat-card-title>
+              <img
+                style="width: 50%"
+                src="../../../../assets/gif/entrenamiento.gif"
+              />
+              <div class="container text-center">
+                <a
+                  mat-fab
+                  matTooltip="Ver el ejercicio en YouTube"
+                  color="accent"
+                  href="http://youtube.com/watch?v=SiCC4ophcjI"
+                >
+                  <mat-icon>ondemand_video</mat-icon>
+                </a>
+              </div>
             </div>
 
             <div
@@ -202,6 +230,8 @@
               "
               class="col-md-12 text-center"
             >
+              <br />
+              <br />
               <mat-card-title class="mt20">
                 <u> Pesos ejercitados: </u>
               </mat-card-title>
