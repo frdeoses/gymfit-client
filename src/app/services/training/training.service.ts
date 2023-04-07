@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ITraining } from 'src/app/interfaces/training-table/training.interface';
+import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
 
 @Injectable({
@@ -20,6 +21,17 @@ export class TrainingService {
   public listTraining(): Observable<ITraining[]> {
     return this.http.get<ITraining[]>(
       `${baseUrl[1]}/api/gymfit/training-tables/trainings`
+    );
+  }
+
+  /**
+   * Lista las tablas por el usuario
+   * @returns
+   */
+  public listTrainingByUser(user: IUser): Observable<ITraining[]> {
+    return this.http.post<ITraining[]>(
+      `${baseUrl[1]}/api/gymfit/training-tables/trainings/user`,
+      user
     );
   }
 
@@ -63,6 +75,29 @@ export class TrainingService {
   public getTraining(trainingId: string): Observable<ITraining> {
     return this.http.get<ITraining>(
       `${baseUrl[1]}/api/gymfit/training-tables/trainings/${trainingId}`
+    );
+  }
+
+  /**
+   * Obtiene tablas de entrenamiento segun el tipo de entrenamiento
+   * y el usuario logeado en la aplicación
+   *
+   * @param typeTrainingTable
+   * @returns
+   */
+  public getTrainingByTypeTraining(
+    typeTraining: string,
+    idUser: string
+  ): Observable<ITraining[]> {
+    return this.http.get<ITraining[]>(
+      `${baseUrl[1]}` +
+        '/api/gymfit/training-tables/trainings/find-type-training',
+      {
+        params: {
+          typeTraining: typeTraining,
+          idUser: idUser,
+        },
+      }
     );
   }
 

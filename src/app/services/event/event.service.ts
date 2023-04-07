@@ -21,6 +21,15 @@ export class EventService {
     return this.http.get<IEvent[]>(`${baseUrl[2]}/api/gymfit/calendars`);
   }
 
+  /**
+   * Lista los eventos publicados en el sistema
+   */
+  public listEventsPublished(): Observable<IEvent[]> {
+    return this.http.get<IEvent[]>(
+      `${baseUrl[2]}/api/gymfit/calendars/published`
+    );
+  }
+
   public createEvent(event: IEvent): Observable<IEvent> {
     return this.http
       .post<IEvent>(`${baseUrl[2]}/api/gymfit/calendar`, event)
