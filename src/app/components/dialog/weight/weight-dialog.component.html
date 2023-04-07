@@ -1,7 +1,4 @@
-<h1 class="text-center" mat-dialog-title>
-  <!-- Hola <span> {{ comment.userName }}</span> -->
-  Introducir peso trabajado
-</h1>
+<h1 class="text-center" mat-dialog-title>Introducir peso trabajado</h1>
 <div mat-dialog-content>
   <p>Introduce con que peso vas a trabajar...</p>
   <form>
@@ -31,13 +28,14 @@
   </form>
 </div>
 
-<div class="w100" mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
+<div class="w100" style="justify-content: center" mat-dialog-actions>
+  <button mat-button color="accent" (click)="onNoClick()">Cancel</button>
   <!-- cdkFocusInitial -->
   <!-- disabled="validateFields()" -->
   <button
     class="ml90"
     mat-button
+    color="primary"
     (click)="validateFields()"
     [mat-dialog-close]="workedWeights"
   >
