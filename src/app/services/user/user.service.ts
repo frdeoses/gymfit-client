@@ -11,6 +11,7 @@ import baseUrl from '../helper';
 export class UserService {
   public refresh$ = new Subject<void>();
   viewEdit: boolean = false;
+  navigateProfile: boolean = false;
   constructor(private httpClient: HttpClient) {}
 
   public createUser(user: IUser) {
@@ -72,13 +73,21 @@ export class UserService {
   }
 
   /**
-   * Cambiamos el valor de la var de la sesion
-   *  que nos permiten entrar en modo edicion o
+   * Cambiamos el valor de la var de la sesión
+   *  que nos permiten entrar en modo edición o
    * en modo consulta
    * @param value
    */
   modeEdit(value: string) {
     localStorage.setItem('modeView', value);
+  }
+
+  activateNavigateProfile() {
+    this.navigateProfile = true;
+  }
+
+  disableNavigateProfile() {
+    this.navigateProfile = false;
   }
 
   // Obtenemos en que modo estamos
