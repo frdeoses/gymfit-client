@@ -85,7 +85,6 @@ export class CreateTableComponent implements OnInit {
   }
 
   formSubmit() {
-    this.table.user.authorities = [];
     if (_.isNull(this.table) || _.isEmpty(this.table.name)) {
       this.snack.open('El titulo es obligatorio introducirlo!!', '', {
         duration: 3000,
@@ -117,6 +116,13 @@ export class CreateTableComponent implements OnInit {
         }
       );
       return;
+    }
+
+    this.table.user.authorities = [];
+    if (!_.isUndefined(this.table.listTraining)) {
+      this.table.listTraining.forEach((training) => {
+        training.user.authorities = [];
+      });
     }
 
     if (!this.validateDate(this.table.initDate, this.table.endDate)) {
