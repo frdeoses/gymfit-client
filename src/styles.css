@@ -7,6 +7,12 @@ body {
     background: #f5f5f5;
 }
 
+.fondo{
+    background: url('./assets/image/fondo3.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
 /* .overlay{
     position: fixed;
     width: 100%;
