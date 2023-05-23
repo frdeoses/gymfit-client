@@ -45,7 +45,6 @@ import { ViewUsersComponent } from './pages/admin/view-users/view-users.componen
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { authInterceptorProviders } from './services/auth.interceptor';
 import { spinnerInterceptorProviders } from './shared/interceptor/spinner.interceptor';
@@ -54,13 +53,14 @@ import { SidebarComponent as UserSidebar } from './pages/user/sidebar/sidebar.co
 import { LoadTableComponent } from './pages/user/load-table/load-table.component';
 import { InstructionsComponent } from './pages/user/instructions/instructions.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.component';
 import { LoadEventsComponent } from './pages/user/load-events/load-events.component';
 import { LoadMachineComponent } from './pages/user/load-machine/load-machine.component';
 import { LoadTrainingComponent } from './pages/user/load-training/load-training.component';
 import { ProfileUserComponent } from './pages/user/profile-user/profile-user.component';
 import { ErrorNotFoundComponent } from './pages/404/error-not-found/error-not-found.component';
+import { ProfileComponent } from './pages/admin/profile/profile.component';
+import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
   declarations: [
