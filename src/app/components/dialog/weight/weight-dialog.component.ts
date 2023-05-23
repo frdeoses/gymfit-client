@@ -31,7 +31,6 @@ export class WeightDialogComponent implements OnInit {
 
   // validateFields(): boolean {
   validateFields(): void {
-    debugger;
     if (
       _.isUndefined(this.workedWeights.serie) ||
       this.workedWeights.serie <= 0

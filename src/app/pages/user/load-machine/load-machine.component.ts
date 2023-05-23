@@ -52,7 +52,6 @@ export class LoadMachineComponent implements OnInit, OnDestroy {
   }
 
   // likeMachine(id: string): void {
-  //   debugger;
 
   //   let machine = this.gymMachines.find((m) => m.id === id);
 

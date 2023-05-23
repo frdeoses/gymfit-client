@@ -8,6 +8,7 @@ import { ITraining } from 'src/app/interfaces/training-table/training.interface'
 import { IWorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
+import { LoginService } from 'src/app/services/login/login.service';
 import { TrainingService } from 'src/app/services/training/training.service';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
@@ -53,10 +54,12 @@ export class EditTrainingComponent implements OnInit {
   trainingTypes: string[] = [];
   gymMachines: IGymMachine[] = [];
   users: IUser[] = [];
+  rolLogin: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
+    private loginService: LoginService,
     private userService: UserService,
     private machineService: MachineService,
     private trainingService: TrainingService,
@@ -64,6 +67,8 @@ export class EditTrainingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    let rolUser: string = this.loginService.getUser().userRols[0].nameRole;
+    this.rolLogin = rolUser.toUpperCase();
     this.trainingId = this.route.snapshot.params['trainingId'];
 
     this.trainingService.getTraining(this.trainingId).subscribe(
@@ -139,7 +144,6 @@ export class EditTrainingComponent implements OnInit {
   createWorkedWeight() {
     let listWorkedWeights: IWorkedWeights[] = [];
 
-    debugger;
     if (!_.isUndefined(this.training.listWorkedWeights)) {
       // listWorkedWeights = this.training.listWorkedWeights;
       this.training.listWorkedWeights.forEach((w) => {
@@ -157,7 +161,6 @@ export class EditTrainingComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      debugger;
       console.log('The dialog was closed');
       if (
         !_.isUndefined(listWorkedWeights) &&
@@ -167,15 +170,11 @@ export class EditTrainingComponent implements OnInit {
       )
         listWorkedWeights.push(result);
 
-      debugger;
       this.addWorkedWeight(listWorkedWeights);
     });
   }
 
   addWorkedWeight(listWorkedWeight: IWorkedWeights[] | undefined) {
-    debugger;
-    // this.training.listWorkedWeights = [];
-
     if (!_.isEqual(this.training.listWorkedWeights, listWorkedWeight)) {
       this.training.listWorkedWeights = listWorkedWeight;
       this.trainingService.editTraining(this.training).subscribe(

@@ -29,10 +29,8 @@ export class ErrorNotFoundComponent implements OnInit {
   constructor(public loginService: LoginService) {}
 
   ngOnInit(): void {
-    // debugger;
     this.user = this.loginService.getUser();
     this.loginService.loginStatusSubject.subscribe((data) => {
-      debugger;
       this.isLoggedIn = this.loginService.isLoggedIn();
       this.user = this.loginService.getUser();
     });
