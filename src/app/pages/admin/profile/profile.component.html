@@ -1,0 +1,105 @@
+<mat-card style="margin-left: 50px">
+  <h1>Detalles del perfil</h1>
+  <mat-divider></mat-divider>
+  <mat-card-content style="margin-block: 35px">
+    <div class="bootstrap-wrapper">
+      <div class="container">
+        <div class="text-center">
+          <img
+            src="../../../assets/image/forma-de-persona-llena-de-usuario.png"
+            alt=""
+            class="profile-image"
+          />
+
+          <!-- TODO: LLevar a una clase el estilo -->
+
+          <h1
+            style="
+              background: aliceblue;
+              border-radius: 20px;
+              background-size: cover;
+            "
+            class="mt20"
+          >
+            {{ user.name }} {{ user.surname }}
+          </h1>
+        </div>
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <mat-card-title class="mt20"> Usuario:</mat-card-title>
+            <mat-card-content>
+              {{ user.username }}
+            </mat-card-content>
+          </div>
+          <div class="col-md-4 text-center">
+            <mat-card-title class="mt20"> Password:</mat-card-title>
+            <mat-card-content> **** </mat-card-content>
+          </div>
+          <div class="col-md-4 text-center">
+            <mat-card-title class="mt20"> Rol:</mat-card-title>
+
+            <mat-card-content>
+              <span>
+                {{ user.authorities[0].authority }}
+              </span>
+            </mat-card-content>
+          </div>
+          <div class="col-md-3 text-center">
+            <mat-card-title class="mt20"> Nombre:</mat-card-title>
+            <mat-card-content>
+              {{ user.name }}
+            </mat-card-content>
+          </div>
+          <div class="col-md-3 text-center">
+            <mat-card-title class="mt20"> Apellidos:</mat-card-title>
+            <mat-card-content> {{ user.surname }} </mat-card-content>
+          </div>
+          <div class="col-md-3 text-center">
+            <mat-card-title class="mt20"> Correo:</mat-card-title>
+            <mat-card-content>
+              {{ user.email }}
+            </mat-card-content>
+          </div>
+          <div class="col-md-3 text-center">
+            <mat-card-title class="mt20"> Teléfono:</mat-card-title>
+            <mat-card-content> {{ user.phone }} </mat-card-content>
+          </div>
+          <div *ngIf="user.height" class="col-md-6 text-center">
+            <mat-card-title class="mt20">
+              Altura <span>(cm)</span> :</mat-card-title
+            >
+            <mat-card-content>
+              <i>
+                <b>
+                  {{ user.height }}
+                </b>
+              </i>
+            </mat-card-content>
+          </div>
+          <div *ngIf="user.weight" class="col-md-6 text-center">
+            <mat-card-title class="mt20">
+              Peso <span>(kg)</span> :</mat-card-title
+            >
+            <mat-card-content>
+              <i>
+                <b>
+                  {{ user.weight }}
+                </b>
+              </i>
+            </mat-card-content>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-card-actions class="text-center">
+      <button
+        mat-raised-button
+        [routerLink]="'/admin/users/' + user.id"
+        (click)="modeEdit()"
+        color="primary"
+      >
+        Actualizar
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>
