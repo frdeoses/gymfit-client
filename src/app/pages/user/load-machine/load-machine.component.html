@@ -10,15 +10,12 @@
             <div mat-card-avatar class="ml20 example-header-image"></div>
             <mat-card-title> {{ g.name }} </mat-card-title>
             <mat-card-subtitle>
-              {{ g.description }}
+              {{ g.model }}
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <mat-card-actions>
-              <!-- TODO: Realizar esto en el componente interno de consulta aqui es
-              una locura o no me sale -->
-              <!-- [disabled]="like != g.like" -->
-              <!-- (click)="likeMachine(g.id)" -->
+              <!-- <div> -->
               <button mat-icon-button color="warn" class="ml20">
                 <mat-icon matBadge="{{ g.like }}" matBadgeColor="primary"
                   >favorite</mat-icon
@@ -31,6 +28,10 @@
               >
                 Instrucciones
               </button>
+              <button *ngIf="g.numMachine" mat-button color="accent">
+                Nº de máquinas: {{ g.numMachine }}
+              </button>
+              <!-- </div> -->
             </mat-card-actions>
           </mat-card-content>
         </mat-card>
