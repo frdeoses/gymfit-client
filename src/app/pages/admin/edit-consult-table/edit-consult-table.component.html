@@ -186,7 +186,7 @@
       </div>
 
       <div class="col-md-6">
-        <mat-card-title class="mt20"> Fecha de creacion:</mat-card-title>
+        <mat-card-title class="mt20"> Fecha de creación:</mat-card-title>
         <mat-card-content>
           {{ trainingTable.creationDate | date : "dd/MM/yy" }}
         </mat-card-content>
@@ -199,7 +199,7 @@
         </mat-card-content>
       </div>
       <div class="col-md-6">
-        <mat-card-title class="mt20"> Finalizacion de la tabla:</mat-card-title>
+        <mat-card-title class="mt20"> Finalización de la tabla:</mat-card-title>
         <mat-card-content>
           {{ trainingTable.endDate | date : "dd/MM/yy" }}
         </mat-card-content>
@@ -220,7 +220,11 @@
       </div>
 
       <div
-        *ngIf="trainingTable.user.username"
+        *ngIf="
+          trainingTable.user &&
+          trainingTable.user.username &&
+          rolLogin === 'ADMIN'
+        "
         [routerLink]="'/admin/users/' + trainingTable.user.id"
         class="user cursorHand col-md-6"
       >
@@ -230,7 +234,12 @@
         </mat-card-content>
       </div>
 
-      <div *ngIf="trainingTable.user.name" class="col-md-6">
+      <div
+        *ngIf="
+          trainingTable.user && trainingTable.user.name && rolLogin === 'ADMIN'
+        "
+        class="col-md-6"
+      >
         <mat-card-title class="mt20">Nombre del usuario:</mat-card-title>
         <mat-card-content>
           {{ trainingTable.user.name }}
@@ -238,7 +247,9 @@
       </div>
       <div
         *ngIf="
-          trainingTable.listTraining && trainingTable.listTraining.length != 0
+          trainingTable.listTraining &&
+          trainingTable.listTraining.length != 0 &&
+          rolLogin === 'ADMIN'
         "
         class="col-md-12 text-center"
       >
@@ -248,6 +259,7 @@
       </div>
       <div class="card" *ngFor="let t of trainingTable.listTraining">
         <mat-card
+          *ngIf="rolLogin === 'ADMIN'"
           [routerLink]="'/admin/trainings/' + t.id"
           class="col-md-3 mt20 ml20 cursorHand box"
         >
@@ -262,6 +274,40 @@
             </mat-card-content>
           </mat-list>
         </mat-card>
+        <ng-template #templateName> </ng-template>
+      </div>
+      <div
+        *ngIf="
+          trainingTable.listTraining &&
+          trainingTable.listTraining.length != 0 &&
+          rolLogin === 'USER'
+        "
+        class="col-md-12 text-center"
+      >
+        <mat-card-title class="mt20">
+          <u> <b> Ejercicios de entrenamiento: </b></u>
+        </mat-card-title>
+      </div>
+      <div class="card" *ngFor="let t of trainingTable.listTraining">
+        <mat-card
+          *ngIf="rolLogin === 'USER'"
+          [routerLink]="
+            '/user-dashboard/trainings/' + t.typeTraining + '/' + t.id
+          "
+          class="col-md-3 mt20 ml20 cursorHand box"
+        >
+          <mat-list>
+            <mat-card-header class="headerTitle">
+              <mat-card-title> {{ t.name }} </mat-card-title>
+            </mat-card-header>
+            <span>{{ t.description }}</span>
+            <br />
+            <mat-card-content class="content">
+              {{ t.typeTraining }}
+            </mat-card-content>
+          </mat-list>
+        </mat-card>
+        <ng-template #templateName> </ng-template>
       </div>
     </div>
   </mat-card>

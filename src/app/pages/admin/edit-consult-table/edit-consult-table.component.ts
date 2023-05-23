@@ -7,6 +7,7 @@ import { ITraining } from 'src/app/interfaces/training-table/training.interface'
 import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
+import { LoginService } from 'src/app/services/login/login.service';
 import { TablesService } from 'src/app/services/tables/tables.service';
 import { TrainingService } from 'src/app/services/training/training.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -49,10 +50,13 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   initADD: boolean = false;
   endADD: boolean = false;
 
+  rolLogin: string = '';
+
   constructor(
     private tableService: TablesService,
     private userService: UserService,
     private trainingService: TrainingService,
+    private loginService: LoginService,
     private machineService: MachineService,
     private snack: MatSnackBar,
     private router: Router,
@@ -63,6 +67,9 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    let rolUser: string = this.loginService.getUser().userRols[0].nameRole;
+    this.rolLogin = rolUser.toUpperCase();
+
     this.tableId = this.route.snapshot.params['tableId'];
 
     this.editMode = this.tableService.getModeEdit() === 'yes' ? true : false;
@@ -113,7 +120,18 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   }
 
   formSubmit() {
-    debugger;
+    if (
+      _.isNull(this.trainingTable) ||
+      _.isUndefined(this.trainingTable.user)
+    ) {
+      this.snack.open('Es obligatorio asignar un usuario', 'Aceptar', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
+      });
+      return;
+    }
+
     // Para evitar problemas al guardar en el back
     this.trainingTable.user.authorities = [];
 
@@ -124,7 +142,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
     )
       this.checkUserListTrainings(this.trainingTable.listTraining);
 
-    // TODO: Resivar ya que cuando falla al tener formateados los valores me suma dias sin sumar
+    // TODO: Revisar ya que cuando falla al tener formateados los valores me suma dias sin sumar
     if (_.isFunction(this.trainingTable.initDate.getDate) && !this.initADD) {
       this.trainingTable.initDate.setDate(
         this.trainingTable.initDate.getDate() + 1
