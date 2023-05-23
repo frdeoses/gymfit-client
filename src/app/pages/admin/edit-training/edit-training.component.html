@@ -154,7 +154,7 @@
                 {{ training.description }}
               </mat-card-content>
             </div>
-            <div class="col-md-12">
+            <div *ngIf="training.exercisedArea" class="col-md-12">
               <mat-card-title class="mt20">Area ejercitada:</mat-card-title>
               <mat-card-content>
                 {{ training.exercisedArea }}
@@ -171,13 +171,39 @@
               </mat-card-content>
             </div>
             <div
-              *ngIf="training.gymMachine"
+              *ngIf="
+                training.gymMachine &&
+                training.user.authorities[0].authority == 'ADMIN'
+              "
               [routerLink]="'/admin/gym-machines/' + training.gymMachine.id"
               class="col-md-6 machine cursorHand"
             >
               <mat-card-title class="mt20">Máquina:</mat-card-title>
               <mat-card-content>
-                {{ training.gymMachine.name }}
+                <i>
+                  <b>
+                    {{ training.gymMachine.name }}
+                  </b>
+                </i>
+              </mat-card-content>
+            </div>
+            <div
+              *ngIf="
+                training.gymMachine &&
+                training.user.authorities[0].authority == 'USER'
+              "
+              [routerLink]="
+                '/user-dashboard/gym-machines/' + training.gymMachine.id
+              "
+              class="col-md-6 machine cursorHand"
+            >
+              <mat-card-title class="mt20">Máquina:</mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b>
+                    {{ training.gymMachine.name }}
+                  </b>
+                </i>
               </mat-card-content>
             </div>
             <div class="col-md-6">
@@ -194,7 +220,7 @@
                 {{ training.numSeries }}
               </mat-card-content>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
               <mat-card-title class="mt20">Me gustas:</mat-card-title>
               <mat-card-content>
                 <span>
@@ -202,9 +228,25 @@
                 </span>
               </mat-card-content>
             </div>
+            <div
+              *ngIf="
+                training.user && training.user.username && rolLogin === 'ADMIN'
+              "
+              [routerLink]="'/admin/users/' + training.user.id"
+              class="user cursorHand col-md-6"
+            >
+              <mat-card-title class="mt20"> Usuario asignado:</mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b>
+                    {{ training.user.username }}
+                  </b>
+                </i>
+              </mat-card-content>
+            </div>
 
             <div class="col-md-12 text-center">
-              <mat-card-title class="mt10">
+              <mat-card-title class="mt20">
                 <u> Video explicativo: </u>
               </mat-card-title>
               <img
