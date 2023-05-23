@@ -19,7 +19,6 @@ import { ViewUsersComponent } from './pages/admin/view-users/view-users.componen
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { InstructionsComponent } from './pages/user/instructions/instructions.component';
 import { LoadEventsComponent } from './pages/user/load-events/load-events.component';
@@ -31,6 +30,7 @@ import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboa
 import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.component';
 import { AdminGuard } from './services/guards/admin/admin.guard';
 import { UserGuard } from './services/guards/user/user.guard';
+import { ProfileComponent } from './pages/admin/profile/profile.component';
 const routes: Routes = [
   {
     path: '',
