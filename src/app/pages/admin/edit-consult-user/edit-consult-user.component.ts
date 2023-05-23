@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { IWeight } from 'src/app/interfaces/user/weight.interface';
+import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
 
@@ -16,6 +17,7 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
 
   listUserWeight: IWeight[] | undefined;
   editMode: boolean | undefined;
+  navigateProfile: boolean | undefined;
 
   user: IUser = {
     id: '',
@@ -30,14 +32,18 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
     height: 0,
   };
 
+  userLogin: string = '';
+
   constructor(
     private userService: UserService,
     private snack: MatSnackBar,
     private router: Router,
+    private loginService: LoginService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.userLogin = this.loginService.getUser().username;
     this.userId = this.route.snapshot.params['userId'];
 
     this.userService.getUser(this.userId).subscribe(
@@ -51,6 +57,8 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.navigateProfile = this.userService.navigateProfile;
+
     this.editMode = this.userService.getModeEdit() === 'yes' ? true : false;
   }
 
@@ -59,34 +67,49 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
   }
 
   formSubmit() {
-    if (this.user.username == '' || this.user.username == null) {
-      this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
-        duration: 3000,
-        verticalPosition: 'top',
-        horizontalPosition: 'right',
-      });
-      return;
-    }
 
-    this.userService.editUser(this.user).subscribe(
-      (data) => {
-        console.log(data);
-        Swal.fire(
-          'Usuario guardado:',
-          'Usuario actualizado con exito!!',
-          'success'
-        );
-        this.router.navigate(['/admin/users']);
-      },
-      (error) => {
-        console.error(error);
-
-        Swal.fire(
-          'Error:',
-          'Ha ocurrido un error en el sistema al actualizar el usuario!!',
-          'error'
-        );
+    if (this.editMode) {
+      if (this.user.username == '' || this.user.username == null) {
+        this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'right',
+        });
+        return;
       }
-    );
+      this.userService.editUser(this.user).subscribe(
+        (data) => {
+          console.log(data);
+          Swal.fire(
+            'Usuario actualizado:',
+            'Usuario actualizado con éxito!!',
+            'success'
+          );
+
+          if (this.navigateProfile) {
+            this.router.navigate(['/admin/profile']);
+          } else {
+            this.router.navigate(['/admin/users']);
+          }
+        },
+        (error) => {
+          console.error(error);
+
+          Swal.fire(
+            'Error:',
+            'Ha ocurrido un error en el sistema al actualizar el usuario!!',
+            'error'
+          );
+        }
+      );
+    }
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.userService.modeEdit('no');
   }
 }
