@@ -42,3 +42,33 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="trainings.length === 0">
+  <div class="bootstrap-wrapper">
+    <div class="container-fluid">
+      <h1
+        style="
+          background: white;
+          border-radius: 24px;
+          padding: 10px;
+          text-align: center;
+        "
+      >
+        No hay ejercicios....
+      </h1>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-card
+            style="
+              background: url(../../../assets/gif/empty-state.gif) no-repeat;
+              min-height: 75vh;
+              background-position: center;
+              background-size: cover;
+            "
+          >
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

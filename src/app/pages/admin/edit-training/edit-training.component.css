@@ -27,6 +27,11 @@
     border-radius: 20px;
 }
 
+.user{
+    background: blanchedalmond;
+    border-radius: 20px;
+}
+
 .cursorHand{
     cursor: pointer;
 }

@@ -19,7 +19,7 @@
           <textarea
             [(ngModel)]="event.description"
             type="text"
-            name="descripcion"
+            name="descripción"
             placeholder="Introduzca la descripción"
             matInput
             rows="8"
@@ -54,7 +54,18 @@
           <div class="col-md-12">
             <mat-divider></mat-divider>
           </div>
-          <div class="col-md-12 mt20">
+          <br />
+
+          <div class="col-md-12 text-center">
+            <img
+              style="width: 30%"
+              src="../../../../assets/gif/dancing-llama.gif"
+            />
+          </div>
+          <div
+            style="background: aliceblue; border-radius: 20px"
+            class="col-md-12 mt20"
+          >
             <mat-card-content>
               <p>
                 {{ event.description }}
