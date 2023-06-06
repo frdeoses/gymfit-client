@@ -24,7 +24,7 @@ export class UserGuard implements CanActivate {
     | UrlTree {
     if (
       this.loginService.isLoggedIn() &&
-      this.loginService.getUserRoles() == 'USER'
+      this.loginService.getCurrentUserRole() == 'USER'
     ) {
       return true;
     }

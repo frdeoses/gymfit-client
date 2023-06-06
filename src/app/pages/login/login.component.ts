@@ -53,12 +53,12 @@ export class LoginComponent implements OnInit {
           this.loginService.setUser(user);
           console.log(user);
 
-          if (this.loginService.getUserRoles() == 'ADMIN') {
+          if (this.loginService.getCurrentUserRole() == 'ADMIN') {
             // mostrar dashboard admin
             // window.location.href = '/admin';
             this.router.navigate(['admin']);
             this.loginService.loginStatusSubject.next(true);
-          } else if (this.loginService.getUserRoles() == 'USER') {
+          } else if (this.loginService.getCurrentUserRole() == 'USER') {
             // window.location.href = '/user-dashboard';
             this.router.navigate(['user-dashboard']);
             this.loginService.loginStatusSubject.next(true);
