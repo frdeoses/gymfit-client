@@ -67,8 +67,11 @@ export class EditTrainingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let rolUser: string = this.loginService.getUser().userRols[0].nameRole;
-    this.rolLogin = rolUser.toUpperCase();
+    let rolUser: undefined | string = this.loginService.getCurrentUserRole();
+
+    if (!_.isUndefined(rolUser)) {
+      this.rolLogin = rolUser.toUpperCase();
+    }
     this.trainingId = this.route.snapshot.params['trainingId'];
 
     this.trainingService.getTraining(this.trainingId).subscribe(

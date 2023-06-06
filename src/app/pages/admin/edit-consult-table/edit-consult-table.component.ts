@@ -67,8 +67,11 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let rolUser: string = this.loginService.getUser().userRols[0].nameRole;
-    this.rolLogin = rolUser.toUpperCase();
+    let rolUser = this.loginService.getCurrentUserRole();
+
+    if (!_.isUndefined(rolUser)) {
+      this.rolLogin = rolUser.toUpperCase();
+    }
 
     this.tableId = this.route.snapshot.params['tableId'];
 

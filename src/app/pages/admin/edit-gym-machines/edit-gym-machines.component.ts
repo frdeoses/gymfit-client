@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
+import { LoginService } from 'src/app/services/login/login.service';
 import Swal from 'sweetalert2';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-edit-gym-machines',
@@ -15,6 +17,7 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
   editMode: boolean | undefined;
   subscription: Subscription = new Subscription();
   likeAdd: boolean = false;
+  rolLoginUser: string = '';
   gymMachine: IGymMachine = {
     id: '',
     name: '',
@@ -31,6 +34,7 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private machineService: MachineService,
+    private loginService: LoginService,
     private router: Router
   ) {}
 
@@ -46,6 +50,12 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     );
+    let role = this.loginService.getCurrentUserRole();
+
+    if (!_.isUndefined(role)) {
+      this.rolLoginUser = role;
+    }
+
     this.editMode = this.machineService.getModeEdit() === 'yes' ? true : false;
     this.likeAdd = this.machineService.getLikeAdd() === 'yes' ? true : false;
   }
