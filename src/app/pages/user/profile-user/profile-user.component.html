@@ -8,7 +8,14 @@
             <span class="userName">{{ user.username }}</span>
           </h1>
         </div>
-        <div class="col-md-2 mt20" style="padding-left: 90px">
+        <div
+          class="col-md-2"
+          style="
+            display: flex;
+            align-content: flex-end;
+            justify-content: center;
+          "
+        >
           <button mat-icon-button (click)="modeEdit()">
             <mat-icon color="warn" mat-list-icon>edit</mat-icon>
           </button>

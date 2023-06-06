@@ -11,21 +11,18 @@
   <span>GYMFIT!!</span>
   <span class="example-spacer"></span>
   <a
+    style="width: 10%"
     *ngIf="!loginService.isLoggedIn()"
     [routerLink]="'/login'"
     mat-icon-button
-    class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
   >
     Iniciar sesión
   </a>
-
   <a
+    style="width: 7%"
     *ngIf="!loginService.isLoggedIn()"
     [routerLink]="'/register'"
     mat-icon-button
-    class="example-icon favorite-icon mr20 ml70"
-    aria-label="Example icon-button with heart icon"
   >
     Registrarse
   </a>
@@ -42,9 +39,6 @@
     admin
   </button>
 
-  <!-- user.userRols &&
-  user.userRols[0].nameRole &&
-  user.userRols[0].nameRole === 'USER' -->
   <button
     *ngIf="loginService.isLoggedIn() && role === 'USER'"
     mat-button

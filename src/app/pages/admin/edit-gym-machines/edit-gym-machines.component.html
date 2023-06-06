@@ -1,8 +1,8 @@
-<div *ngIf="!editMode" class="bootstrap-wrapper">
+<div *ngIf="!editMode" class="bootstrap-wrapper" style="padding-top: 20px">
   <div class="container">
     <mat-card>
       <div class="row">
-        <div style="display: flex; align-items: flex-end">
+        <div class="col-md-10" style="display: flex; align-items: flex-end">
           <div class="ml10" style="padding: 4px">
             <img
               src="../../../../assets/image/bench-press.png"
@@ -10,28 +10,38 @@
               class="profile-image"
             />
           </div>
-          <div class="col-md-7">
-            <mat-card-title>
-              Consultar Máquina:
-              <span> {{ gymMachine.name }}</span>
-            </mat-card-title>
-          </div>
-          <div class="col-md-3 offset-md-3">
-            <button mat-icon-button color="primary" class="ml20">
-              <mat-icon color="primary" (click)="modeEdit()" mat-list-icon
-                >edit</mat-icon
-              >
-            </button>
-            <button
-              class="ml10"
-              color="warn"
-              [disabled]="likeAdd"
-              (click)="like()"
-              mat-icon-button
+          <mat-card-title>
+            Consultar Máquina:
+            <span> {{ gymMachine.name }}</span>
+          </mat-card-title>
+        </div>
+
+        <div
+          class="col-md-2"
+          style="display: flex; align-items: flex-end; justify-content: center"
+        >
+          <button
+            *ngIf="rolLoginUser === 'ADMIN'"
+            mat-icon-button
+            color="primary"
+            class="ml20"
+          >
+            <mat-icon color="primary" (click)="modeEdit()" mat-list-icon
+              >edit</mat-icon
             >
-              <mat-icon>favorite</mat-icon>
-            </button>
-          </div>
+          </button>
+          <button
+            class="ml10"
+            color="warn"
+            [disabled]="likeAdd"
+            (click)="like()"
+            mat-icon-button
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
           <mat-divider></mat-divider>
         </div>
 
