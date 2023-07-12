@@ -61,7 +61,8 @@ import { ProfileUserComponent } from './pages/user/profile-user/profile-user.com
 import { ErrorNotFoundComponent } from './pages/404/error-not-found/error-not-found.component';
 import { ProfileComponent } from './pages/admin/profile/profile.component';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
-
+import { NgChartsModule } from 'ng2-charts';
+import { UserGraphComponent } from './components/user-graph/user-graph.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -100,6 +101,7 @@ import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
     LoadTrainingComponent,
     ProfileUserComponent,
     ErrorNotFoundComponent,
+    UserGraphComponent,
   ],
   imports: [
     BrowserModule,
@@ -129,6 +131,7 @@ import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true,
     }),
+    NgChartsModule,
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],
