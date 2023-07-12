@@ -189,7 +189,7 @@
               <mat-card-content> {{ user.phone }} </mat-card-content>
             </div>
 
-            <div *ngIf="user.height" class="col-md-6 text-center">
+            <div *ngIf="user.height" class="col-md-3 text-center">
               <u>
                 <mat-card-title class="mt20">
                   Altura <span>(cm)</span> :</mat-card-title
@@ -197,7 +197,34 @@
               </u>
               <mat-card-content> {{ user.height }} </mat-card-content>
             </div>
-            <div *ngIf="user.weight" class="col-md-4 text-center">
+
+            <div *ngIf="user.height" class="col-md-3 text-center">
+              <mat-card-title class="mt20">
+                Frecuencia cardíaca
+                <span>(BPM)</span> :
+              </mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b> 1200 </b>
+                </i>
+              </mat-card-content>
+            </div>
+
+            <div *ngIf="user.height" class="col-md-3 text-center">
+              <u>
+                <mat-card-title class="mt20">
+                  Calorías
+                  <span> <mat-icon>whatshot</mat-icon> </span>:
+                </mat-card-title>
+              </u>
+              <mat-card-content>
+                <i>
+                  <b> 1200 </b>
+                </i>
+              </mat-card-content>
+            </div>
+
+            <div *ngIf="user.weight" class="col-md-3 text-center">
               <u>
                 <mat-card-title class="mt20">
                   Peso <span>(kg)</span> :</mat-card-title
@@ -205,11 +232,17 @@
               </u>
               <mat-card-content> {{ user.weight }} </mat-card-content>
             </div>
-            <div
+
+            <!-- <div
               *ngIf="listUserWeight && listUserWeight.length != 0"
               class="col-md-12 text-center"
             >
-              <mat-card-title class="mt20"> Pesos:</mat-card-title>
+              <br />
+              <u>
+                <mat-card-title class="mt20">
+                  Histórico de pesos <span>(kg)</span>:</mat-card-title
+                >
+              </u>
             </div>
             <div class="card ml20" *ngFor="let w of listUserWeight">
               <mat-card class="col-md-3 mt20 ml20 box">
@@ -224,6 +257,16 @@
                   </mat-card-content>
                 </mat-list>
               </mat-card>
+            </div> -->
+
+            <div class="col-md-12 text-center">
+              <br />
+              <u>
+                <mat-card-title class="mt20">
+                  Evolución física: peso y porcentaje de grasa :</mat-card-title
+                >
+              </u>
+              <app-user-graph></app-user-graph>
             </div>
           </div>
         </mat-card>

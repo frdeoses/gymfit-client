@@ -2,19 +2,27 @@
   <mat-card class="col-md-12">
     <div class="container">
       <div class="row">
-        <div class="col-md-10 head">
-          <img src="../../../../assets/image/membership.png" />
+        <div class="col-md-8 col-sm-6 col-xs-6 col-10 head">
+          <img
+            style="
+              max-width: 100px;
+              width: auto;
+              height: auto;
+              min-height: 100px;
+            "
+            src="../../../../assets/image/membership.png"
+          />
           <h1>
             <span class="userName">{{ user.username }}</span>
           </h1>
         </div>
         <div
-          class="col-md-2"
           style="
             display: flex;
-            align-content: flex-end;
-            justify-content: center;
+            align-items: flex-end;
+            justify-content: flex-end;
           "
+          class="col-md-4 col-sm-6 col-2"
         >
           <button mat-icon-button (click)="modeEdit()">
             <mat-icon color="warn" mat-list-icon>edit</mat-icon>
@@ -23,49 +31,131 @@
         <div class="col-md-12">
           <mat-divider></mat-divider>
         </div>
-        <div class="col-md-6">
-          <mat-card-title class="mt20"> Usuario:</mat-card-title>
+        <div class="col-md-6 text-center">
+          <u>
+            <mat-card-title class="mt20"> Usuario:</mat-card-title>
+          </u>
           <mat-card-content>
-            {{ user.username }}
+            <i>
+              <b>
+                {{ user.username }}
+              </b>
+            </i>
           </mat-card-content>
         </div>
-        <div class="col-md-6">
-          <mat-card-title class="mt20"> Password:</mat-card-title>
-          <mat-card-content> **** </mat-card-content>
+        <div class="col-md-6 text-center">
+          <u>
+            <mat-card-title class="mt20"> Password:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b> **** </b>
+            </i>
+          </mat-card-content>
         </div>
 
-        <div class="col-md-3">
-          <mat-card-title class="mt20"> Nombre:</mat-card-title>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Nombre:</mat-card-title>
+          </u>
           <mat-card-content>
-            {{ user.name }}
+            <i>
+              <b>
+                {{ user.name }}
+              </b>
+            </i>
           </mat-card-content>
         </div>
-        <div class="col-md-3">
-          <mat-card-title class="mt20"> Apellidos:</mat-card-title>
-          <mat-card-content> {{ user.surname }} </mat-card-content>
-        </div>
-        <div class="col-md-3">
-          <mat-card-title class="mt20"> Correo:</mat-card-title>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Apellidos:</mat-card-title>
+          </u>
           <mat-card-content>
-            {{ user.email }}
+            <i>
+              <b>
+                {{ user.surname }}
+              </b>
+            </i>
           </mat-card-content>
         </div>
-        <div class="col-md-3">
-          <mat-card-title class="mt20"> Teléfono:</mat-card-title>
-          <mat-card-content> {{ user.phone }} </mat-card-content>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Correo:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.email }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Teléfono:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.phone }}
+              </b>
+            </i>
+          </mat-card-content>
         </div>
 
-        <div *ngIf="user.height" class="col-md-6">
-          <mat-card-title class="mt20">
-            Altura <span>(cm)</span> :</mat-card-title
-          >
-          <mat-card-content> {{ user.height }} </mat-card-content>
+        <div *ngIf="user.height" class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20">
+              Altura <span>(cm)</span> :</mat-card-title
+            >
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.height }}
+              </b>
+            </i>
+          </mat-card-content>
         </div>
-        <div *ngIf="user.weight" class="col-md-6">
+
+        <div *ngIf="user.height" class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20">
+              Calorías
+              <span> <mat-icon>whatshot</mat-icon> </span>:
+            </mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b> 1200 </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="user.height" class="col-md-3 text-center">
           <mat-card-title class="mt20">
-            Peso <span>(kg)</span> :</mat-card-title
+            Frecuencia cardíaca <span>(BPM)</span> :</mat-card-title
           >
-          <mat-card-content> {{ user.weight }} </mat-card-content>
+          <mat-card-content>
+            <i>
+              <b> 1200 </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="user.weight" class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20">
+              Peso <span>(kg)</span> :</mat-card-title
+            >
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.weight }}
+              </b>
+            </i>
+          </mat-card-content>
         </div>
 
         <div
@@ -89,6 +179,14 @@
               </mat-card-content>
             </mat-list>
           </mat-card>
+        </div>
+
+        <div class="col-md-12 text-center">
+          <br />
+          <u>
+            <mat-card-title class="mt20"> Evolución física: </mat-card-title>
+          </u>
+          <app-user-graph></app-user-graph>
         </div>
       </div>
     </div>
