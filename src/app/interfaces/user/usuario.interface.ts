@@ -15,9 +15,10 @@ export interface IUser {
   registrationDate?: Date;
   height?: number;
   weight?: number;
+  caloriesBurned?: number;
   enabled?: boolean;
   authorities: IAuthority[];
-  userRols?: IRol[];
+  userRoles?: IRol[];
   listUserWeight?: IWeight[];
   listFatPercentage?: IFatPercentage[];
   accountNonExpired?: boolean;
