@@ -13,6 +13,7 @@ export interface ITraining {
   like?: number;
   user: IUser;
   listWorkedWeights?: IWorkedWeights[];
+  caloriesBurned?: number;
   gymMachine?: IGymMachine;
   creationDate: Date;
   lastUpdateDate: Date;

@@ -12,6 +12,7 @@ export interface ITrainingTable {
   endDate: Date;
   trainingDuration?: number;
   breakTime?: number;
+  caloriesBurned?: number;
   observation?: string;
   listTraining?: ITraining[];
 }
