@@ -197,20 +197,7 @@
               </u>
               <mat-card-content> {{ user.height }} </mat-card-content>
             </div>
-
-            <div *ngIf="user.height" class="col-md-3 text-center">
-              <mat-card-title class="mt20">
-                Frecuencia cardíaca
-                <span>(BPM)</span> :
-              </mat-card-title>
-              <mat-card-content>
-                <i>
-                  <b> 1200 </b>
-                </i>
-              </mat-card-content>
-            </div>
-
-            <div *ngIf="user.height" class="col-md-3 text-center">
+            <div *ngIf="user.height" class="col-md-4 text-center">
               <u>
                 <mat-card-title class="mt20">
                   Calorías
@@ -231,31 +218,15 @@
               <mat-card-content> {{ user.weight }} </mat-card-content>
             </div>
 
-            <!-- <div
-              *ngIf="listUserWeight && listUserWeight.length != 0"
-              class="col-md-12 text-center"
-            >
-              <br />
+            <div *ngIf="user.height" class="col-md-12 text-center">
               <u>
                 <mat-card-title class="mt20">
-                  Histórico de pesos <span>(kg)</span>:</mat-card-title
-                >
+                  Frecuencia cardíaca
+                  <span>(BPM)</span> :
+                </mat-card-title>
               </u>
+              <mat-card-content> 1200 </mat-card-content>
             </div>
-            <div class="card ml20" *ngFor="let w of listUserWeight">
-              <mat-card class="col-md-3 mt20 ml20 box">
-                <mat-list>
-                  <mat-card-header class="headerTitle">
-                    <mat-card-title> {{ w.weight }} kg</mat-card-title>
-                  </mat-card-header>
-                  <br />
-                  <mat-card-content class="content"
-                    >Fecha:
-                    <span>{{ w.date | date : "dd/MM/yy HH:mm" }}</span>
-                  </mat-card-content>
-                </mat-list>
-              </mat-card>
-            </div> -->
 
             <div class="col-md-12 text-center">
               <br />
