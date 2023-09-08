@@ -72,26 +72,34 @@
 
           <div class="row">
             <mat-form-field class="col-md-4" appearance="fill">
-                <mat-label>Número de repeticiones</mat-label>
-                <input
-                  [(ngModel)]="training.numRepetitions"
-                  type="number"
-                  name="numRepetitions"
-                  placeholder="Introduzca el título.."
-                  matInput
-                />
-              </mat-form-field>
+              <mat-label>Número de repeticiones</mat-label>
+              <input
+                [(ngModel)]="training.numRepetitions"
+                type="number"
+                name="numRepetitions"
+                placeholder="Introduzca el título.."
+                matInput
+              />
+            </mat-form-field>
             <mat-form-field class="col-md-4" appearance="fill">
-                <mat-label>Numero de series</mat-label>
-                <input
-                  [(ngModel)]="training.numSeries"
-                  type="number"
-                  name="numSeries"
-                  placeholder="Introduzca el título.."
-                  matInput
-                />
-              </mat-form-field>
-            </div>
+              <mat-label>Numero de series</mat-label>
+              <input
+                [(ngModel)]="training.numSeries"
+                type="number"
+                name="numSeries"
+                placeholder="Introduzca el título.."
+                matInput
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-4" appearance="fill">
+              <mat-label>Calorías quemadas :</mat-label>
+              <input
+                [(ngModel)]="training.caloriesBurned"
+                type="number"
+                name="caloriesBurned"
+                matInput
+              />
+            </mat-form-field>
           </div>
 
           <mat-form-field class="w100" appearance="fill">
@@ -129,7 +137,9 @@
             <div class="col-md-8">
               <mat-card-title class="mt20">Nombre:</mat-card-title>
               <mat-card-content>
-                {{ training.name }}
+                <b>
+                  {{ training.name }}
+                </b>
               </mat-card-content>
             </div>
             <div class="col-md-2">
@@ -155,7 +165,11 @@
             <div class="col-md-12">
               <mat-card-title class="mt20">Descripción:</mat-card-title>
               <mat-card-content>
-                {{ training.description }}
+                <b>
+                  <i>
+                    {{ training.description }}
+                  </i>
+                </b>
               </mat-card-content>
             </div>
             <div *ngIf="training.exercisedArea" class="col-md-12">
@@ -175,10 +189,7 @@
               </mat-card-content>
             </div>
             <div
-              *ngIf="
-                training.gymMachine &&
-                training.user.authorities[0].authority == 'ADMIN'
-              "
+              *ngIf="training.gymMachine && rolLogin == 'ADMIN'"
               [routerLink]="'/admin/gym-machines/' + training.gymMachine.id"
               class="col-md-6 machine cursorHand"
             >
@@ -192,10 +203,7 @@
               </mat-card-content>
             </div>
             <div
-              *ngIf="
-                training.gymMachine &&
-                training.user.authorities[0].authority == 'USER'
-              "
+              *ngIf="training.gymMachine && rolLogin == 'USER'"
               [routerLink]="
                 '/user-dashboard/gym-machines/' + training.gymMachine.id
               "
@@ -215,13 +223,17 @@
                 >Número de repeticiones:</mat-card-title
               >
               <mat-card-content>
-                {{ training.numRepetitions }}
+                <i>
+                  <b> {{ training.numRepetitions }} </b>
+                </i>
               </mat-card-content>
             </div>
             <div *ngIf="training.gymMachine" class="col-md-6">
               <mat-card-title class="mt20">Numero de series:</mat-card-title>
               <mat-card-content>
-                {{ training.numSeries }}
+                <i>
+                  <b> {{ training.numSeries }} </b>
+                </i>
               </mat-card-content>
             </div>
             <div class="col-md-6">
@@ -230,6 +242,17 @@
                 <span>
                   {{ training.like }}
                 </span>
+              </mat-card-content>
+            </div>
+            <div class="col-md-6">
+              <mat-card-title class="mt20">
+                Calorías
+                <span> <mat-icon>whatshot</mat-icon> </span>:
+              </mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b> {{ training.caloriesBurned }} </b>
+                </i>
               </mat-card-content>
             </div>
             <div

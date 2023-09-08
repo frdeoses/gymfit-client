@@ -1,21 +1,18 @@
 <div *ngIf="editMode" class="bootstrap-wraper">
-  <div class="row mt20">
-    <div class="col-md-12">
-      <h1>
-        Editar Tabla de Entrenamiento: <span>{{ trainingTable.name }}</span>
-      </h1>
-    </div>
-  </div>
-  <mat-divider></mat-divider>
-
   <mat-card>
-    <mat-card-header>
-      <mat-card-title> Datos de la tabla: </mat-card-title>
-    </mat-card-header>
+    <div class="row mt20">
+      <div class="col-md-12">
+        <u>
+          <mat-card-title class="text-center mt20">
+            Editar tabla de entrenamiento</mat-card-title
+          >
+        </u>
+      </div>
+    </div>
 
     <mat-card-content>
       <form (ngSubmit)="formSubmit()">
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width mt20" appearance="outline">
           <mat-label>Nombre: </mat-label>
           <input
             required
@@ -31,7 +28,7 @@
           <textarea
             [(ngModel)]="trainingTable.description"
             type="text"
-            name="descripcion"
+            name="descripción"
             placeholder="Introduzca la descripción"
             matInput
             rows="8"
@@ -87,6 +84,16 @@
               >{{ training.name }}</mat-option
             >
           </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Calorías quemadas :</mat-label>
+          <input
+            [(ngModel)]="trainingTable.caloriesBurned"
+            type="number"
+            name="caloriesBurned"
+            matInput
+          />
         </mat-form-field>
 
         <mat-form-field class="col-md-6 mt20" appearance="outline">
@@ -153,26 +160,51 @@
 
 <!-- modo consulta -->
 
-<div *ngIf="!editMode" class="bootstrap-wraper">
+<div *ngIf="!editMode" class="bootstrap-wraper mt20">
   <mat-card>
     <div class="row ml10">
       <div class="col-md-12">
-        <div class="head">
-          <h1>Consultar tabla de entrenamiento</h1>
+        <div class="text-center">
+          <h1>
+            <b> Consultar tabla de entrenamiento </b>
+          </h1>
         </div>
         <mat-divider></mat-divider>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-8">
         <mat-card-title class="mt20"> Nombre:</mat-card-title>
         <mat-card-content>
-          {{ trainingTable.name }}
+          <b>
+            <i>
+              {{ trainingTable.name }}
+            </i>
+          </b>
+        </mat-card-content>
+      </div>
+      <div class="col-md-2 text-center">
+        <mat-card-subtitle class="mt20">Fecha de creación:</mat-card-subtitle>
+        <mat-card-content class="text-center">
+          <b>
+            {{ trainingTable.creationDate | date : "dd/MM/yy " }}
+          </b>
+        </mat-card-content>
+      </div>
+
+      <div class="col-md-2 text-center">
+        <mat-card-subtitle class="mt20">Última modificación:</mat-card-subtitle>
+        <mat-card-content class="text-center">
+          <b> </b>
         </mat-card-content>
       </div>
 
       <div class="col-md-12">
         <mat-card-title class="mt20"> Descripción:</mat-card-title>
         <mat-card-content>
-          {{ trainingTable.description }}
+          <b>
+            <i>
+              {{ trainingTable.description }}
+            </i>
+          </b>
         </mat-card-content>
       </div>
 
@@ -186,28 +218,41 @@
       </div>
 
       <div class="col-md-6">
-        <mat-card-title class="mt20"> Fecha de creación:</mat-card-title>
+        <mat-card-title class="mt20">
+          Calorías
+          <span> <mat-icon>whatshot</mat-icon> </span>:
+        </mat-card-title>
         <mat-card-content>
-          {{ trainingTable.creationDate | date : "dd/MM/yy" }}
+          <i>
+            <b> {{ trainingTable.caloriesBurned }} </b>
+          </i>
         </mat-card-content>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-6 text-center">
         <mat-card-title class="mt20"> Inicio de la tabla:</mat-card-title>
-        <mat-card-content>
-          {{ trainingTable.initDate | date : "dd/MM/yy" }}
+        <mat-card-content class="text-center">
+          <span>
+            {{ trainingTable.initDate | date : "dd/MM/yy" }}
+          </span>
         </mat-card-content>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6 text-center">
         <mat-card-title class="mt20"> Finalización de la tabla:</mat-card-title>
-        <mat-card-content>
-          {{ trainingTable.endDate | date : "dd/MM/yy" }}
+        <mat-card-content class="text-center">
+          <span>
+            {{ trainingTable.endDate | date : "dd/MM/yy" }}
+          </span>
         </mat-card-content>
       </div>
       <div class="col-md-6">
         <mat-card-title class="mt20"> Tiempo de descanso (seg):</mat-card-title>
         <mat-card-content>
-          {{ trainingTable.breakTime }}
+          <b>
+            <i>
+              {{ trainingTable.breakTime }}
+            </i>
+          </b>
         </mat-card-content>
       </div>
       <div class="col-md-6">
@@ -215,7 +260,11 @@
           Tiempo de duración (días):</mat-card-title
         >
         <mat-card-content>
-          {{ trainingTable.trainingDuration }}
+          <b>
+            <i>
+              {{ trainingTable.trainingDuration }}
+            </i>
+          </b>
         </mat-card-content>
       </div>
 
@@ -294,7 +343,7 @@
           [routerLink]="
             '/user-dashboard/trainings/' + t.typeTraining + '/' + t.id
           "
-          class="col-md-3 mt20 ml20 cursorHand box"
+          class="col-md-3 mt20 mr20 cursorHand box"
         >
           <mat-list>
             <mat-card-header class="headerTitle">
@@ -312,5 +361,3 @@
     </div>
   </mat-card>
 </div>
-
-<!-- {{ trainingTable | json }} -->
