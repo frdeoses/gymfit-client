@@ -101,11 +101,12 @@
           </div>
 
           <div class="mt20 container text-center">
-            <!-- <button mat-raised-button color="primary" (click)="createComment()">
-              Comentar
-            </button> -->
-
-            <button mat-mini-fab color="primary" (click)="createComment()">
+            <button
+              matTooltip="Añadir un comentario"
+              mat-mini-fab
+              color="primary"
+              (click)="createComment()"
+            >
               <mat-icon>add_comment</mat-icon>
             </button>
           </div>
