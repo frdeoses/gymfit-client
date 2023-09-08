@@ -16,29 +16,40 @@
 
           <h1 class="text-center">Regístrate aquí!!</h1>
 
-          <form (ngSubmit)="formSubmit()">
+          <form [formGroup]="userForm" (ngSubmit)="formSubmit()">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label> Usuario </mat-label>
               <input
                 required
                 matInput
-                [(ngModel)]="user.username"
+                formControlName="username"
                 name="username"
                 placeholder="Introduzca el nombre del usuario..."
               />
               <mat-hint>El nombre de usuario debe ser único</mat-hint>
+
+              <mat-error *ngIf="userForm.get('username')?.hasError('required')"
+                >El usuario es obligatorio introducirlo</mat-error
+              >
             </mat-form-field>
 
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="mt10 full-width" appearance="outline">
               <mat-label>Contraseña</mat-label>
               <input
                 required
                 matInput
-                [(ngModel)]="user.password"
+                formControlName="password"
                 name="password"
                 type="password"
                 placeholder="Introduzca la contraseña"
               />
+
+              <mat-error *ngIf="userForm.get('password')?.hasError('required')"
+                >La contraseña es obligatorio introducirlo</mat-error
+              >
+              <mat-error *ngIf="userForm.get('password')?.hasError('minlength')"
+                >La contraseña debe tener al menos 8 caracteres</mat-error
+              >
             </mat-form-field>
 
             <mat-form-field class="full-width" appearance="outline">
@@ -46,10 +57,13 @@
               <input
                 required
                 matInput
-                [(ngModel)]="user.name"
                 name="name"
+                formControlName="name"
                 placeholder="Introduzca su nombre..."
               />
+              <mat-error *ngIf="userForm.get('name')?.hasError('required')"
+                >El nombre es obligatorio introducirlo</mat-error
+              >
             </mat-form-field>
 
             <mat-form-field class="full-width" appearance="outline">
@@ -57,41 +71,59 @@
               <input
                 required
                 matInput
-                [(ngModel)]="user.surname"
                 name="surname"
+                formControlName="surname"
                 placeholder="Introduzca sus apellidos..."
               />
+
+              <mat-error *ngIf="userForm.get('surname')?.hasError('required')"
+                >Los apellidos es obligatorio introducirlo</mat-error
+              >
             </mat-form-field>
 
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Email:</mat-label>
               <input
                 required
+                formControlName="email"
                 matInput
-                [(ngModel)]="user.email"
                 name="email"
                 type="email"
                 placeholder="Ex. pat@example.com"
               />
+
+              <mat-error *ngIf="userForm.get('email')?.hasError('required')"
+                >El correo electrónico es obligatorio introducirlo</mat-error
+              >
+              <mat-error *ngIf="userForm.get('email')?.hasError('email')"
+                >Correo electrónico no es válido</mat-error
+              >
             </mat-form-field>
 
             <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Número de telefono</mat-label>
+              <mat-label>Número de teléfono</mat-label>
               <input
                 required
                 matInput
-                [(ngModel)]="user.phone"
+                formControlName="phone"
                 name="phone"
-                placeholder="Introduzca el número de telefono..."
+                placeholder="Introduzca el número de teléfono..."
               />
+              <mat-error *ngIf="userForm.get('phone')?.hasError('required')"
+                >El teléfono es obligatorio introducirlo</mat-error
+              >
+              <mat-error *ngIf="userForm.get('phone')?.hasError('pattern')"
+                >El teléfono debe contener solo números</mat-error
+              >
             </mat-form-field>
 
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Fecha de nacimiento:</mat-label>
               <input
                 matInput
+                required
+                formControlName="birthDate"
                 [matDatepicker]="picker"
-                [(ngModel)]="user.birthDate"
                 name="birthDate"
               />
               <mat-hint>MM/DD/YYYY</mat-hint>
@@ -100,14 +132,23 @@
                 [for]="picker"
               ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
+
+              <mat-error *ngIf="userForm.get('birthDate')?.hasError('required')"
+                >La fecha de nacimiento es obligatorio introducirlo</mat-error
+              >
+              <mat-error
+                *ngIf="userForm.get('birthDate')?.hasError('fechaInvalida')"
+              >
+                Fecha de nacimiento no válida
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field class="col-md-6 mt20" appearance="outline">
               <mat-label>Altura (cm):</mat-label>
               <input
                 matInput
-                [(ngModel)]="user.height"
                 name="height"
+                formControlName="height"
                 type="number"
                 placeholder="Introduzca la altura..."
               />
@@ -117,14 +158,21 @@
               <mat-label>Peso (kg):</mat-label>
               <input
                 matInput
-                [(ngModel)]="user.weight"
-                name="heigth"
+                formControlName="weight"
+                name="height"
+                type="number"
                 placeholder="Introduzca el peso..."
               />
             </mat-form-field>
 
             <div class="container text-center">
-              <button mat-raised-button color="primary">Registrar</button>
+              <button
+                mat-raised-button
+                color="primary"
+                [disabled]="!userForm.valid"
+              >
+                Registrar
+              </button>
               <button
                 type="reset"
                 style="margin-left: 20px"
