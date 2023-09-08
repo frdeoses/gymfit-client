@@ -38,28 +38,12 @@ export class CreateTrainingComponent implements OnInit {
     gymMachine: undefined,
     like: 0,
     listWorkedWeights: [],
-    numRepetitions: 0,
-    numSeries: 0,
     typeTraining: '',
     creationDate: new Date(),
     lastUpdateDate: new Date(),
   };
 
   users: IUser[] = [];
-
-  // userLogin: IUser = {
-  //   id: '',
-  //   name: '',
-  //   username: '',
-  //   password: '',
-  //   userRols: [],
-  //   surname: '',
-  //   email: '',
-  //   birthDate: new Date(),
-  //   height: undefined,
-  //   phone: '',
-  //   authorities: [],
-  // };
 
   trainingTypes: string[] = [];
   gymMachines: IGymMachine[] = [];

@@ -11,9 +11,6 @@
         matInput
         [(ngModel)]="workedWeights.serie"
       />
-      <!-- <mat-error *ngIf="weightFormControl.hasError('required')">
-        Por favor introduce un peso correcto
-      </mat-error> -->
     </mat-form-field>
     <mat-form-field class="w100" appearance="fill">
       <mat-label>Peso</mat-label>
@@ -30,8 +27,6 @@
 
 <div class="w100" style="justify-content: center" mat-dialog-actions>
   <button mat-button color="accent" (click)="onNoClick()">Cancel</button>
-  <!-- cdkFocusInitial -->
-  <!-- disabled="validateFields()" -->
   <button
     class="ml90"
     mat-button

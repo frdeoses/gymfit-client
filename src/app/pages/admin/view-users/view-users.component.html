@@ -1,7 +1,6 @@
 <div *ngFor="let u of users">
   <mat-card *ngIf="u.username != userLogin" class="mt10 container">
     <mat-card-header class="headCol">
-      <!-- <mat-card-title-group> -->
       <mat-card-title class="mt10 ml20">{{ u.username }}</mat-card-title>
       <mat-card-subtitle *ngIf="u.authorities" class="ml20">{{
         u.authorities[0].authority
@@ -11,7 +10,6 @@
         mat-card-sm-image
         src="../../../../assets/image/membership.png"
       />
-      <!-- </mat-card-title-group> -->
     </mat-card-header>
     <mat-card-content class="contenCol">
       <mat-card-actions align="end" class="ml20 mt20">
