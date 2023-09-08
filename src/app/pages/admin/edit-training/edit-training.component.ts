@@ -180,6 +180,10 @@ export class EditTrainingComponent implements OnInit {
   addWorkedWeight(listWorkedWeight: IWorkedWeights[] | undefined) {
     if (!_.isEqual(this.training.listWorkedWeights, listWorkedWeight)) {
       this.training.listWorkedWeights = listWorkedWeight;
+
+      if (!_.isUndefined(this.training.user) && !_.isNull(this.training.user))
+        this.training.user.authorities = [];
+
       this.trainingService.editTraining(this.training).subscribe(
         (data: ITraining) => {
           console.log(data);
