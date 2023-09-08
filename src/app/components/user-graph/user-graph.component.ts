@@ -62,10 +62,11 @@ export class UserGraphComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.loginUser.getUser();
-    this.weightPerMonth = _.isUndefined(this.user.listUserWeight)
-      ? []
-      : this.groupWeightsByMonth(this.user.listUserWeight);
+    // this.weightPerMonth = _.isUndefined(this.user.listUserWeight)
+    //   ? []
+    //   : this.groupWeightsByMonth(this.user.listUserWeight);
 
+    this.weightPerMonth = [80, 70, 75, 75, 76, 85, 90, 95, 92, 87, 89, 85];
     this.grassPerMonth = [20, 15, 18, 22, 16, 19, 15, 18, 22, 0, 19, 12];
 
     this.barChartData = [
@@ -123,10 +124,10 @@ export class UserGraphComponent implements OnInit {
   groupWeightsByMonth(listUserWeight: IWeight[]): number[] {
     const groupedWeights = new Array(12).fill(0);
 
-    for (const { date, weight } of listUserWeight) {
+    for (const { date, weightData } of listUserWeight) {
       if (date) {
         const month = new Date(date).getMonth();
-        const currentWeight = weight || 0;
+        const currentWeight = weightData || 0;
 
         if (currentWeight > groupedWeights[month]) {
           groupedWeights[month] = currentWeight;
