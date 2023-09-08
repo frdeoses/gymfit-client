@@ -10,7 +10,7 @@
             <div mat-card-avatar class="ml20 example-header-image"></div>
             <mat-card-title> {{ e.title }} </mat-card-title>
             <mat-card-subtitle>
-              {{ e.description }}
+              {{ e.creationDate | date : "dd/MM/yyyy" }}
             </mat-card-subtitle>
           </mat-card-header>
         </mat-card>
