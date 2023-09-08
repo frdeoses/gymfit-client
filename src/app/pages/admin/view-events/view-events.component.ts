@@ -76,7 +76,7 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Entrar en modo edicion
+   * Entrar en modo edición
    */
   modeEdit() {
     this.eventService.modeEdit('yes');

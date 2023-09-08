@@ -108,8 +108,8 @@ export class CreateTrainingComponent implements OnInit {
         this.training.description = '';
         this.training.typeTraining = '';
         Swal.fire(
-          'Maquina creada!!',
-          'La maquina ha sido creada con éxito',
+          'Entrenamiento creado!!',
+          'El entrenamiento ha sido creado con éxito',
           'success'
         );
 

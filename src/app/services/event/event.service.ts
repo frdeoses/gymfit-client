@@ -67,7 +67,7 @@ export class EventService {
 
   /**
    * Cambiamos el valor de la var de la sesion
-   *  que nos permiten entrar en modo edicion o
+   *  que nos permiten entrar en modo edición o
    * en modo consulta
    * @param value
    */

@@ -46,7 +46,8 @@ export class EditEventComponent implements OnInit {
         this.event = data;
         this.comments =
           !_.isUndefined(this.event.comments) &&
-          this.event.comments?.length != 0
+          !_.isNull(this.event.comments) &&
+          !_.isEmpty(this.event.comments)
             ? this.event.comments
             : [];
         console.log(this.event);
@@ -62,7 +63,7 @@ export class EditEventComponent implements OnInit {
       (data: IEvent) => {
         Swal.fire(
           'Evento actualizado',
-          'El evento se ha modificado con exito...',
+          'El evento se ha modificado con éxito...',
           'success'
         );
         this.router.navigate(['/admin/events']);
@@ -70,7 +71,7 @@ export class EditEventComponent implements OnInit {
       (error) => {
         Swal.fire(
           'Error en el sistema',
-          'El evento no se ha modificado con exito...',
+          'El evento no se ha modificado con éxito...',
           'error'
         );
         console.error(error);

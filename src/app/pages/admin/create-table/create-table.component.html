@@ -59,15 +59,15 @@
               <mat-label>Tiempo de entrenamiento (días):</mat-label>
               <input
                 matInput
-                matTooltip="Introduzca el nº de dias de entrenamiento"
+                matTooltip="Introduzca el nº de días de entrenamiento"
                 [(ngModel)]="table.trainingDuration"
                 name="breakTime"
                 type="number"
-                placeholder="Introduzca el nº de dias de entrenamiento..."
+                placeholder="Introduzca el nº de días de entrenamiento..."
               />
             </mat-form-field>
 
-            <mat-form-field class="w100 mt20" appearance="outline">
+            <mat-form-field class="col-md-6" appearance="outline">
               <mat-label>Seleccionar ejercicios:</mat-label>
               <mat-select
                 [(ngModel)]="table.listTraining"
