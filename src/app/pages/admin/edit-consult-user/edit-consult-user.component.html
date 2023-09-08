@@ -189,7 +189,7 @@
               <mat-card-content> {{ user.phone }} </mat-card-content>
             </div>
 
-            <div *ngIf="user.height" class="col-md-3 text-center">
+            <div *ngIf="user.height" class="col-md-4 text-center">
               <u>
                 <mat-card-title class="mt20">
                   Altura <span>(cm)</span> :</mat-card-title
@@ -218,13 +218,11 @@
                 </mat-card-title>
               </u>
               <mat-card-content>
-                <i>
-                  <b> 1200 </b>
-                </i>
+                {{ user.caloriesBurned }}
               </mat-card-content>
             </div>
 
-            <div *ngIf="user.weight" class="col-md-3 text-center">
+            <div *ngIf="user.weight" class="col-md-4 text-center">
               <u>
                 <mat-card-title class="mt20">
                   Peso <span>(kg)</span> :</mat-card-title
