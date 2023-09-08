@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -132,6 +132,7 @@ import { UserGraphComponent } from './components/user-graph/user-graph.component
       showForeground: true,
     }),
     NgChartsModule,
+    ReactiveFormsModule,
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],
