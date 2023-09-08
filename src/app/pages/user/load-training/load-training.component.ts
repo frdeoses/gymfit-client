@@ -21,7 +21,7 @@ export class LoadTrainingComponent implements OnInit {
     name: '',
     username: '',
     password: '',
-    userRols: [],
+    userRoles: [],
     surname: '',
     email: '',
     birthDate: new Date(),

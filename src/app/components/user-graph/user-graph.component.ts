@@ -18,7 +18,7 @@ export class UserGraphComponent implements OnInit {
     name: '',
     username: '',
     password: '',
-    userRols: [],
+    userRoles: [],
     surname: '',
     email: '',
     birthDate: new Date(),

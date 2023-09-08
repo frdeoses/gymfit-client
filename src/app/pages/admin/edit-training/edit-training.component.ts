@@ -30,7 +30,7 @@ export class EditTrainingComponent implements OnInit {
       name: '',
       username: '',
       password: '',
-      userRols: [],
+      userRoles: [],
       surname: '',
       email: '',
       birthDate: new Date(),

@@ -11,8 +11,8 @@
         <button
           *ngIf="
             loginService.isLoggedIn() &&
-            user.userRols &&
-            user.userRols[0].roleList === 'USER'
+            user.userRoles &&
+            user.userRoles[0].roleList === 'USER'
           "
           mat-icon-button
           color="primary"
@@ -23,8 +23,8 @@
         <button
           *ngIf="
             loginService.isLoggedIn() &&
-            user.userRols &&
-            user.userRols[0].roleList === 'ADMIN'
+            user.userRoles &&
+            user.userRoles[0].roleList === 'ADMIN'
           "
           mat-icon-button
           color="primary"

@@ -14,7 +14,7 @@ export class ProfileComponent implements OnInit {
     name: '',
     username: '',
     password: '',
-    userRols: [],
+    userRoles: [],
     surname: '',
     email: '',
     birthDate: new Date(),

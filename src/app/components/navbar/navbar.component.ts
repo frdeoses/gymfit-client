@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
     name: '',
     username: '',
     password: '',
-    userRols: [],
+    userRoles: [],
     surname: '',
     email: '',
     birthDate: new Date(),
@@ -33,21 +33,21 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.loginService.getUser();
     if (
-      this.user.userRols !== undefined &&
-      this.user.userRols.length > 0 &&
-      this.user.userRols[0].roleList !== undefined
+      this.user.userRoles !== undefined &&
+      this.user.userRoles.length > 0 &&
+      this.user.userRoles[0].roleList !== undefined
     ) {
-      this.role = this.user.userRols[0].roleList;
+      this.role = this.user.userRoles[0].roleList;
     }
     this.loginService.loginStatusSubject.subscribe((data) => {
       this.isLoggedIn = this.loginService.isLoggedIn();
       this.user = this.loginService.getUser();
       if (
         this.user &&
-        this.user.userRols !== undefined &&
-        this.user.userRols[0].roleList !== undefined
+        this.user.userRoles !== undefined &&
+        this.user.userRoles[0].roleList !== undefined
       ) {
-        this.role = this.user.userRols[0].roleList;
+        this.role = this.user.userRoles[0].roleList;
       }
     });
   }
