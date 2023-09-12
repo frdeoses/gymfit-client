@@ -1,66 +1,338 @@
-<app-spinner></app-spinner>
-<mat-card>
-  <h1>Editar entrenamiento</h1>
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <form *ngIf="training" (submit)="editTraining()">
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Título</mat-label>
-          <input
-            [(ngModel)]="training.name"
-            type="text"
-            name="name"
-            placeholder="Introduzca el título.."
-            required
-            matInput
-          />
-        </mat-form-field>
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Descripción</mat-label>
-          <textarea
-            [(ngModel)]="training.description"
-            type="text"
-            name="descripcion"
-            placeholder="Introduzca la descripción"
-            matInput
-            rows="8"
-          ></textarea>
-        </mat-form-field>
+<div *ngIf="editMode" class="bootstrap-wrapper">
+  <mat-card class="mt20">
+    <div class="row">
+      <div class="col-md-12">
+        <u>
+          <mat-card-title class="text-center mt20">
+            Editar ejercicio</mat-card-title
+          >
+        </u>
+      </div>
+      <div class="col-md-8 offset-md-2">
+        <form *ngIf="training" (submit)="editTraining()">
+          <mat-form-field class="w100 mt20" appearance="fill">
+            <mat-label>Título</mat-label>
+            <input
+              [(ngModel)]="training.name"
+              type="text"
+              name="name"
+              placeholder="Introduzca el título.."
+              required
+              matInput
+            />
+          </mat-form-field>
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              [(ngModel)]="training.description"
+              type="text"
+              name="descripción"
+              placeholder="Introduzca la descripción"
+              matInput
+              rows="8"
+            ></textarea>
+          </mat-form-field>
 
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w100" appearance="fill">
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Tipo de entrenamiento</mat-label>
+            <mat-select
+              name="trainingTypes"
+              [(ngModel)]="training.typeTraining"
+            >
+              <mat-option></mat-option>
+              <mat-option *ngFor="let t of trainingTypes" [value]="t">
+                {{ t }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field
+            *ngIf="gymMachines.length != 0"
+            class="w100"
+            appearance="fill"
+          >
+            <mat-label>Máquinas de entrenamiento</mat-label>
+            <mat-select name="gymMachine" [(ngModel)]="training.gymMachine">
+              <mat-option></mat-option>
+              <mat-option *ngFor="let g of gymMachines" [value]="g">
+                {{ g.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Seleccionar usuario</mat-label>
+            <mat-select [(ngModel)]="training.user" name="user">
+              <mat-option></mat-option>
+              <mat-option *ngFor="let user of users" [value]="user">{{
+                user.username
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field class="col-md-4" appearance="fill">
               <mat-label>Número de repeticiones</mat-label>
               <input
                 [(ngModel)]="training.numRepetitions"
-                type="text"
+                type="number"
                 name="numRepetitions"
                 placeholder="Introduzca el título.."
                 matInput
               />
             </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w100" appearance="fill">
+            <mat-form-field class="col-md-4" appearance="fill">
               <mat-label>Numero de series</mat-label>
               <input
                 [(ngModel)]="training.numSeries"
-                type="text"
+                type="number"
                 name="numSeries"
                 placeholder="Introduzca el título.."
                 matInput
               />
             </mat-form-field>
+            <mat-form-field class="col-md-4" appearance="fill">
+              <mat-label>Calorías quemadas :</mat-label>
+              <input
+                [(ngModel)]="training.caloriesBurned"
+                type="number"
+                name="caloriesBurned"
+                matInput
+              />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Zona ejercitada</mat-label>
+            <input
+              [(ngModel)]="training.exercisedArea"
+              type="text"
+              name="exercisedArea"
+              placeholder="Introduzca la zona ejercitada.."
+              matInput
+            />
+          </mat-form-field>
+
+          <div class="container text-center">
+            <button mat-raised-button color="primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- Modo consulta  -->
+
+<div *ngIf="!editMode" class="bootstrap-wrapper mt20">
+  <mat-card>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1>
+            <b> Consultar entrenamiento </b>
+          </h1>
+          <mat-divider></mat-divider>
+          <div class="row">
+            <div class="col-md-8">
+              <mat-card-title class="mt20">Nombre:</mat-card-title>
+              <mat-card-content>
+                <b>
+                  {{ training.name }}
+                </b>
+              </mat-card-content>
+            </div>
+            <div class="col-md-2">
+              <mat-card-subtitle class="mt20"
+                >Fecha de creación:</mat-card-subtitle
+              >
+              <mat-card-content>
+                <b>
+                  {{ training.creationDate | date : "dd/MM/yy " }}
+                </b>
+              </mat-card-content>
+            </div>
+            <div *ngIf="training.gymMachine" class="col-md-2">
+              <mat-card-subtitle class="mt20"
+                >Última modificación:</mat-card-subtitle
+              >
+              <mat-card-content>
+                <b>
+                  {{ training.lastUpdateDate | date : "dd/MM/yy " }}
+                </b>
+              </mat-card-content>
+            </div>
+            <div class="col-md-12">
+              <mat-card-title class="mt20">Descripción:</mat-card-title>
+              <mat-card-content>
+                <b>
+                  <i>
+                    {{ training.description }}
+                  </i>
+                </b>
+              </mat-card-content>
+            </div>
+            <div *ngIf="training.exercisedArea" class="col-md-12">
+              <mat-card-title class="mt20">Area ejercitada:</mat-card-title>
+              <mat-card-content>
+                {{ training.exercisedArea }}
+              </mat-card-content>
+            </div>
+            <div class="col-md-6">
+              <mat-card-title class="mt20"
+                >Tipo de entrenamiento:</mat-card-title
+              >
+              <mat-card-content>
+                <span>
+                  {{ training.typeTraining }}
+                </span>
+              </mat-card-content>
+            </div>
+            <div
+              *ngIf="training.gymMachine && rolLogin == 'ADMIN'"
+              [routerLink]="'/admin/gym-machines/' + training.gymMachine.id"
+              class="col-md-6 machine cursorHand"
+            >
+              <mat-card-title class="mt20">Máquina:</mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b>
+                    {{ training.gymMachine.name }}
+                  </b>
+                </i>
+              </mat-card-content>
+            </div>
+            <div
+              *ngIf="training.gymMachine && rolLogin == 'USER'"
+              [routerLink]="
+                '/user-dashboard/gym-machines/' + training.gymMachine.id
+              "
+              class="col-md-6 machine cursorHand"
+            >
+              <mat-card-title class="mt20">Máquina:</mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b>
+                    {{ training.gymMachine.name }}
+                  </b>
+                </i>
+              </mat-card-content>
+            </div>
+            <div class="col-md-6">
+              <mat-card-title class="mt20"
+                >Número de repeticiones:</mat-card-title
+              >
+              <mat-card-content>
+                <i>
+                  <b> {{ training.numRepetitions }} </b>
+                </i>
+              </mat-card-content>
+            </div>
+            <div *ngIf="training.gymMachine" class="col-md-6">
+              <mat-card-title class="mt20">Numero de series:</mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b> {{ training.numSeries }} </b>
+                </i>
+              </mat-card-content>
+            </div>
+            <div class="col-md-6">
+              <mat-card-title class="mt20">Me gustas:</mat-card-title>
+              <mat-card-content>
+                <span>
+                  {{ training.like }}
+                </span>
+              </mat-card-content>
+            </div>
+            <div class="col-md-6">
+              <mat-card-title class="mt20">
+                Calorías
+                <span> <mat-icon>whatshot</mat-icon> </span>:
+              </mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b> {{ training.caloriesBurned }} </b>
+                </i>
+              </mat-card-content>
+            </div>
+            <div
+              *ngIf="
+                training.user && training.user.username && rolLogin === 'ADMIN'
+              "
+              [routerLink]="'/admin/users/' + training.user.id"
+              class="user cursorHand col-md-6"
+            >
+              <mat-card-title class="mt20"> Usuario asignado:</mat-card-title>
+              <mat-card-content>
+                <i>
+                  <b>
+                    {{ training.user.username }}
+                  </b>
+                </i>
+              </mat-card-content>
+            </div>
+
+            <div class="col-md-12 text-center">
+              <mat-card-title class="mt20">
+                <u> Video explicativo: </u>
+              </mat-card-title>
+              <img
+                style="width: 50%"
+                src="../../../../assets/gif/entrenamiento.gif"
+              />
+              <div class="container text-center">
+                <a
+                  mat-fab
+                  matTooltip="Ver el ejercicio en YouTube"
+                  color="accent"
+                  href="http://youtube.com/watch?v=SiCC4ophcjI"
+                >
+                  <mat-icon>ondemand_video</mat-icon>
+                </a>
+              </div>
+            </div>
+
+            <div
+              *ngIf="
+                training.listWorkedWeights &&
+                training.listWorkedWeights.length != 0
+              "
+              class="col-md-12 text-center"
+            >
+              <br />
+              <br />
+              <mat-card-title class="mt20">
+                <u> Pesos ejercitados: </u>
+              </mat-card-title>
+            </div>
+            <div class="card" *ngFor="let w of training.listWorkedWeights">
+              <mat-card class="col-md-3 mt20 mr20 box">
+                <mat-list>
+                  <mat-card-header class="headerTitle">
+                    <mat-card-title> {{ w.weight }} kg</mat-card-title>
+                    <mat-card-subtitle>Serie: {{ w.serie }} </mat-card-subtitle>
+                  </mat-card-header>
+                  <br />
+                  <mat-card-content class="content"
+                    >Fecha:
+                    <span>{{ w.date | date : "dd/MM/yy HH:mm" }}</span>
+                  </mat-card-content>
+                </mat-list>
+              </mat-card>
+            </div>
+
+            <div class="mt20 container text-center">
+              <button
+                (click)="createWorkedWeight()"
+                mat-raised-button
+                color="primary"
+              >
+                Añadir peso
+              </button>
+            </div>
           </div>
         </div>
-
-        <div class="container text-center">
-          <button mat-raised-button color="primary">Guardar</button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-</mat-card>
-
-<!-- Mirar el objeto  -->
-<!-- {{ eventData | json }} -->
+  </mat-card>
+</div>

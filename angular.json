@@ -105,5 +105,8 @@
       }
     }
   },
-  "defaultProject": "gymfit-client"
+  "defaultProject": "gymfit-client",
+  "cli": {
+    "analytics": false
+  }
 }

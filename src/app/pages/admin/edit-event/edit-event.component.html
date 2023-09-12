@@ -1,9 +1,13 @@
-<mat-card>
-  <h1>Editar evento</h1>
+<mat-card *ngIf="editMode">
   <div class="row">
+    <div class="col-md-12">
+      <u>
+        <mat-card-title class="text-center mt20"> Editar evento</mat-card-title>
+      </u>
+    </div>
     <div class="col-md-8 offset-md-2">
       <form *ngIf="event" (submit)="editEvent()">
-        <mat-form-field class="w100" appearance="fill">
+        <mat-form-field class="w100 mt20" appearance="fill">
           <mat-label>Título</mat-label>
           <input
             [(ngModel)]="event.title"
@@ -19,37 +23,12 @@
           <textarea
             [(ngModel)]="event.description"
             type="text"
-            name="descripcion"
+            name="descripción"
             placeholder="Introduzca la descripción"
             matInput
             rows="8"
           ></textarea>
         </mat-form-field>
-
-        <!-- <div class="row">
-            <div class="col-md-6">
-              <mat-form-field class="w100" appearance="fill">
-                <mat-label>Ptos maximos</mat-label>
-                <input
-                  type="text"
-                  name="sdfsd"
-                  placeholder="Introduzca el título.."
-                  matInput
-                />
-              </mat-form-field>
-            </div>
-            <div class="col-md-6">
-              <mat-form-field class="w100" appearance="fill">
-                <mat-label>Numero de preguntas</mat-label>
-                <input
-                  type="text"
-                  name="titusdfhglo"
-                  placeholder="Introduzca el título.."
-                  matInput
-                />
-              </mat-form-field>
-            </div>
-          </div> -->
 
         <mat-slide-toggle
           class="mt20"
@@ -60,15 +39,6 @@
           Estado de publicación</mat-slide-toggle
         >
 
-        <!-- <mat-form-field class="mt20 w100" appearance="fill">
-            <mat-label>Eventos</mat-label>
-            <mat-select name="eventos" [(ngModel)]="eventData.type.name">
-              <mat-option *ngFor="let e of events" [value]="e.title">
-                {{ e.title }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field> -->
-
         <div class="container text-center">
           <button mat-raised-button color="primary">Guardar</button>
         </div>
@@ -76,6 +46,75 @@
     </div>
   </div>
 </mat-card>
+
+<div *ngIf="!editMode" class="bootstrap-wrapper">
+  <mat-card>
+    <div class="bootstrap-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="ml20 col-md-12 text-center">
+            <h1>{{ event.title }}</h1>
+          </div>
+          <div class="col-md-12">
+            <mat-divider></mat-divider>
+          </div>
+          <br />
+
+          <div class="col-md-12 text-center">
+            <img
+              style="width: 30%"
+              src="../../../../assets/gif/dancing-llama.gif"
+            />
+          </div>
+          <div
+            style="background: aliceblue; border-radius: 20px"
+            class="col-md-12 mt20"
+          >
+            <mat-card-content>
+              <p>
+                {{ event.description }}
+              </p>
+            </mat-card-content>
+          </div>
+          <br />
+          <br />
+
+          <div *ngIf="comments && comments.length != 0" class="mt20 col-md-12">
+            <h3 class="titleComment">Comentarios:</h3>
+            <mat-divider></mat-divider>
+          </div>
+
+          <div *ngIf="comments && comments.length != 0" class="mt20 col-md-12">
+            <mat-card class="mt10 cardComment" *ngFor="let c of comments">
+              <mat-card-header>
+                <div mat-card-avatar class="ml20 example-header-image"></div>
+                <mat-card-title> {{ c.userName }} </mat-card-title>
+                <mat-card-subtitle>
+                  {{ c.text }}
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content class="content">
+                Fecha:
+                <span>{{ c.date | date : "dd/MM/yy HH:mm" }}</span>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <div class="mt20 container text-center">
+            <button
+              matTooltip="Añadir un comentario"
+              mat-mini-fab
+              color="primary"
+              (click)="createComment()"
+            >
+              <mat-icon>add_comment</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
 
 <!-- Mirar el objeto  -->
 <!-- {{ eventData | json }} -->

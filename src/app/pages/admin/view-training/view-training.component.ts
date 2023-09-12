@@ -35,7 +35,7 @@ export class ViewTrainingComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          Swal.fire('Error!!', 'Error al cargar los eventos...', 'error');
+          Swal.fire('Error!!', 'Error al cargar los ejercicios...', 'error');
         }
       );
     });
@@ -72,5 +72,19 @@ export class ViewTrainingComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  /**
+   * Entrar en modo edicion
+   */
+  modeEdit() {
+    this.trainingService.modeEdit('yes');
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.trainingService.modeEdit('no');
   }
 }

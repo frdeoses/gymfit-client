@@ -7,7 +7,6 @@ export interface IUser {
   id?: string;
   username: string;
   password: string;
-  // userRols: String[];
   name: string;
   surname: string;
   email: string;
@@ -16,9 +15,10 @@ export interface IUser {
   registrationDate?: Date;
   height?: number;
   weight?: number;
+  caloriesBurned?: number;
   enabled?: boolean;
-  authorities?: IAuthority[];
-  userRols?: IRol[];
+  authorities: IAuthority[];
+  userRoles?: IRol[];
   listUserWeight?: IWeight[];
   listFatPercentage?: IFatPercentage[];
   accountNonExpired?: boolean;

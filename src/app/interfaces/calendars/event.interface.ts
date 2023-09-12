@@ -5,5 +5,7 @@ export interface IEvent {
   title: string;
   description?: string;
   published: boolean;
+  lastUpdateDate?: Date;
+  creationDate?: Date;
   comments?: IComment[];
 }

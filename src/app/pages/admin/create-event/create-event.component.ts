@@ -57,7 +57,7 @@ export class CreateEventComponent implements OnInit {
         console.log(data);
         Swal.fire(
           'Evento creado',
-          'El evento ha sido creado con exito!!',
+          'El evento ha sido creado con éxito!!',
           'success'
         );
         this.eventData = {

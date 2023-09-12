@@ -1,0 +1,44 @@
+.w100{
+    width: 100%;
+}
+
+span{
+    font-weight: bold;
+    color: red;
+    font-style: italic;
+    /* font-size: larger; */
+}
+
+.head {
+    display: flex;
+    align-items: flex-end;
+}
+
+.card{
+    display: contents;
+}
+
+.box{
+    background-color: wheat;
+}
+
+.headerTitle{
+    justify-content: center;
+    font-weight: bold;
+}
+
+.content{
+    text-align: end;
+    font-style: oblique;
+    font-family: fantasy;
+    text-decoration: overline;
+}
+
+.user{
+    background: lavender;
+    border-radius: 20px;
+}
+
+.cursorHand{
+    cursor: pointer;
+}

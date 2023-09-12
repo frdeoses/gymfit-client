@@ -9,6 +9,8 @@
 .head {
     display: flex;
     align-items: flex-end;
+    background: antiquewhite;
+    border-radius: 5px;
 }
 
 img{

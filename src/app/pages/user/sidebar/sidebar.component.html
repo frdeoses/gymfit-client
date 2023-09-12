@@ -1,0 +1,76 @@
+<mat-card>
+  <mat-action-list>
+    <div mat-subheader>Perfil del usuario</div>
+    <button mat-list-item routerLink="/user-dashboard">
+      <mat-icon mat-list-icon>home</mat-icon> Inicio
+    </button>
+
+    <button mat-list-item routerLink="/user-dashboard/profile">
+      <mat-icon mat-list-icon>account_circle</mat-icon> Perfil
+    </button>
+    <mat-divider></mat-divider>
+    <div mat-subheader>Tipos de entrenamientos</div>
+
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <button routerLink="/user-dashboard/tables" mat-list-item>
+              <mat-icon mat-list-icon>list</mat-icon> Tablas de ejercicio
+            </button>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <button
+          [routerLink]="'/user-dashboard/tables/' + t"
+          mat-list-item
+          *ngFor="let t of trainingTypes"
+        >
+          <mat-icon mat-list-icon>folder</mat-icon> {{ t }}
+        </button>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-divider></mat-divider>
+    <br />
+
+    <div mat-subheader>Máquina</div>
+    <button mat-list-item routerLink="/user-dashboard/gym-machines">
+      <mat-icon mat-list-icon>fitness_center</mat-icon> Maquinas
+    </button>
+    <mat-divider></mat-divider>
+
+    <div mat-subheader>Tipos de ejercicios</div>
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <button routerLink="/user-dashboard/trainings" mat-list-item>
+              <mat-icon mat-list-icon>directions_run</mat-icon> Ejercicios
+            </button>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <button
+          [routerLink]="'/user-dashboard/trainings/' + t"
+          mat-list-item
+          *ngFor="let t of trainingTypes"
+        >
+          <mat-icon mat-list-icon>folder_open</mat-icon> {{ t }}
+        </button>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-divider></mat-divider>
+    <br />
+
+    <div mat-subheader>Eventos</div>
+    <button mat-list-item routerLink="/user-dashboard/events">
+      <mat-icon mat-list-icon>event</mat-icon> Eventos
+    </button>
+    <mat-divider></mat-divider>
+    <br />
+
+    <button mat-list-item (click)="logout()">
+      <mat-icon mat-list-icon>logout</mat-icon> Salir
+    </button>
+  </mat-action-list>
+</mat-card>

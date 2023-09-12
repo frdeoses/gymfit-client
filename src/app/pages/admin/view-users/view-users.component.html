@@ -1,47 +1,45 @@
-<app-spinner></app-spinner>
+<div *ngFor="let u of users">
+  <mat-card *ngIf="u.username != userLogin" class="mt10 container">
+    <mat-card-header class="headCol">
+      <mat-card-title class="mt10 ml20">{{ u.username }}</mat-card-title>
+      <mat-card-subtitle *ngIf="u.authorities" class="ml20">{{
+        u.authorities[0].authority
+      }}</mat-card-subtitle>
+      <img
+        class="ml20"
+        mat-card-sm-image
+        src="../../../../assets/image/membership.png"
+      />
+    </mat-card-header>
+    <mat-card-content class="contenCol">
+      <mat-card-actions align="end" class="ml20 mt20">
+        <button
+          [routerLink]="'/admin/users/' + u.id"
+          mat-raised-button
+          (click)="modeConsult()"
+        >
+          Consultar
+        </button>
 
-<mat-card class="mt10 container" *ngFor="let u of users">
-  <mat-card-header class="headCol">
-    <!-- <mat-card-title-group> -->
-    <mat-card-title class="mt10 ml20">{{ u.username }}</mat-card-title>
-    <mat-card-subtitle *ngIf="u.authorities" class="ml20">{{
-      u.authorities[0].authority
-    }}</mat-card-subtitle>
-    <img
-      class="ml20"
-      mat-card-sm-image
-      src="../../../../assets/image/membership.png"
-    />
-    <!-- </mat-card-title-group> -->
-  </mat-card-header>
-  <mat-card-content class="contenCol">
-    <mat-card-actions align="end" class="ml20 mt20">
-      <button
-        [routerLink]="'/admin/users/' + u.id"
-        mat-raised-button
-        (click)="modeConsult()"
-      >
-        Consultar
-      </button>
-
-      <button
-        [routerLink]="'/admin/users/' + u.id"
-        mat-flat-button
-        color="primary"
-        class="ml10"
-        (click)="modeEdit()"
-      >
-        Editar
-      </button>
-      <button
-        *ngIf="u.id"
-        mat-flat-button
-        color="warn"
-        class="ml10"
-        (click)="deleteUser(u.id)"
-      >
-        Eliminar
-      </button>
-    </mat-card-actions>
-  </mat-card-content>
-</mat-card>
+        <button
+          [routerLink]="'/admin/users/' + u.id"
+          mat-flat-button
+          color="primary"
+          class="ml10"
+          (click)="modeEdit()"
+        >
+          Editar
+        </button>
+        <button
+          *ngIf="u.id"
+          mat-flat-button
+          color="warn"
+          class="ml10"
+          (click)="deleteUser(u.id)"
+        >
+          Eliminar
+        </button>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</div>

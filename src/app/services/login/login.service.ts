@@ -40,6 +40,7 @@ export class LoginService {
   public logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('modeView');
 
     return true;
   }
@@ -53,7 +54,7 @@ export class LoginService {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  public getUser() {
+  public getUser(): IUser {
     let userStr = localStorage.getItem('user');
 
     if (userStr != null) {
@@ -81,7 +82,7 @@ export class LoginService {
     return userEmpty;
   }
 
-  public getUserRoles() {
+  public getCurrentUserRole() {
     let user = this.getUser();
 
     return user.authorities[0].authority;

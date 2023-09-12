@@ -1,0 +1,46 @@
+<div class="bootstrap-wrapper">
+  <div class="container error">
+    <mat-card class="mt20">
+      <!-- <u>
+        <mat-card-title class="text-center">
+          Página no encontrada
+        </mat-card-title>
+      </u> -->
+      <img src="../../../../assets/gif/404-error-doodle-animation.gif" />
+      <div class="container text-center">
+        <button
+          *ngIf="
+            loginService.isLoggedIn() &&
+            user.userRoles &&
+            user.userRoles[0].roleList === 'USER'
+          "
+          mat-icon-button
+          color="primary"
+          routerLink="/user-dashboard"
+        >
+          <mat-icon mat-list-icon>home</mat-icon> Inicio
+        </button>
+        <button
+          *ngIf="
+            loginService.isLoggedIn() &&
+            user.userRoles &&
+            user.userRoles[0].roleList === 'ADMIN'
+          "
+          mat-icon-button
+          color="primary"
+          routerLink="/admin"
+        >
+          <mat-icon mat-list-icon>home</mat-icon> Inicio
+        </button>
+        <button
+          *ngIf="!loginService.isLoggedIn()"
+          mat-icon-button
+          color="primary"
+          [routerLink]="'/login'"
+        >
+          <mat-icon mat-list-icon>home</mat-icon> Login
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

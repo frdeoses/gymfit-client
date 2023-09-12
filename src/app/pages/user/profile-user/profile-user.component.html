@@ -1,0 +1,325 @@
+<div *ngIf="!editMode" class="bootstrap-wraper mt20">
+  <mat-card class="col-md-12">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-6 col-10 head">
+          <img
+            style="
+              max-width: 100px;
+              width: auto;
+              height: auto;
+              min-height: 100px;
+            "
+            src="../../../../assets/image/membership.png"
+          />
+          <h1>
+            <span class="userName">{{ user.username }}</span>
+          </h1>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+          "
+          class="col-md-4 col-sm-6 col-2"
+        >
+          <button mat-icon-button (click)="modeEdit()">
+            <mat-icon color="warn" mat-list-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div class="col-md-12">
+          <mat-divider></mat-divider>
+        </div>
+        <div class="col-md-6 text-center">
+          <u>
+            <mat-card-title class="mt20"> Usuario:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.username }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+        <div class="col-md-6 text-center">
+          <u>
+            <mat-card-title class="mt20"> Password:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b> **** </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Nombre:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.name }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Apellidos:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.surname }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Correo:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.email }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+        <div class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20"> Teléfono:</mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.phone }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="user.height" class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20">
+              Altura <span>(cm)</span> :</mat-card-title
+            >
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.height }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="user.height" class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20">
+              Calorías
+              <span> <mat-icon>whatshot</mat-icon> </span>:
+            </mat-card-title>
+          </u>
+          <mat-card-content>
+            <i>
+              <b> {{ user.caloriesBurned }} </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="user.height" class="col-md-3 text-center">
+          <mat-card-title class="mt20">
+            Frecuencia cardíaca <span>(BPM)</span> :</mat-card-title
+          >
+          <mat-card-content>
+            <i>
+              <b> 1200 </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="user.weight" class="col-md-3 text-center">
+          <u>
+            <mat-card-title class="mt20">
+              Peso <span>(kg)</span> :</mat-card-title
+            >
+          </u>
+          <mat-card-content>
+            <i>
+              <b>
+                {{ user.weight }}
+              </b>
+            </i>
+          </mat-card-content>
+        </div>
+
+        <div
+          *ngIf="listUserWeight && listUserWeight.length != 0"
+          class="col-md-12 text-center"
+        >
+          <u>
+            <mat-card-title class="mt20">Histórico de Pesos:</mat-card-title>
+          </u>
+        </div>
+        <div class="card" *ngFor="let w of listUserWeight">
+          <mat-card class="col-md-3 mt20 ml20 box">
+            <mat-list>
+              <mat-card-header class="headerTitle">
+                <mat-card-title> {{ w.weightData }} kg</mat-card-title>
+              </mat-card-header>
+              <br />
+              <mat-card-content class="content"
+                >Fecha:
+                <span>{{ w.date | date : "dd/MM/yy HH:mm" }}</span>
+              </mat-card-content>
+            </mat-list>
+          </mat-card>
+        </div>
+
+        <div class="col-md-12 text-center">
+          <br />
+          <u>
+            <mat-card-title class="mt20"> Evolución física: </mat-card-title>
+          </u>
+          <app-user-graph></app-user-graph>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- Modo Edicion -->
+
+<div
+  *ngIf="editMode"
+  class="bootstrap-wraper"
+  style="background: white; border-radius: 5px"
+>
+  <div class="row mt20">
+    <div class="col-md-12">
+      <div class="head">
+        <img src="../../../../assets/image/membership.png" alt="" />
+        <h1>
+          Editar Usuario:
+          <span class="userName">{{ user.username }}</span>
+        </h1>
+      </div>
+      <mat-divider></mat-divider>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> Datos del Usuario: </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form (ngSubmit)="formSubmit()">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Nombre </mat-label>
+              <input
+                required
+                matInput
+                [(ngModel)]="user.name"
+                name="name"
+                placeholder="Introduzca su nombre..."
+              />
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Apellidos</mat-label>
+              <input
+                required
+                matInput
+                [(ngModel)]="user.surname"
+                name="surname"
+                placeholder="Introduzca sus apellidos..."
+              />
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input
+                required
+                matInput
+                [(ngModel)]="user.email"
+                name="email"
+                type="email"
+                placeholder="Ex. pat@example.com"
+              />
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Número de teléfono</mat-label>
+              <input
+                required
+                matInput
+                [(ngModel)]="user.phone"
+                name="phone"
+                placeholder="Introduzca el número de teléfono..."
+              />
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Fecha de nacimiento</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [(ngModel)]="user.birthDate"
+                name="birthDate"
+              />
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Altura (cm)</mat-label>
+              <input
+                matInput
+                [(ngModel)]="user.height"
+                name="height"
+                type="number"
+                placeholder="Introduzca la altura..."
+              />
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Peso (kg)</mat-label>
+              <input
+                matInput
+                [(ngModel)]="user.weight"
+                name="weight"
+                type="number"
+                placeholder="Introduzca el peso..."
+              />
+            </mat-form-field>
+
+            <div class="container text-center">
+              <button
+                mat-raised-button
+                [routerLink]="'/user-dashboard/profile'"
+                (click)="modeConsult()"
+                color="warn"
+              >
+                Cancelar
+              </button>
+              <button mat-raised-button class="ml20" color="primary">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- Mirar el objeto  -->
+<!-- {{ editMode | json }} -->

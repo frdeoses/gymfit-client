@@ -3,17 +3,18 @@ import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
+  selector: 'app-error-not-found',
+  templateUrl: './error-not-found.component.html',
+  styleUrls: ['./error-not-found.component.css'],
 })
-export class ProfileComponent implements OnInit {
+export class ErrorNotFoundComponent implements OnInit {
+  isLoggedIn: boolean = false;
   user: IUser = {
     id: undefined,
     name: '',
     username: '',
     password: '',
-    userRols: [],
+    userRoles: [],
     surname: '',
     email: '',
     birthDate: new Date(),
@@ -25,10 +26,13 @@ export class ProfileComponent implements OnInit {
       },
     ],
   };
-
-  constructor(private loginService: LoginService) {}
+  constructor(public loginService: LoginService) {}
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
+    this.loginService.loginStatusSubject.subscribe((data) => {
+      this.isLoggedIn = this.loginService.isLoggedIn();
+      this.user = this.loginService.getUser();
+    });
   }
 }

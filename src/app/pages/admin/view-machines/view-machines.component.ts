@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
   templateUrl: './view-machines.component.html',
   styleUrls: ['./view-machines.component.css'],
 })
-export class ViewMachinesComponent implements OnInit {
+export class ViewMachinesComponent implements OnInit, OnDestroy {
   gymMachines: IGymMachine[] = [];
   subscription: Subscription = new Subscription();
 
@@ -35,7 +35,11 @@ export class ViewMachinesComponent implements OnInit {
         },
         (error) => {
           console.error(error);
-          Swal.fire('Error!!', 'Error al cargar los eventos...', 'error');
+          Swal.fire(
+            'Error!!',
+            'Error al cargar las maquinas de ejercicios...',
+            'error'
+          );
         }
       );
     });
@@ -77,12 +81,17 @@ export class ViewMachinesComponent implements OnInit {
       }
     });
   }
-
+  /**
+   * Entrar en modo edicion
+   */
   modeEdit() {
-    this.machineService.modeEdit(true);
+    this.machineService.modeEdit('yes');
   }
 
+  /**
+   * Entrar en modo consulta
+   */
   modeConsult() {
-    this.machineService.modeEdit(false);
+    this.machineService.modeEdit('no');
   }
 }

@@ -1,3 +1,4 @@
+import { IUser } from '../user/usuario.interface';
 import { IGymMachine } from './gymMachine.interface';
 import { IWorkedWeights } from './workedWeights.interface';
 
@@ -10,7 +11,9 @@ export interface ITraining {
   exercisedArea?: string;
   description?: string;
   like?: number;
+  user: IUser;
   listWorkedWeights?: IWorkedWeights[];
+  caloriesBurned?: number;
   gymMachine?: IGymMachine;
   creationDate: Date;
   lastUpdateDate: Date;

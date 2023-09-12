@@ -1,5 +1,3 @@
-<app-spinner></app-spinner>
-
 <mat-card>
   <mat-list>
     <div mat-subheader>Todas las tablas</div>
@@ -8,6 +6,31 @@
       <mat-icon mat-list-icon>description</mat-icon>
       <div mat-line>{{ t.name }}</div>
       <div mat-line>{{ t.description }}</div>
+      <mat-icon
+        class="cursorHand"
+        [routerLink]="'/admin/tables/' + t.id"
+        (click)="modeConsult()"
+        >remove_red_eye</mat-icon
+      >
+      <button
+        *ngIf="t.id"
+        mat-button
+        [routerLink]="'/admin/tables/' + t.id"
+        color="primary"
+        class="ml20"
+        (click)="modeEdit()"
+      >
+        Editar
+      </button>
+      <button
+        *ngIf="t.id"
+        mat-button
+        color="warn"
+        class="ml10"
+        (click)="deleteGymMachine(t.id)"
+      >
+        Eliminar
+      </button>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>

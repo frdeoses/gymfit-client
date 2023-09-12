@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
 
@@ -11,11 +12,16 @@ import Swal from 'sweetalert2';
 })
 export class ViewUsersComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
-  constructor(private userService: UserService) {}
+  userLogin: string = '';
+  constructor(
+    private userService: UserService,
+    private loginService: LoginService
+  ) {}
 
   users: IUser[] = [];
 
   ngOnInit(): void {
+    this.userLogin = this.loginService.getUser().username;
     this.userService.listUser().subscribe(
       (data: IUser[]) => {
         this.users = data;
@@ -74,11 +80,18 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Entrar en modo edicion
+   */
   modeEdit() {
-    this.userService.modeEdit(true);
+    this.userService.modeEdit('yes');
+    this.userService.disableNavigateProfile();
   }
 
+  /**
+   * Entrar en modo consulta
+   */
   modeConsult() {
-    this.userService.modeEdit(false);
+    this.userService.modeEdit('no');
   }
 }

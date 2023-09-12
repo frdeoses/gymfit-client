@@ -1,0 +1,20 @@
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    <div class="row mt20">
+      <div class="col-md-4" *ngFor="let e of events">
+        <mat-card
+          [routerLink]="'/user-dashboard/events/' + e.id"
+          class="mb20 cursorHand"
+        >
+          <mat-card-header>
+            <div mat-card-avatar class="ml20 example-header-image"></div>
+            <mat-card-title> {{ e.title }} </mat-card-title>
+            <mat-card-subtitle>
+              {{ e.creationDate | date : "dd/MM/yyyy" }}
+            </mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

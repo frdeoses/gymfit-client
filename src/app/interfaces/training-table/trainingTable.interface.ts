@@ -1,8 +1,9 @@
+import { IUser } from '../user/usuario.interface';
 import { ITraining } from './training.interface';
 
 export interface ITrainingTable {
   id?: string;
-  idUser: string;
+  user: IUser;
   name: string;
   description?: string;
   creationDate: Date;
@@ -11,6 +12,7 @@ export interface ITrainingTable {
   endDate: Date;
   trainingDuration?: number;
   breakTime?: number;
+  caloriesBurned?: number;
   observation?: string;
   listTraining?: ITraining[];
 }

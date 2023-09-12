@@ -1,46 +1,87 @@
-<mat-card>
+<mat-card class="mt20">
   <h1>Crear Maquina</h1>
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <form (ngSubmit)="createMachine()">
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Nombre</mat-label>
-          <input
-            [(ngModel)]="machine.name"
-            type="text"
-            name="name"
-            placeholder="Introduzca el título.."
-            required
-            matInput
-          />
-        </mat-form-field>
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Descripción</mat-label>
-          <textarea
-            [(ngModel)]="machine.description"
-            type="text"
-            name="descripcion"
-            placeholder="Introduzca la descripción"
-            matInput
-            rows="8"
-          ></textarea>
-        </mat-form-field>
+  <mat-divider></mat-divider>
+  <div class="bootstrap-wrapper">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <form (ngSubmit)="createMachine()">
+          <mat-form-field class="w100 mt20" appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input
+              [(ngModel)]="machine.name"
+              type="text"
+              name="name"
+              placeholder="Introduzca el título.."
+              required
+              matInput
+            />
+          </mat-form-field>
 
-        <mat-form-field class="mt20 w100" appearance="fill">
-          <mat-label>Zona ejercitada</mat-label>
-          <input
-            [(ngModel)]="machine.exercisedArea"
-            type="text"
-            name="exercisedArea"
-            placeholder="Introduzca la zona ejercitada.."
-            matInput
-          />
-        </mat-form-field>
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Modelo de la máquina</mat-label>
+            <input
+              [(ngModel)]="machine.model"
+              type="text"
+              name="model"
+              placeholder="Introduzca el modelo de la máquina de entrenamiento.."
+              required
+              matInput
+            />
+          </mat-form-field>
 
-        <div class="container text-center">
-          <button mat-raised-button color="primary">Crear maquina</button>
-        </div>
-      </form>
+          <mat-expansion-panel
+            class="w100"
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                ¿Hay más maquinas de este modelo?
+              </mat-panel-title>
+              <mat-panel-description>
+                Desplegar en caso afirmativo
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Numero de maquina:</mat-label>
+              <input
+                matInput
+                [(ngModel)]="machine.numMachine"
+                name="numMachine"
+                type="number"
+                placeholder="Introduzca el numero de maquinas con el mismo modelo..."
+              />
+            </mat-form-field>
+          </mat-expansion-panel>
+
+          <mat-form-field class="w100 mt20" appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              [(ngModel)]="machine.description"
+              type="text"
+              name="descripción"
+              placeholder="Introduzca la descripción"
+              matInput
+              rows="8"
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Zona ejercitada</mat-label>
+            <input
+              [(ngModel)]="machine.exercisedArea"
+              type="text"
+              name="exercisedArea"
+              placeholder="Introduzca la zona ejercitada.."
+              matInput
+            />
+          </mat-form-field>
+
+          <div class="container text-center">
+            <button mat-raised-button color="primary">Crear maquina</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </mat-card>

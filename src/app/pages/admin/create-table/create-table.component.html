@@ -1,22 +1,24 @@
-<mat-card>
-  <h1>Crear una tabla nueva</h1>
+<mat-card class="mt20">
+  <h1>Crear una tabla de entrenamiento</h1>
+  <mat-divider></mat-divider>
   <mat-card-content>
     <div class="bootstrap-wrapper">
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form (ngSubmit)="formSubmit()">
-            <mat-form-field class="w100" appearance="outline">
-              <mat-label>Titulo</mat-label>
+            <mat-form-field class="w100 mt20" appearance="outline">
+              <mat-label>Nombre: </mat-label>
               <input
                 required
                 autofocus
                 type="text"
-                name="titulo"
+                name="name"
                 matInput
                 placeholder="Introduzca el titulo de la tabla..."
                 [(ngModel)]="table.name"
               />
             </mat-form-field>
+
             <mat-form-field class="w100" appearance="outline">
               <mat-label>Descripción</mat-label>
               <textarea
@@ -28,15 +30,121 @@
               ></textarea>
             </mat-form-field>
 
-            <!-- Combo que trae de BBDD los datos -->
-            <!-- <mat-form-field class="mt20 w100" appearance="fill">
-              <mat-label>Eventos</mat-label>
-              <mat-select name="eventos" [(ngModel)]="eventData.type.name">
-                <mat-option *ngFor="let e of events" [value]="e.title">
-                  {{ e.title }}</mat-option
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>Tipo de entrenamiento</mat-label>
+              <mat-select
+                required
+                name="trainingTypes"
+                [(ngModel)]="table.typeTraining"
+              >
+                <mat-option></mat-option>
+                <mat-option *ngFor="let t of trainingTypes" [value]="t">
+                  {{ t }}</mat-option
                 >
               </mat-select>
-            </mat-form-field> -->
+            </mat-form-field>
+
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>Tiempo de descanso (seg):</mat-label>
+              <input
+                matInput
+                [(ngModel)]="table.breakTime"
+                name="breakTime"
+                type="number"
+                placeholder="Introduzca el tiempo de descanso..."
+              />
+            </mat-form-field>
+
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>Tiempo de entrenamiento (días):</mat-label>
+              <input
+                matInput
+                matTooltip="Introduzca el nº de días de entrenamiento"
+                [(ngModel)]="table.trainingDuration"
+                name="breakTime"
+                type="number"
+                placeholder="Introduzca el nº de días de entrenamiento..."
+              />
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Seleccionar ejercicios:</mat-label>
+              <mat-select
+                [(ngModel)]="table.listTraining"
+                name="listTraining"
+                multiple
+              >
+                <mat-option
+                  *ngFor="let training of listTraining"
+                  [value]="training"
+                  >{{ training.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Calorías quemadas :</mat-label>
+              <input
+                [(ngModel)]="table.caloriesBurned"
+                type="number"
+                name="caloriesBurned"
+                matInput
+              />
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Inicio de la tabla</mat-label>
+              <input
+                matInput
+                [matDatepicker]="pickerInitDate"
+                [(ngModel)]="table.initDate"
+                required
+                name="initDate"
+              />
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerInitDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerInitDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Finalizacion de la tabla</mat-label>
+              <input
+                matInput
+                required
+                [matDatepicker]="pickerEndDate"
+                [(ngModel)]="table.endDate"
+                name="endDate"
+              />
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerEndDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerEndDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="w100 mt20" appearance="outline">
+              <mat-label>Seleccionar usuario</mat-label>
+              <mat-select [(ngModel)]="table.user" name="user" required>
+                <mat-option></mat-option>
+                <mat-option *ngFor="let user of users" [value]="user">{{
+                  user.username
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w100" appearance="outline">
+              <mat-label>Observaciones:</mat-label>
+              <textarea
+                [(ngModel)]="table.observation"
+                name="observation"
+                matInput
+                placeholder="Ej. Descripción breve de mejoras del usuario ..."
+              ></textarea>
+            </mat-form-field>
 
             <div class="container text-center mt15">
               <button mat-raised-button color="primary">Guardar</button>

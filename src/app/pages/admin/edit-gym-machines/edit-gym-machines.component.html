@@ -1,45 +1,111 @@
-<app-spinner></app-spinner>
+<div *ngIf="!editMode" class="bootstrap-wrapper" style="padding-top: 20px">
+  <div class="container">
+    <mat-card>
+      <div class="row">
+        <div class="col-md-10" style="display: flex; align-items: flex-end">
+          <div class="ml10" style="padding: 4px">
+            <img
+              src="../../../../assets/image/bench-press.png"
+              alt=""
+              class="profile-image"
+            />
+          </div>
+          <mat-card-title>
+            Consultar Máquina:
+            <span> {{ gymMachine.name }}</span>
+          </mat-card-title>
+        </div>
 
-<div *ngIf="!editMode" class="bootstrap-wrapper">
-  <mat-card>
-    <div class="row">
-      <div class="col-md-12">
-        <u>
-          <mat-card-title class="text-center mt20"> Máquina:</mat-card-title>
-        </u>
-      </div>
-      <br />
-
-      <div class="col-md-12">
-        <mat-card-subtitle class="mt20">Nombre</mat-card-subtitle>
-        <mat-card-content>
-          {{ gymMachine.name }}
-        </mat-card-content>
-      </div>
-      <div class="col-md-12">
-        <mat-card-subtitle class="mt20">Descripción</mat-card-subtitle>
-        <mat-card-content>
-          {{ gymMachine.description }}
-        </mat-card-content>
-      </div>
-      <div class="col-md-12">
-        <mat-card-subtitle class="mt20">Músculos ejercitados</mat-card-subtitle>
-        <mat-card-content>
-          {{ gymMachine.exercisedArea }}
-        </mat-card-content>
-      </div>
-
-      <div class="col-md-11">
-        <mat-card-actions align="end">
-          <button mat-icon-button color="warn">
-            <mat-icon matBadge="{{ gymMachine.like }}" matBadgeColor="primary"
-              >favorite</mat-icon
+        <div
+          class="col-md-2"
+          style="display: flex; align-items: flex-end; justify-content: center"
+        >
+          <button
+            *ngIf="rolLoginUser === 'ADMIN'"
+            mat-icon-button
+            color="primary"
+            class="ml20"
+          >
+            <mat-icon color="primary" (click)="modeEdit()" mat-list-icon
+              >edit</mat-icon
             >
           </button>
-        </mat-card-actions>
+          <button
+            class="ml10"
+            color="warn"
+            [disabled]="likeAdd"
+            (click)="like()"
+            mat-icon-button
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <mat-divider></mat-divider>
+        </div>
+
+        <br />
+
+        <div class="col-md-12">
+          <mat-card-subtitle class="mt10 letter">Nombre</mat-card-subtitle>
+          <mat-card-content class="letter">
+            {{ gymMachine.name }}
+          </mat-card-content>
+        </div>
+        <div class="col-md-6">
+          <mat-card-subtitle class="mt10 letter">Modelo</mat-card-subtitle>
+          <mat-card-content class="letter">
+            {{ gymMachine.model }}
+          </mat-card-content>
+        </div>
+        <div class="col-md-6">
+          <mat-card-subtitle class="mt10 letter"
+            >Nº de maquinas</mat-card-subtitle
+          >
+          <mat-card-content class="letter">
+            {{ gymMachine.numMachine }}
+          </mat-card-content>
+        </div>
+        <div class="col-md-12">
+          <mat-card-subtitle class="mt10 letter">Descripción</mat-card-subtitle>
+          <mat-card-content class="letter">
+            {{ gymMachine.description }}
+          </mat-card-content>
+        </div>
+        <div *ngIf="gymMachine.exercisedArea" class="col-md-12">
+          <mat-card-subtitle class="mt10 letter"
+            >Músculos ejercitados</mat-card-subtitle
+          >
+          <mat-card-content class="letter">
+            {{ gymMachine.exercisedArea }}
+          </mat-card-content>
+        </div>
+        <div class="col-md-12">
+          <mat-card-subtitle class="mt10 letter">Me gusta</mat-card-subtitle>
+          <mat-card-content class="letter">
+            <span>
+              {{ gymMachine.like }}
+            </span>
+          </mat-card-content>
+        </div>
       </div>
-    </div>
-  </mat-card>
+      <div class="col-md-12 text-center">
+        <mat-card-title class="mt10">Video explicativo:</mat-card-title>
+        <img style="width: 40%" src="../../../../assets/gif/bench-press.gif" />
+        <div class="container text-center">
+          <a
+            mat-fab
+            matTooltip="Ver la máquina en YouTube"
+            color="accent"
+            href="http://youtube.com/watch?v=SiCC4ophcjI"
+          >
+            <mat-icon>ondemand_video</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card>
+  </div>
 </div>
 
 <!-- Modo edición    -->
@@ -53,9 +119,6 @@
           >
         </u>
       </div>
-    </div>
-
-    <div class="row">
       <div class="col-md-8 offset-md-2">
         <form (ngSubmit)="editGymMachine()">
           <mat-form-field class="w100 mt20" appearance="fill">
@@ -70,18 +133,56 @@
             />
           </mat-form-field>
           <mat-form-field class="w100" appearance="fill">
+            <mat-label>Modelo</mat-label>
+            <input
+              [(ngModel)]="gymMachine.model"
+              type="text"
+              name="model"
+              placeholder="Introduzca el modelo de la máquina.."
+              required
+              matInput
+            />
+          </mat-form-field>
+
+          <!-- hideToggle -->
+          <mat-expansion-panel
+            class="w100"
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                ¿Hay más maquinas de este modelo?
+              </mat-panel-title>
+              <mat-panel-description>
+                Desplegar en caso afirmativo
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Numero de maquina:</mat-label>
+              <input
+                matInput
+                [(ngModel)]="gymMachine.numMachine"
+                name="numMachine"
+                type="number"
+                placeholder="Introduzca el numero de maquinas con el mismo modelo..."
+              />
+            </mat-form-field>
+          </mat-expansion-panel>
+
+          <mat-form-field class="w100 mt20" appearance="fill">
             <mat-label>Descripción</mat-label>
             <textarea
               [(ngModel)]="gymMachine.description"
               type="text"
-              name="descripcion"
+              name="descripción"
               placeholder="Introduzca la descripción"
               matInput
               disabled="false"
               rows="8"
             ></textarea>
           </mat-form-field>
-          <mat-form-field class="w100 mt20" appearance="fill">
+          <mat-form-field class="w100" appearance="fill">
             <mat-label>Zona de trabajo</mat-label>
             <input
               [(ngModel)]="gymMachine.exercisedArea"
@@ -92,8 +193,6 @@
             />
           </mat-form-field>
 
-          <!-- <div class="row"> -->
-
           <div class="container text-center">
             <button mat-raised-button color="primary">Guardar</button>
           </div>
@@ -102,6 +201,3 @@
     </div>
   </div>
 </mat-card>
-
-<!-- Mirar el objeto  -->
-<!-- {{ gymMachine | json }} -->

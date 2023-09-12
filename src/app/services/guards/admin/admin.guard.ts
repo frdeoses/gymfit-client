@@ -25,7 +25,7 @@ export class AdminGuard implements CanActivate {
     | Promise<boolean | UrlTree> {
     if (
       this.loginService.isLoggedIn() &&
-      this.loginService.getUserRoles() == 'ADMIN'
+      this.loginService.getCurrentUserRole() == 'ADMIN'
     ) {
       return true;
     }

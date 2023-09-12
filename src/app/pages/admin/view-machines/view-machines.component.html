@@ -1,11 +1,9 @@
-<app-spinner></app-spinner>
-
 <mat-card class="mt10" *ngFor="let g of gymMachines">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title> {{ g.name }} </mat-card-title>
     <mat-card-subtitle>
-      {{ g.description }}
+      {{ g.model }}
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -18,7 +16,6 @@
       >
         Consultar
       </button>
-      <!-- <button mat-stroked-button color="primary" class="ml20">Eventos</button> -->
       <button mat-icon-button color="warn" class="ml20">
         <mat-icon matBadge="{{ g.like }}" matBadgeColor="primary"
           >favorite</mat-icon

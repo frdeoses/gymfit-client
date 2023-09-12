@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ITraining } from 'src/app/interfaces/training-table/training.interface';
+import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
 
 @Injectable({
@@ -20,6 +21,17 @@ export class TrainingService {
   public listTraining(): Observable<ITraining[]> {
     return this.http.get<ITraining[]>(
       `${baseUrl[1]}/api/gymfit/training-tables/trainings`
+    );
+  }
+
+  /**
+   * Lista las tablas por el usuario
+   * @returns
+   */
+  public listTrainingByUser(user: IUser): Observable<ITraining[]> {
+    return this.http.post<ITraining[]>(
+      `${baseUrl[1]}/api/gymfit/training-tables/trainings/user`,
+      user
     );
   }
 
@@ -67,6 +79,29 @@ export class TrainingService {
   }
 
   /**
+   * Obtiene tablas de entrenamiento segun el tipo de entrenamiento
+   * y el usuario logeado en la aplicación
+   *
+   * @param typeTrainingTable
+   * @returns
+   */
+  public getTrainingByTypeTraining(
+    typeTraining: string,
+    idUser: string
+  ): Observable<ITraining[]> {
+    return this.http.get<ITraining[]>(
+      `${baseUrl[1]}` +
+        '/api/gymfit/training-tables/trainings/find-type-training',
+      {
+        params: {
+          typeTraining: typeTraining,
+          idUser: idUser,
+        },
+      }
+    );
+  }
+
+  /**
    * Edita un entrenamiento
    *
    * @param training
@@ -83,5 +118,24 @@ export class TrainingService {
           this.refresh$.next();
         })
       );
+  }
+
+  /**
+   * Cambiamos el valor de la var de la sesion
+   *  que nos permiten entrar en modo edicion o
+   * en modo consulta
+   * @param value
+   */
+  modeEdit(value: string) {
+    localStorage.setItem('modeView', value);
+  }
+
+  // Obtenemos en que modo estamos
+  public getModeEdit() {
+    return localStorage.getItem('modeView');
+  }
+  //  eliminamos el token
+  public removeItem() {
+    localStorage.removeItem('modeView');
   }
 }

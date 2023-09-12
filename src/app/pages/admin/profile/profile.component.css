@@ -14,3 +14,9 @@
     padding: 15px 10px;
     border: 0.5px solid gainsboro;
 }
+
+span{
+    color: crimson;
+    font-style: oblique;
+    font-weight: bold;
+}

@@ -21,6 +21,15 @@ export class EventService {
     return this.http.get<IEvent[]>(`${baseUrl[2]}/api/gymfit/calendars`);
   }
 
+  /**
+   * Lista los eventos publicados en el sistema
+   */
+  public listEventsPublished(): Observable<IEvent[]> {
+    return this.http.get<IEvent[]>(
+      `${baseUrl[2]}/api/gymfit/calendars/published`
+    );
+  }
+
   public createEvent(event: IEvent): Observable<IEvent> {
     return this.http
       .post<IEvent>(`${baseUrl[2]}/api/gymfit/calendar`, event)
@@ -54,5 +63,25 @@ export class EventService {
           this.refresh$.next();
         })
       );
+  }
+
+  /**
+   * Cambiamos el valor de la var de la sesion
+   *  que nos permiten entrar en modo edición o
+   * en modo consulta
+   * @param value
+   */
+  modeEdit(value: string) {
+    localStorage.setItem('modeView', value);
+  }
+
+  // Obtenemos en que modo estamos
+  public getModeEdit() {
+    return localStorage.getItem('modeView');
+  }
+
+  //  eliminamos el token
+  public removeItem() {
+    localStorage.removeItem('modeView');
   }
 }

@@ -1,56 +1,73 @@
-<mat-card>
+<mat-card class="mt20">
   <h1>Crear Ejercicio</h1>
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <form (ngSubmit)="createTraining()">
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Nombre</mat-label>
-          <input
-            [(ngModel)]="training.name"
-            type="text"
-            name="name"
-            placeholder="Introduzca el título.."
-            required
-            matInput
-          />
-        </mat-form-field>
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Descripción</mat-label>
-          <textarea
-            [(ngModel)]="training.description"
-            type="text"
-            name="descripcion"
-            placeholder="Introduzca la descripción"
-            matInput
-            rows="8"
-          ></textarea>
-        </mat-form-field>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div class="bootstrap-wrapper">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <form (ngSubmit)="createTraining()">
+            <mat-form-field class="w100 mt20" appearance="fill">
+              <mat-label>Nombre</mat-label>
+              <input
+                [(ngModel)]="training.name"
+                type="text"
+                name="name"
+                placeholder="Introduzca el título.."
+                required
+                matInput
+              />
+            </mat-form-field>
 
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Tipo de entrenamiento</mat-label>
-          <mat-select name="trainingTypes" [(ngModel)]="training.typeTraining">
-            <mat-option *ngFor="let t of trainingTypes" [value]="t">
-              {{ t }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field
-          *ngIf="gymMachines.length != 0"
-          class="w100"
-          appearance="fill"
-        >
-          <mat-label>Máquinas de entrenamiento</mat-label>
-          <mat-select name="gymMachine" [(ngModel)]="training.gymMachine">
-            <mat-option *ngFor="let g of gymMachines" [value]="g">
-              {{ g.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-
-        <div class="row">
-          <div class="col-md-6">
             <mat-form-field class="w100" appearance="fill">
+              <mat-label>Descripción</mat-label>
+              <textarea
+                [(ngModel)]="training.description"
+                type="text"
+                name="descripción"
+                placeholder="Introduzca la descripción"
+                matInput
+                rows="8"
+              ></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="w100" appearance="fill">
+              <mat-label>Tipo de entrenamiento</mat-label>
+              <mat-select
+                name="trainingTypes"
+                [(ngModel)]="training.typeTraining"
+              >
+                <mat-option></mat-option>
+                <mat-option *ngFor="let t of trainingTypes" [value]="t">
+                  {{ t }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field
+              *ngIf="gymMachines.length != 0"
+              class="w100"
+              appearance="fill"
+            >
+              <mat-label>Máquinas de entrenamiento</mat-label>
+              <mat-select name="gymMachine" [(ngModel)]="training.gymMachine">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let g of gymMachines" [value]="g">
+                  {{ g.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w100" appearance="fill">
+              <mat-label>Seleccionar usuario</mat-label>
+              <mat-select [(ngModel)]="training.user" name="user">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let user of users" [value]="user">{{
+                  user.username
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-4" appearance="fill">
               <mat-label>Número de repeticiones</mat-label>
               <input
                 [(ngModel)]="training.numRepetitions"
@@ -59,9 +76,8 @@
                 matInput
               />
             </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w100" appearance="fill">
+
+            <mat-form-field class="col-md-4" appearance="fill">
               <mat-label>Numero de series</mat-label>
               <input
                 [(ngModel)]="training.numSeries"
@@ -70,26 +86,36 @@
                 matInput
               />
             </mat-form-field>
-          </div>
-        </div>
 
-        <mat-form-field class="w100" appearance="fill">
-          <mat-label>Zona ejercitada</mat-label>
-          <input
-            [(ngModel)]="training.exercisedArea"
-            type="text"
-            name="exercisedArea"
-            placeholder="Introduzca la zona ejercitada.."
-            matInput
-          />
-        </mat-form-field>
+            <mat-form-field class="col-md-4" appearance="fill">
+              <mat-label>Calorías quemadas :</mat-label>
+              <input
+                [(ngModel)]="training.caloriesBurned"
+                type="number"
+                name="caloriesBurned"
+                matInput
+              />
+            </mat-form-field>
 
-        <div class="container text-center">
-          <button mat-raised-button color="primary">Crear ejercicio</button>
+            <mat-form-field class="w100" appearance="fill">
+              <mat-label>Zona ejercitada</mat-label>
+              <input
+                [(ngModel)]="training.exercisedArea"
+                type="text"
+                name="exercisedArea"
+                placeholder="Introduzca la zona ejercitada.."
+                matInput
+              />
+            </mat-form-field>
+
+            <div class="container text-center">
+              <button mat-raised-button color="primary">Crear ejercicio</button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
-  </div>
+  </mat-card-content>
 </mat-card>
 
 <!-- Mirar el objeto  -->

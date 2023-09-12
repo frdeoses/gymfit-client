@@ -15,10 +15,14 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
   machine: IGymMachine = {
     id: '',
     name: '',
+    model: '',
+    numMachine: 0,
     like: 0,
     description: '',
     exercisedArea: '',
   };
+
+  panelOpenState: boolean = false;
 
   trainingTypes: string[] = [];
 
@@ -45,18 +49,33 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
 
   createMachine() {
     if (_.isNull(this.machine) || _.isEmpty(this.machine.name)) {
-      this.snack.open('El nombre es obligatorio introducirlo!!', '', {
+      this.snack.open('El nombre es obligatorio introducirlo!!', 'Aceptar', {
         duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
       });
+      return;
+    }
+    if (_.isNull(this.machine) || _.isEmpty(this.machine.model)) {
+      this.snack.open(
+        'El modelo de la máquina es obligatorio introducirlo!!',
+        'Aceptar',
+        {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'right',
+        }
+      );
       return;
     }
 
     this.machineService.createGymMachine(this.machine).subscribe(
       (data: IGymMachine) => {
         this.machine.name = '';
+        this.machine.model = '';
         this.machine.description = '';
         Swal.fire(
-          'Maquina creada!!',
+          'Máquina creada!!',
           'La maquina ha sido creada con éxito',
           'success'
         );
@@ -72,5 +91,12 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
         );
       }
     );
+  }
+
+  /**
+   * Te descarga en PDF la pantalla
+   */
+  printPage() {
+    window.print();
   }
 }
