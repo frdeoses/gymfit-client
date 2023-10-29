@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
+const routeAdmin = '/admin';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
+  newNotificationsCount: number = 0;
+  private subscription: Subscription = new Subscription();
+
   role: string = '';
   user: IUser = {
     id: undefined,
@@ -28,7 +34,11 @@ export class NavbarComponent implements OnInit {
     ],
   };
 
-  constructor(public loginService: LoginService) {}
+  constructor(
+    public loginService: LoginService,
+    public notificationService: NotificationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
@@ -50,10 +60,31 @@ export class NavbarComponent implements OnInit {
         this.role = this.user.userRoles[0].roleList;
       }
     });
+
+    this.subscription = this.notificationService.newNotifications$.subscribe(
+      (notifications) => {
+        this.newNotificationsCount = notifications.length;
+        // this.cdr.detectChanges(); // Forzar la detección de cambios
+      }
+    );
+  }
+
+  updateNotificationCount() {
+    this.notificationService.newNotifications$.subscribe((notifications) => {
+      this.newNotificationsCount = notifications.length;
+    });
   }
 
   public logout() {
     this.loginService.logout();
     window.location.reload();
+  }
+
+  ngOnDestroy(): void {
+    // console.log(this.subscription);
+    
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

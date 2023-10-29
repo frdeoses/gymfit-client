@@ -31,6 +31,7 @@ import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.com
 import { AdminGuard } from './services/guards/admin/admin.guard';
 import { UserGuard } from './services/guards/user/user.guard';
 import { ProfileComponent } from './pages/admin/profile/profile.component';
+import { NotificationComponent } from './components/notification/notification.component';
 const routes: Routes = [
   {
     path: '',
@@ -53,12 +54,16 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     children: [
       {
+        path: '',
+        component: WelcomeComponent,
+      },
+      {
         path: 'profile',
         component: ProfileComponent,
       },
       {
-        path: '',
-        component: WelcomeComponent,
+        path: 'notification',
+        component: NotificationComponent,
       },
       {
         path: 'tables',
@@ -130,6 +135,10 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileUserComponent,
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent,
       },
       {
         path: 'instructions',

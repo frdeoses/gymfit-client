@@ -10,6 +10,20 @@
 
   <span>GYMFIT!!</span>
   <span class="example-spacer"></span>
+
+  <!-- Icono de notificaciones -->
+  <!-- <mat-icon (click)="toggleNotifications()">notifications</mat-icon> -->
+
+  <!-- Panel de notificaciones (inicialmente oculto) -->
+  <!-- <div
+    class="notification-panel"
+    [ngClass]="{ show: isNotificationPanelVisible }"
+  > -->
+  <!-- Contenido de las notificaciones aquí -->
+  <!-- <p>Notificación 1</p>
+    <p>Notificación 2</p>
+  </div> -->
+
   <a
     style="width: 10%"
     *ngIf="!loginService.isLoggedIn()"
@@ -26,6 +40,20 @@
   >
     Registrarse
   </a>
+
+  <button
+    *ngIf="loginService.isLoggedIn()"
+    mat-button
+    mat-icon-button
+    [matBadge]="newNotificationsCount"
+    [matBadgeHidden]="newNotificationsCount === 0"
+    matBadgeColor="warn"
+    class="mr20"
+    routerLink="/admin/notification"
+    aria-label="Example icon-button with heart icon"
+  >
+    <mat-icon mat-list-icon>notifications</mat-icon>
+  </button>
 
   <button
     *ngIf="loginService.isLoggedIn() && role === 'ADMIN'"
