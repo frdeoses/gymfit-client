@@ -12,6 +12,7 @@ import baseUrl from '../helper';
 export class TablesService {
   public refresh$ = new Subject<void>();
   viewEdit: boolean | undefined;
+  numNewTableCreated: number = 0;
   constructor(private http: HttpClient) {}
 
   /**

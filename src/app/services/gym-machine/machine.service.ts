@@ -4,6 +4,8 @@ import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import baseUrl from '../helper';
+import { NotificationService } from '../notification/notification.service';
+import { INotification } from 'src/app/interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +13,11 @@ import baseUrl from '../helper';
 export class MachineService {
   public refresh$ = new Subject<void>();
   viewEdit: boolean = false;
-  constructor(private http: HttpClient) {}
+  // notificationService: NotificationService;
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   /**
    * Lista las maquinas de entrenamiento
@@ -36,17 +42,28 @@ export class MachineService {
   /**
    * Crea una maquina de entrenamiento.
    *
-   * @param event
+   * @param machine
    * @returns
    */
-  public createGymMachine(event: IGymMachine): Observable<IGymMachine> {
+  public createGymMachine(machine: IGymMachine): Observable<IGymMachine> {
     return this.http
       .post<IGymMachine>(
         `${baseUrl[1]}/api/gymfit/training-tables/gym-machine`,
-        event
+        machine
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            title: 'Nueva Maquina',
+            description: `Se ha creado una nueva máquina: ${machine.name}`,
+            date: new Date(),
+            read: false,
+            page: `/admin/gym-machines/ ${machine.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );

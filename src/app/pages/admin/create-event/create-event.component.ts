@@ -68,7 +68,10 @@ export class CreateEventComponent implements OnInit {
           comments: undefined,
         };
 
-        this.router.navigate(['/admin/events']);
+        this.eventService.numNewEventCreated++;
+
+        // FIXME: Revisar si las notificaciones
+        // this.router.navigate(['/admin/events']);
       },
       (error) => {
         console.error(error);

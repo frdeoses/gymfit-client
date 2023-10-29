@@ -10,6 +10,7 @@ import baseUrl from '../helper';
 })
 export class EventService {
   public refresh$ = new Subject<void>();
+  numNewEventCreated: number = 0;
 
   constructor(private http: HttpClient) {}
 
