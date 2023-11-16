@@ -18,6 +18,13 @@
         </h3>
 
         <!-- Notificaciones nuevas -->
+
+        <div class="mt10 text-center" *ngIf="newNotificationsCount == 0">
+          <!-- <mat-card class="mt20 text-center"> -->
+          <h1>No hay notificaciones nuevas...</h1>
+          <!-- </mat-card> -->
+        </div>
+
         <mat-card
           class="mt20"
           *ngFor="let n of newNotifications$ | async; let i = index"
@@ -53,7 +60,14 @@
                   align-items: center;
                 "
               >
-                <button mat-raised-button color="accent">Consultar</button>
+                <button
+                  *ngIf="n.page && n.page !== ''"
+                  mat-raised-button
+                  color="accent"
+                  (click)="goToPage(n)"
+                >
+                  Consultar
+                </button>
                 <br />
                 <mat-checkbox
                   [checked]="n.read"
@@ -122,7 +136,14 @@
                   align-items: center;
                 "
               >
-                <button mat-raised-button color="accent">Consultar</button>
+                <button
+                  *ngIf="n.page && n.page !== ''"
+                  mat-raised-button
+                  color="accent"
+                  (click)="goToPage(n)"
+                >
+                  Consultar
+                </button>
                 <br />
                 <mat-checkbox
                   [checked]="n.read"
