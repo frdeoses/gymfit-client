@@ -18,19 +18,16 @@ export class NotificationService {
   constructor() {}
 
   addNotification(notification: INotification) {
-    debugger;
     const currentNotifications = this.notificationsSubject.value;
     currentNotifications.push(notification);
     this.notificationsSubject.next(currentNotifications);
     this.saveNotificationsToLocalStorage(currentNotifications);
+    this.separateNotifications(currentNotifications);
   }
 
   markNotificationAsRead(notification: INotification) {
-    debugger;
     const notifications = this.notificationsSubject.value;
-    const index = notifications.findIndex(
-      (n) => n.title === notification.title && n.date === notification.date // asumiendo que título y fecha combinados son únicos
-    );
+    const index = notifications.findIndex((n) => n.id === notification.id);
 
     if (index > -1) {
       notifications[index].read = true;
@@ -60,7 +57,6 @@ export class NotificationService {
   }
 
   deleteNotification(notification: INotification): void {
-    debugger;
     const currentNotifications = this.notificationsSubject.value;
     const index = currentNotifications.findIndex(
       (n) => n.title === notification.title && n.date === notification.date // asumiendo que título y fecha combinados son únicos
