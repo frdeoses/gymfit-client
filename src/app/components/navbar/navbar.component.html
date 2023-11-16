@@ -42,7 +42,7 @@
   </a>
 
   <button
-    *ngIf="loginService.isLoggedIn()"
+    *ngIf="loginService.isLoggedIn() && role === 'ADMIN'"
     mat-button
     mat-icon-button
     [matBadge]="newNotificationsCount"
@@ -50,7 +50,19 @@
     matBadgeColor="warn"
     class="mr20"
     routerLink="/admin/notification"
-    aria-label="Example icon-button with heart icon"
+  >
+    <mat-icon mat-list-icon>notifications</mat-icon>
+  </button>
+
+  <button
+    *ngIf="loginService.isLoggedIn() && role === 'USER'"
+    mat-button
+    mat-icon-button
+    [matBadge]="newNotificationsCount"
+    [matBadgeHidden]="newNotificationsCount === 0"
+    matBadgeColor="warn"
+    class="mr20"
+    routerLink="/user-dashboard/notification"
   >
     <mat-icon mat-list-icon>notifications</mat-icon>
   </button>
@@ -62,7 +74,6 @@
     style="margin-right: 10px"
     class="mr20 example-icon favorite-icon"
     routerLink="/admin/profile"
-    aria-label="Example icon-button with heart icon"
   >
     admin
   </button>
@@ -74,7 +85,6 @@
     style="margin-right: 10px"
     class="mr20 example-icon favorite-icon"
     routerLink="/user-dashboard/profile"
-    aria-label="Example icon-button with heart icon"
   >
     {{ user.username }}
   </button>
@@ -85,7 +95,6 @@
     mat-icon-button
     style="margin-right: 50px"
     class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
   >
     Cerrar sesión
   </a>

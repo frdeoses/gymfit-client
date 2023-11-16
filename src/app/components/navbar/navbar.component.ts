@@ -13,7 +13,12 @@ const routeAdmin = '/admin';
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   newNotificationsCount: number = 0;
-  private subscription: Subscription = new Subscription();
+  subscription: Subscription;
+  // =
+  //   this.notificationService.newNotifications$.subscribe((notifications) => {
+  //     this.newNotificationsCount = notifications.length;
+  //     // this.cdr.detectChanges(); // Forzar la detección de cambios
+  //   });
 
   role: string = '';
   user: IUser = {
@@ -36,9 +41,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     public loginService: LoginService,
-    public notificationService: NotificationService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    public notificationService: NotificationService
+  ) {
+    this.subscription = new Subscription();
+  }
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
@@ -64,7 +70,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subscription = this.notificationService.newNotifications$.subscribe(
       (notifications) => {
         this.newNotificationsCount = notifications.length;
-        // this.cdr.detectChanges(); // Forzar la detección de cambios
+        console.log('Notificaciones nuevas recibidas:', notifications);
       }
     );
   }
@@ -81,9 +87,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // console.log(this.subscription);
-    
+    console.log(this.subscription);
+
+    debugger;
+
     if (this.subscription) {
+      console.log(this.subscription);
       this.subscription.unsubscribe();
     }
   }
