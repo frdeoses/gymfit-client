@@ -5,6 +5,7 @@ import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interf
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-create-machine',
@@ -68,6 +69,7 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
       );
       return;
     }
+    this.machine.id = uuid.v4();
 
     this.machineService.createGymMachine(this.machine).subscribe(
       (data: IGymMachine) => {
