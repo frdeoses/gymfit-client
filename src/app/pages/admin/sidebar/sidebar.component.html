@@ -47,6 +47,16 @@
       <mat-icon mat-list-icon>add_box</mat-icon> Crear evento
     </button>
 
+    <button
+      mat-list-item
+      matBadgeColor="warn"
+      [matBadge]="newNotificationsCount"
+      [matBadgeHidden]="newNotificationsCount === 0"
+      routerLink="/admin/notification"
+    >
+      <mat-icon mat-list-icon>notifications</mat-icon> Notificaciones
+    </button>
+
     <button mat-list-item (click)="logout()">
       <mat-icon mat-list-icon>logout</mat-icon> Salir
     </button>
