@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
@@ -14,12 +14,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   newNotificationsCount: number = 0;
   subscription: Subscription;
-  // =
-  //   this.notificationService.newNotifications$.subscribe((notifications) => {
-  //     this.newNotificationsCount = notifications.length;
-  //     // this.cdr.detectChanges(); // Forzar la detección de cambios
-  //   });
-
   role: string = '';
   user: IUser = {
     id: undefined,
@@ -48,6 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
+    
     if (
       this.user.userRoles !== undefined &&
       this.user.userRoles.length > 0 &&
@@ -55,6 +50,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     ) {
       this.role = this.user.userRoles[0].roleList;
     }
+  
     this.loginService.loginStatusSubject.subscribe((data) => {
       this.isLoggedIn = this.loginService.isLoggedIn();
       this.user = this.loginService.getUser();
@@ -88,8 +84,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     console.log(this.subscription);
-
-    debugger;
 
     if (this.subscription) {
       console.log(this.subscription);
