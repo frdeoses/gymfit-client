@@ -5,6 +5,9 @@ import { tap } from 'rxjs/operators';
 import { ITraining } from 'src/app/interfaces/training-table/training.interface';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
+import * as uuid from 'uuid';
+import { NotificationService } from '../notification/notification.service';
+import { INotification } from 'src/app/interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +15,10 @@ import baseUrl from '../helper';
 export class TrainingService {
   public refresh$ = new Subject<void>();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   /**
    * Lista las tablas
@@ -41,10 +47,28 @@ export class TrainingService {
    * @returns
    */
   public createTraining(table: ITraining): Observable<ITraining> {
-    return this.http.post<ITraining>(
-      `${baseUrl[1]}/api/gymfit/training-tables/training`,
-      table
-    );
+    return this.http
+      .post<ITraining>(
+        `${baseUrl[1]}/api/gymfit/training-tables/training`,
+        table
+      )
+      .pipe(
+        tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Nuevo Entrenamiento',
+            description: `Se ha creado un nuevo entrenamiento: ${table.name}`,
+            date: new Date(),
+            read: false,
+            page: `/trainings/${table.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
+          this.refresh$.next();
+        })
+      );
   }
 
   /**
@@ -61,6 +85,18 @@ export class TrainingService {
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Eliminar Ejercicio',
+            description: `Se ha eliminado el ejercicio correctamente`,
+            date: new Date(),
+            read: false,
+            page: '',
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );
@@ -115,6 +151,18 @@ export class TrainingService {
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Actualizar Ejercicio',
+            description: `Se ha actualizado el ejercicio: ${training.name}`,
+            date: new Date(),
+            read: false,
+            page: `/trainings/${training.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );

@@ -5,6 +5,9 @@ import { tap } from 'rxjs/operators';
 import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
+import { NotificationService } from '../notification/notification.service';
+import * as uuid from 'uuid';
+import { INotification } from 'src/app/interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +15,10 @@ import baseUrl from '../helper';
 export class TablesService {
   public refresh$ = new Subject<void>();
   viewEdit: boolean | undefined;
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   /**
    * Lista las tablas
@@ -40,10 +46,25 @@ export class TablesService {
    * @returns
    */
   public createTable(table: ITrainingTable): Observable<ITrainingTable> {
-    return this.http.post<ITrainingTable>(
-      `${baseUrl[1]}/api/gymfit/training-table`,
-      table
-    );
+    return this.http
+      .post<ITrainingTable>(`${baseUrl[1]}/api/gymfit/training-table`, table)
+      .pipe(
+        tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Nueva Tabla de Entrenamiento',
+            description: `Se ha creado una nueva tabla de entrenamiento: ${table.name}`,
+            date: new Date(),
+            read: false,
+            page: `/tables/${table.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
+          this.refresh$.next();
+        })
+      );
   }
 
   /**
@@ -60,6 +81,18 @@ export class TablesService {
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Eliminar Tabla de Entrenamiento',
+            description: `Se ha eliminado la tabla de entrenamiento correctamente`,
+            date: new Date(),
+            read: false,
+            page: '',
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );
@@ -115,6 +148,18 @@ export class TablesService {
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Actualizar Tabla de Entrenamiento',
+            description: `Se ha actualizado la tabla de entrenamiento: ${trainingTable.name}`,
+            date: new Date(),
+            read: false,
+            page: `/tables/${trainingTable.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );

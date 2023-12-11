@@ -1,0 +1,169 @@
+<div class="bootstrap-wrapper">
+  <div class="container">
+    <mat-card class="mt20">
+      <h1 class="text-center">Notificaciones</h1>
+      <mat-divider></mat-divider>
+
+      <mat-card-content>
+        <h3
+          class="text-center"
+          style="
+            margin-top: 30px;
+            background-color: aliceblue;
+            border-radius: 20px;
+            font-size: large;
+          "
+        >
+          Novedades
+        </h3>
+
+        <!-- Notificaciones nuevas -->
+
+        <div class="mt10 text-center" *ngIf="newNotificationsCount == 0">
+          <!-- <mat-card class="mt20 text-center"> -->
+          <h1>No hay notificaciones nuevas...</h1>
+          <!-- </mat-card> -->
+        </div>
+
+        <mat-card
+          class="mt20"
+          *ngFor="let n of newNotifications$ | async; let i = index"
+        >
+          <div class="container">
+            <div class="row">
+              <div
+                class="col-md-6"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <mat-card-header class="mt10">
+                  <div mat-card-avatar class="example-header-image"></div>
+                  <mat-card-title> {{ n.title }}</mat-card-title>
+                  <mat-card-subtitle>{{
+                    n.date | date : "dd/MM/yy HH:mm"
+                  }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <i
+                    ><b>{{ n.description }}</b></i
+                  >
+                </mat-card-content>
+              </div>
+              <div
+                class="container col-md-6"
+                style="
+                  display: flex;
+                  justify-content: space-evenly;
+                  align-items: center;
+                "
+              >
+                <button
+                  *ngIf="n.page && n.page !== ''"
+                  mat-raised-button
+                  color="accent"
+                  (click)="goToPage(n)"
+                >
+                  Consultar
+                </button>
+                <br />
+                <mat-checkbox
+                  [checked]="n.read"
+                  (change)="markRead(n)"
+                  color="primary"
+                >
+                  Marcar como leído
+                </mat-checkbox>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="deleteNotification(n)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+        <h3
+          class="text-center"
+          style="
+            margin-top: 30px;
+            background-color: aliceblue;
+            border-radius: 20px;
+            font-size: large;
+          "
+        >
+          Anteriores
+        </h3>
+
+        <!-- Notificaciones antiguas -->
+        <mat-card
+          class="mt20"
+          *ngFor="let n of oldNotifications$ | async; let i = index"
+        >
+          <div class="container">
+            <div class="row">
+              <div
+                class="col-md-6"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <mat-card-header class="mt10">
+                  <div mat-card-avatar class="example-header-image"></div>
+                  <mat-card-title> {{ n.title }}</mat-card-title>
+                  <mat-card-subtitle>{{
+                    n.date | date : "dd/MM/yy HH:mm"
+                  }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <i
+                    ><b>{{ n.description }}</b></i
+                  >
+                </mat-card-content>
+              </div>
+              <div
+                class="container col-md-6"
+                style="
+                  display: flex;
+                  justify-content: space-evenly;
+                  align-items: center;
+                "
+              >
+                <button
+                  *ngIf="n.page && n.page !== ''"
+                  mat-raised-button
+                  color="accent"
+                  (click)="goToPage(n)"
+                >
+                  Consultar
+                </button>
+                <br />
+                <mat-checkbox
+                  [checked]="n.read"
+                  disabled="true"
+                  color="primary"
+                >
+                  Marcar como leído
+                </mat-checkbox>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="deleteNotification(n)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

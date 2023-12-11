@@ -9,6 +9,7 @@ export interface ITraining {
   numRepetitions?: number;
   numSeries?: number;
   exercisedArea?: string;
+  needBeSupervised?: boolean;
   description?: string;
   like?: number;
   user: IUser;

@@ -63,6 +63,9 @@ import { ProfileComponent } from './pages/admin/profile/profile.component';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { NgChartsModule } from 'ng2-charts';
 import { UserGraphComponent } from './components/user-graph/user-graph.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { NotificationComponent } from './components/notification/notification.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     AppComponent,
@@ -102,6 +105,7 @@ import { UserGraphComponent } from './components/user-graph/user-graph.component
     ProfileUserComponent,
     ErrorNotFoundComponent,
     UserGraphComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,6 +137,8 @@ import { UserGraphComponent } from './components/user-graph/user-graph.component
     }),
     NgChartsModule,
     ReactiveFormsModule,
+    MatMenuModule,
+    MatCheckboxModule,
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],

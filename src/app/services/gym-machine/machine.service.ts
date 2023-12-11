@@ -4,14 +4,19 @@ import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import baseUrl from '../helper';
-
+import { NotificationService } from '../notification/notification.service';
+import { INotification } from 'src/app/interfaces/notification.interface';
+import * as uuid from 'uuid';
 @Injectable({
   providedIn: 'root',
 })
 export class MachineService {
   public refresh$ = new Subject<void>();
   viewEdit: boolean = false;
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   /**
    * Lista las maquinas de entrenamiento
@@ -36,17 +41,29 @@ export class MachineService {
   /**
    * Crea una maquina de entrenamiento.
    *
-   * @param event
+   * @param machine
    * @returns
    */
-  public createGymMachine(event: IGymMachine): Observable<IGymMachine> {
+  public createGymMachine(machine: IGymMachine): Observable<IGymMachine> {
     return this.http
       .post<IGymMachine>(
         `${baseUrl[1]}/api/gymfit/training-tables/gym-machine`,
-        event
+        machine
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Nueva Maquina',
+            description: `Se ha creado una nueva máquina: ${machine.name}`,
+            date: new Date(),
+            read: false,
+            page: `/gym-machines/${machine.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );
@@ -66,6 +83,18 @@ export class MachineService {
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Eliminar Máquina',
+            description: `Se ha eliminado la máquina correctamente`,
+            date: new Date(),
+            read: false,
+            page: '',
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );
@@ -97,6 +126,18 @@ export class MachineService {
       )
       .pipe(
         tap(() => {
+          const notification: INotification = {
+            id: uuid.v4(),
+            title: 'Actualizar Máquina',
+            description: `Se ha actualizado la máquina: ${gymMachine.name}`,
+            date: new Date(),
+            read: false,
+            page: `/gym-machines/${gymMachine.id}`,
+          };
+          // Agregar la notificación al servicio de notificaciones
+
+          this.notificationService.addNotification(notification);
+
           this.refresh$.next();
         })
       );
