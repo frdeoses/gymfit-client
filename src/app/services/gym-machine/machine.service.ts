@@ -149,24 +149,10 @@ export class MachineService {
    * en modo consulta
    * @param value
    */
-  modeEdit(value: string) {
-    localStorage.setItem('modeView', value);
-  }
-
-  /**
-   * Cambiamos el valor de la var de la sesión
-   *  que nos permiten entrar en modo edición o
-   * en modo consulta
-   * @param value
-   */
   likeAdd(value: string) {
     localStorage.setItem('likeAdd', value);
   }
 
-  // Obtenemos en que modo estamos
-  public getModeEdit() {
-    return localStorage.getItem('modeView');
-  }
   // Obtenemos en que modo estamos
   public getLikeAdd() {
     return localStorage.getItem('likeAdd');
@@ -174,7 +160,6 @@ export class MachineService {
 
   //  eliminamos el token
   public removeItems() {
-    localStorage.removeItem('modeView');
     localStorage.removeItem('likeAdd');
   }
 }
