@@ -71,7 +71,7 @@
           />
         </mat-form-field>
 
-        <mat-form-field class="col-md-6 mt20" appearance="outline">
+        <mat-form-field class="col-md-12 mt20" appearance="outline">
           <mat-label>Seleccionar ejercicios:</mat-label>
           <mat-select
             [(ngModel)]="trainingTable.listTraining"
@@ -84,16 +84,6 @@
               >{{ training.name }}</mat-option
             >
           </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="col-md-6" appearance="outline">
-          <mat-label>Calorías quemadas :</mat-label>
-          <input
-            [(ngModel)]="trainingTable.caloriesBurned"
-            type="number"
-            name="caloriesBurned"
-            matInput
-          />
         </mat-form-field>
 
         <mat-form-field class="col-md-6 mt20" appearance="outline">
@@ -151,7 +141,17 @@
         </mat-form-field>
 
         <div class="container text-center">
-          <button mat-raised-button color="primary">Guardar</button>
+          <button
+            [routerLink]="'/admin/tables/'"
+            (click)="modeConsult()"
+            mat-raised-button
+            color="accent"
+          >
+            Cancelar
+          </button>
+          <button mat-raised-button class="ml20" color="primary">
+            Guardar
+          </button>
         </div>
       </form>
     </mat-card-content>
@@ -193,7 +193,9 @@
       <div class="col-md-2 text-center">
         <mat-card-subtitle class="mt20">Última modificación:</mat-card-subtitle>
         <mat-card-content class="text-center">
-          <b> </b>
+          <b>
+            {{ trainingTable.lastUpdateDate | date : "dd/MM/yy " }}
+          </b>
         </mat-card-content>
       </div>
 
