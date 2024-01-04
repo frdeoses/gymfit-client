@@ -39,8 +39,18 @@
           Estado de publicación</mat-slide-toggle
         >
 
-        <div class="container text-center">
-          <button mat-raised-button color="primary">Guardar</button>
+        <div class="mt20 container text-center">
+          <button
+            [routerLink]="'/admin/events/'"
+            (click)="modeConsult()"
+            mat-raised-button
+            color="accent"
+          >
+            Cancelar
+          </button>
+          <button mat-raised-button class="ml20" color="primary">
+            Guardar
+          </button>
         </div>
       </form>
     </div>

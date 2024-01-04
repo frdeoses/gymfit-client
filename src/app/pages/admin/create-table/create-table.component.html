@@ -67,7 +67,7 @@
               />
             </mat-form-field>
 
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="w100" appearance="outline">
               <mat-label>Seleccionar ejercicios:</mat-label>
               <mat-select
                 [(ngModel)]="table.listTraining"
@@ -80,16 +80,6 @@
                   >{{ training.name }}</mat-option
                 >
               </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Calorías quemadas :</mat-label>
-              <input
-                [(ngModel)]="table.caloriesBurned"
-                type="number"
-                name="caloriesBurned"
-                matInput
-              />
             </mat-form-field>
 
             <mat-form-field class="col-md-6" appearance="outline">
@@ -110,7 +100,7 @@
             </mat-form-field>
 
             <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Finalizacion de la tabla</mat-label>
+              <mat-label>Finalización de la tabla</mat-label>
               <input
                 matInput
                 required
