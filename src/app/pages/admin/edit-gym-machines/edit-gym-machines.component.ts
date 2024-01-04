@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import { LoginService } from 'src/app/services/login/login.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-edit-gym-machines',
@@ -24,7 +25,6 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
     model: '',
     numMachine: 0,
     like: 0,
-    // listWorkedWeights: [],
     description: '',
     exercisedArea: '',
   };
@@ -35,6 +35,7 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private machineService: MachineService,
     private loginService: LoginService,
+    private viewModeService: ViewModeService,
     private router: Router
   ) {}
 
@@ -56,7 +57,7 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
       this.rolLoginUser = role;
     }
 
-    this.editMode = this.machineService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
     this.likeAdd = this.machineService.getLikeAdd() === 'yes' ? true : false;
   }
 
@@ -101,7 +102,14 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
   }
 
   modeEdit() {
-    this.machineService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
     this.editMode = true;
+  }
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.viewModeService.modeEdit('no');
   }
 }

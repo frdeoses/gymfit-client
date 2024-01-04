@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +30,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
+    private viewModeService: ViewModeService,
     private userService: UserService
   ) {}
 
@@ -40,7 +42,7 @@ export class ProfileComponent implements OnInit {
    * Entrar en modo edición
    */
   modeEdit() {
-    this.userService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
     this.userService.activateNavigateProfile();
   }
 }

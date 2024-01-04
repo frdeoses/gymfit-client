@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,6 +16,7 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
   userLogin: string = '';
   constructor(
     private userService: UserService,
+    private viewModeService: ViewModeService,
     private loginService: LoginService
   ) {}
 
@@ -84,7 +86,7 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
    * Entrar en modo edicion
    */
   modeEdit() {
-    this.userService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
     this.userService.disableNavigateProfile();
   }
 
@@ -92,6 +94,6 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
    * Entrar en modo consulta
    */
   modeConsult() {
-    this.userService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

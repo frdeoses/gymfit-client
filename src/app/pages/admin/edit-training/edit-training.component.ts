@@ -11,6 +11,7 @@ import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import { LoginService } from 'src/app/services/login/login.service';
 import { TrainingService } from 'src/app/services/training/training.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
 
@@ -62,6 +63,7 @@ export class EditTrainingComponent implements OnInit {
     private loginService: LoginService,
     private userService: UserService,
     private machineService: MachineService,
+    private viewModeService: ViewModeService,
     private trainingService: TrainingService,
     private router: Router
   ) {}
@@ -117,7 +119,15 @@ export class EditTrainingComponent implements OnInit {
       }
     );
 
-    this.editMode = this.trainingService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.viewModeService.modeEdit('no');
   }
 
   public editTraining() {

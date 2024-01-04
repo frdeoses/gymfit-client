@@ -7,6 +7,8 @@ import { IComment } from 'src/app/interfaces/calendars/comment.interface';
 import { IEvent } from 'src/app/interfaces/calendars/event.interface';
 import { EventService } from 'src/app/services/event/event.service';
 import { LoginService } from 'src/app/services/login/login.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
 
@@ -33,13 +35,15 @@ export class EditEventComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private eventService: EventService,
+    private userService: UserService,
+    private viewModeService: ViewModeService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.params['eventId'];
 
-    this.editMode = this.eventService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
 
     this.eventService.getEvent(this.eventId).subscribe(
       (data: IEvent) => {
@@ -100,9 +104,16 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.viewModeService.modeEdit('no');
+  }
+
   addComment() {
     this.event.comments = this.comments;
-    // this.event.comments = [];
 
     this.eventService.editEvent(this.event).subscribe(
       (data: IEvent) => {

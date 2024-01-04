@@ -11,6 +11,7 @@ import { LoginService } from 'src/app/services/login/login.service';
 import { TablesService } from 'src/app/services/tables/tables.service';
 import { TrainingService } from 'src/app/services/training/training.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -60,10 +61,11 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
     private machineService: MachineService,
     private snack: MatSnackBar,
     private router: Router,
+    private viewModeService: ViewModeService,
     private route: ActivatedRoute
   ) {}
   ngOnDestroy(): void {
-    this.tableService.removeItem();
+    this.viewModeService.removeItem();
   }
 
   ngOnInit(): void {
@@ -75,7 +77,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
 
     this.tableId = this.route.snapshot.params['tableId'];
 
-    this.editMode = this.tableService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
 
     this.tableService.getTrainingTable(this.tableId).subscribe(
       (data: ITrainingTable) => {
@@ -310,5 +312,13 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
       let user = this.trainingTable.user;
       training.user = user;
     });
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.viewModeService.modeEdit('no');
   }
 }

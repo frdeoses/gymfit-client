@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { TablesService } from 'src/app/services/tables/tables.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,7 +14,9 @@ export class ViewTablesComponent implements OnInit, OnDestroy {
   tables: ITrainingTable[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private tableService: TablesService) {}
+  constructor(private tableService: TablesService,
+    private viewModeService: ViewModeService,
+    ) {}
 
   ngOnInit(): void {
     this.tableService.listTrainingTable().subscribe(
@@ -81,13 +84,13 @@ export class ViewTablesComponent implements OnInit, OnDestroy {
    * Entrar en modo edicion
    */
   modeEdit() {
-    this.tableService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
   }
 
   /**
    * Entrar en modo consulta
    */
   modeConsult() {
-    this.tableService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

@@ -5,6 +5,7 @@ import { IUser } from 'src/app/interfaces/user/usuario.interface';
 import { IWeight } from 'src/app/interfaces/user/weight.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -38,6 +39,7 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private snack: MatSnackBar,
     private router: Router,
+    private viewModeService: ViewModeService,
     private loginService: LoginService,
     private route: ActivatedRoute
   ) {}
@@ -59,11 +61,11 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
 
     this.navigateProfile = this.userService.navigateProfile;
 
-    this.editMode = this.userService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
   }
 
   ngOnDestroy(): void {
-    this.userService.removeItem();
+    this.viewModeService.removeItem();
   }
 
   formSubmit() {
@@ -110,6 +112,6 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
    */
   modeConsult() {
     this.editMode = false;
-    this.userService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

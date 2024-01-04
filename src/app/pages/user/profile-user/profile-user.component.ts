@@ -7,6 +7,7 @@ import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 
 @Component({
   selector: 'app-profile-user',
@@ -40,12 +41,14 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private userService: UserService,
     private router: Router,
+    private viewModeService: ViewModeService,
     private snack: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
-    this.editMode = this.userService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
+    
     if (!_.isUndefined(this.user.id)) {
       this.userService.getUser(this.user.id).subscribe(
         (data: IUser) => {
@@ -61,7 +64,7 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.userService.removeItem();
+    this.viewModeService.removeItem();
   }
 
   formSubmit() {
@@ -75,15 +78,16 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
     }
 
     this.userService.editUser(this.user).subscribe(
-      (data) => {
+      (data: any) => {
         console.log(data);
         Swal.fire(
           'Usuario guardado:',
-          'Usuario actualizado con exito!!',
+          'Usuario actualizado con éxito!!',
           'success'
         );
         this.editMode = false;
-        this.userService.modeEdit('no');
+        this.listUserWeight = _.isUndefined(data.body.listUserWeight) ? [] : data.body.listUserWeight;
+        this.viewModeService.modeEdit('no');
         this.router.navigate(['/user-dashboard/profile']);
       },
       (error) => {
@@ -99,11 +103,11 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
   }
 
   modeEdit() {
-    this.userService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
     this.editMode = true;
   }
   modeConsult() {
-    this.userService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
     this.editMode = false;
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IEvent } from 'src/app/interfaces/calendars/event.interface';
 import { EventService } from 'src/app/services/event/event.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,7 +14,9 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
   events: IEvent[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private eventService: EventService) {}
+  constructor(private eventService: EventService,
+    
+    private viewModeService: ViewModeService,) {}
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(
@@ -79,13 +82,13 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
    * Entrar en modo edición
    */
   modeEdit() {
-    this.eventService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
   }
 
   /**
    * Entrar en modo consulta
    */
   modeConsult() {
-    this.eventService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }
