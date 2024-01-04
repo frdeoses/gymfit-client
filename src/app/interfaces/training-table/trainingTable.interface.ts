@@ -7,6 +7,7 @@ export interface ITrainingTable {
   name: string;
   description?: string;
   creationDate: Date;
+  lastUpdateDate?: Date;
   typeTraining: string;
   initDate: Date;
   endDate: Date;
