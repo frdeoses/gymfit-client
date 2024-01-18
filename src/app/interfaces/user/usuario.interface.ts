@@ -16,6 +16,7 @@ export interface IUser {
   height?: number;
   weight?: number;
   caloriesBurned?: number;
+  heartRate?: number;
   enabled?: boolean;
   authorities: IAuthority[];
   userRoles?: IRol[];

@@ -6,4 +6,6 @@ export interface IGymMachine {
   exercisedArea?: string;
   description?: string;
   like: number;
+  creationDate?: Date;
+  lastUpdateDate?: Date;
 }
