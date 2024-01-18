@@ -16,7 +16,7 @@
 
           <h1 class="text-center">Regístrate aquí!!</h1>
 
-          <form [formGroup]="userForm" (ngSubmit)="formSubmit()">
+          <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label> Usuario </mat-label>
               <input
@@ -28,9 +28,9 @@
               />
               <mat-hint>El nombre de usuario debe ser único</mat-hint>
 
-              <mat-error *ngIf="userForm.get('username')?.hasError('required')"
-                >El usuario es obligatorio introducirlo</mat-error
-              >
+              <mat-error *ngIf="isValidField('username')">
+                {{ getFieldError("username") }}
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field class="mt10 full-width" appearance="outline">
@@ -44,15 +44,36 @@
                 placeholder="Introduzca la contraseña"
               />
 
-              <mat-error *ngIf="userForm.get('password')?.hasError('required')"
-                >La contraseña es obligatorio introducirlo</mat-error
-              >
-              <mat-error *ngIf="userForm.get('password')?.hasError('minlength')"
+              <mat-error *ngIf="isValidField('password')">
+                {{ getFieldError("password") }}
+              </mat-error>
+
+              <!-- <mat-error *ngIf="userForm.get('password')?.hasError('minlength')"
                 >La contraseña debe tener al menos 8 caracteres</mat-error
-              >
+              > -->
             </mat-form-field>
 
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="mt10 full-width" appearance="outline">
+              <mat-label>Confirmar contraseña</mat-label>
+              <input
+                required
+                matInput
+                formControlName="password2"
+                name="password2"
+                type="password"
+                placeholder="Introduzca la contraseña"
+              />
+
+              <mat-error *ngIf="isValidField('password2')">
+                {{ getFieldError("password2") }}
+              </mat-error>
+
+              <!-- <mat-error *ngIf="userForm.get('password')?.hasError('minlength')"
+                >La contraseña debe tener al menos 8 caracteres</mat-error
+              > -->
+            </mat-form-field>
+
+            <mat-form-field class="full-width mt10" appearance="outline">
               <mat-label>Nombre </mat-label>
               <input
                 required
@@ -61,12 +82,13 @@
                 formControlName="name"
                 placeholder="Introduzca su nombre..."
               />
-              <mat-error *ngIf="userForm.get('name')?.hasError('required')"
-                >El nombre es obligatorio introducirlo</mat-error
-              >
+
+              <mat-error *ngIf="isValidField('name')">
+                {{ getFieldError("name") }}
+              </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="full-width mt10" appearance="outline">
               <mat-label>Apellidos</mat-label>
               <input
                 required
@@ -76,12 +98,12 @@
                 placeholder="Introduzca sus apellidos..."
               />
 
-              <mat-error *ngIf="userForm.get('surname')?.hasError('required')"
-                >Los apellidos es obligatorio introducirlo</mat-error
-              >
+              <mat-error *ngIf="isValidField('surname')">
+                {{ getFieldError("surname") }}
+              </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="full-width mt10" appearance="outline">
               <mat-label>Email:</mat-label>
               <input
                 required
@@ -92,32 +114,33 @@
                 placeholder="Ex. pat@example.com"
               />
 
-              <mat-error *ngIf="userForm.get('email')?.hasError('required')"
-                >El correo electrónico es obligatorio introducirlo</mat-error
-              >
-              <mat-error *ngIf="userForm.get('email')?.hasError('email')"
+              <mat-error *ngIf="isValidField('email')">
+                {{ getFieldError("email") }}
+              </mat-error>
+              <!-- <mat-error *ngIf="userForm.get('email')?.hasError('email')"
                 >Correo electrónico no es válido</mat-error
-              >
+              > -->
             </mat-form-field>
 
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="full-width mt10" appearance="outline">
               <mat-label>Número de teléfono</mat-label>
               <input
                 required
                 matInput
+                type="text"
                 formControlName="phone"
                 name="phone"
                 placeholder="Introduzca el número de teléfono..."
               />
-              <mat-error *ngIf="userForm.get('phone')?.hasError('required')"
-                >El teléfono es obligatorio introducirlo</mat-error
-              >
-              <mat-error *ngIf="userForm.get('phone')?.hasError('pattern')"
+              <mat-error *ngIf="isValidField('phone')">
+                {{ getFieldError("phone") }}
+              </mat-error>
+              <!-- <mat-error *ngIf="userForm.get('phone')?.hasError('pattern')"
                 >El teléfono debe contener solo números</mat-error
-              >
+              > -->
             </mat-form-field>
 
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="full-width mt10" appearance="outline">
               <mat-label>Fecha de nacimiento:</mat-label>
               <input
                 matInput
@@ -133,13 +156,11 @@
               ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
 
-              <mat-error *ngIf="userForm.get('birthDate')?.hasError('required')"
+              <!-- <mat-error *ngIf="isValidField('birthDate')"
                 >La fecha de nacimiento es obligatorio introducirlo</mat-error
-              >
-              <mat-error
-                *ngIf="userForm.get('birthDate')?.hasError('fechaInvalida')"
-              >
-                Fecha de nacimiento no válida
+              > -->
+              <mat-error *ngIf="isValidField('birthDate')">
+                {{ getFieldError("birthDate") }}
               </mat-error>
             </mat-form-field>
 
@@ -169,7 +190,7 @@
               <button
                 mat-raised-button
                 color="primary"
-                [disabled]="!userForm.valid"
+                [disabled]="!myForm.valid"
               >
                 Registrar
               </button>
