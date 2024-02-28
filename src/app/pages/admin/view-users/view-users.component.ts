@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
@@ -20,13 +21,13 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
     private loginService: LoginService
   ) {}
 
-  users: IUser[] = [];
+  users: User[] = [];
 
   ngOnInit(): void {
     this.userLogin = this.loginService.getUser().username;
     this.userService.listUser().subscribe(
-      (data: IUser[]) => {
-        this.users = data;
+      (data: ResponseHTTP<User[]>) => {
+        this.users = data.body;
         console.log(this.users);
       },
       (error) => {
@@ -35,18 +36,18 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.subscription = this.userService.refresh$.subscribe(() => {
-      this.userService.listUser().subscribe(
-        (data: IUser[]) => {
-          this.users = data;
-          console.log(this.users);
-        },
-        (error) => {
-          console.error(error);
-          Swal.fire('Error:', 'Error al cargar los usuarios...', 'error');
-        }
-      );
-    });
+    // this.subscription = this.userService.refresh$.subscribe(() => {
+    //   this.userService.listUser().subscribe(
+    //     (data: User[]) => {
+    //       this.users = data;
+    //       console.log(this.users);
+    //     },
+    //     (error) => {
+    //       console.error(error);
+    //       Swal.fire('Error:', 'Error al cargar los usuarios...', 'error');
+    //     }
+    //   );
+    // });
   }
 
   ngOnDestroy(): void {
@@ -66,7 +67,7 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.userService.deleteUser(userId).subscribe(
-          (eventIdDeleted: string) => {
+          (eventIdDeleted: ResponseHTTP<string>) => {
             Swal.fire(
               'Usuario eliminado',
               'El usuario ha sido eliminado correctamente...',

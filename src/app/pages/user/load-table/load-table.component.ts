@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import * as _ from 'lodash';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { TablesService } from 'src/app/services/tables/tables.service';
-import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,9 +16,9 @@ import Swal from 'sweetalert2';
 export class LoadTableComponent implements OnInit {
   typeTrainingTable: string = '';
 
-  tables: ITrainingTable[] = [];
+  tables: TrainingTable[] = [];
 
-  userLogin: IUser = {
+  userLogin: User = {
     id: '',
     name: '',
     username: '',
@@ -47,9 +48,11 @@ export class LoadTableComponent implements OnInit {
       if (_.isUndefined(this.typeTrainingTable)) {
         console.log('Cargando todas las tablas de entrenamiento...');
 
-        this.tablesService.listTrainingTableByUser(this.userLogin).subscribe(
-          (data: ITrainingTable[]) => {
-            this.tables = data;
+        if (!this.userLogin.id) throw new Error('Falta el id del usuario...');
+
+        this.tablesService.listTrainingTableByUser(this.userLogin.id).subscribe(
+          (response: ResponseHTTP<TrainingTable[]>) => {
+            this.tables = response.body;
             this.typeTrainingTable = 'ALL';
             console.log(this.tables);
           },
@@ -67,8 +70,8 @@ export class LoadTableComponent implements OnInit {
               this.userLogin.id
             )
             .subscribe(
-              (data: ITrainingTable[]) => {
-                this.tables = data;
+              (response: ResponseHTTP<TrainingTable[]>) => {
+                this.tables = response.body;
 
                 console.log(this.tables);
               },

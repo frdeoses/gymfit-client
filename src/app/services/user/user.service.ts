@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +15,27 @@ export class UserService {
   navigateProfile: boolean = false;
   constructor(private httpClient: HttpClient) {}
 
-  public createUser(user: IUser): Observable<IUser> {
-    return this.httpClient.post<IUser> (`${baseUrl[0]}/api/gymfit/user`, user);
+  public createUser(user: User): Observable<ResponseHTTP<User>> {
+    return this.httpClient.post<ResponseHTTP<User>>(
+      `${baseUrl[0]}/api/gymfit/user`,
+      user
+    );
   }
 
   /**
    * Lista los usuarios
    * @returns
    */
-  public listUser(): Observable<IUser[]> {
-    return this.httpClient.get<IUser[]>(`${baseUrl[0]}/api/gymfit/users`);
+  public listUser(): Observable<ResponseHTTP<User[]>> {
+    return this.httpClient.get<ResponseHTTP<User[]>>(
+      `${baseUrl[0]}/api/gymfit/users`
+    );
+  }
+
+  public allRoleUser(): Observable<ResponseHTTP<User[]>> {
+    return this.httpClient.get<ResponseHTTP<User[]>>(
+      `${baseUrl[0]}/api/gymfit/users/role/users`
+    );
   }
 
   /**
@@ -33,9 +45,9 @@ export class UserService {
    * @param userId
    * @returns
    */
-  public deleteUser(userId: string): Observable<string> {
+  public deleteUser(userId: string): Observable<ResponseHTTP<string>> {
     return this.httpClient
-      .delete<string>(`${baseUrl[0]}/api/gymfit/users/${userId}`)
+      .delete<ResponseHTTP<string>>(`${baseUrl[0]}/api/gymfit/users/${userId}`)
       .pipe(
         tap(() => {
           this.refresh$.next();
@@ -49,8 +61,8 @@ export class UserService {
    * @param userId
    * @returns
    */
-  public getUser(userId: string): Observable<IUser> {
-    return this.httpClient.get<IUser>(
+  public getUser(userId: string): Observable<ResponseHTTP<User>> {
+    return this.httpClient.get<ResponseHTTP<User>>(
       `${baseUrl[0]}/api/gymfit/users/${userId}`
     );
   }
@@ -61,10 +73,10 @@ export class UserService {
    * @param user
    * @returns
    */
-  public editUser(user: IUser): Observable<IUser> {
+  public editUser(user: User): Observable<ResponseHTTP<User>> {
     user.authorities = [];
     return this.httpClient
-      .put<IUser>(`${baseUrl[0]}/api/gymfit/user`, user)
+      .patch<ResponseHTTP<User>>(`${baseUrl[0]}/api/gymfit/user`, user)
       .pipe(
         tap(() => {
           this.refresh$.next();
@@ -79,5 +91,4 @@ export class UserService {
   disableNavigateProfile() {
     this.navigateProfile = false;
   }
-
 }
