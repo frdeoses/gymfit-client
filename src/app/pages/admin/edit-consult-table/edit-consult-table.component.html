@@ -11,13 +11,13 @@
     </div>
 
     <mat-card-content>
-      <form (ngSubmit)="formSubmit()">
+      <form [formGroup]="myForm" (ngSubmit)="formSubmit()">
         <mat-form-field class="full-width mt20" appearance="outline">
           <mat-label>Nombre: </mat-label>
           <input
             required
             matInput
-            [(ngModel)]="trainingTable.name"
+            formControlName="name"
             name="name"
             placeholder="Introduzca su nombre..."
           />
@@ -26,7 +26,7 @@
         <mat-form-field class="w100" appearance="outline">
           <mat-label>Descripción</mat-label>
           <textarea
-            [(ngModel)]="trainingTable.description"
+            formControlName="description"
             type="text"
             name="descripción"
             placeholder="Introduzca la descripción"
@@ -40,7 +40,7 @@
           <mat-select
             required
             name="trainingTypes"
-            [(ngModel)]="trainingTable.typeTraining"
+            formControlName="typeTraining"
           >
             <mat-option></mat-option>
             <mat-option *ngFor="let t of trainingTypes" [value]="t">
@@ -53,7 +53,7 @@
           <mat-label>Tiempo de descanso (seg):</mat-label>
           <input
             matInput
-            [(ngModel)]="trainingTable.breakTime"
+            formControlName="breakTime"
             name="breakTime"
             type="number"
             placeholder="Introduzca el tiempo de descanso..."
@@ -64,17 +64,17 @@
           <mat-label>Tiempo de entrenamiento (días):</mat-label>
           <input
             matInput
-            [(ngModel)]="trainingTable.trainingDuration"
+            formControlName="trainingDuration"
             name="breakTime"
             type="number"
             placeholder="Introduzca el nº de días de entrenamiento..."
           />
         </mat-form-field>
 
-        <mat-form-field class="col-md-6 mt20" appearance="outline">
+        <mat-form-field class="col-md-12 mt20" appearance="outline">
           <mat-label>Seleccionar ejercicios:</mat-label>
           <mat-select
-            [(ngModel)]="trainingTable.listTraining"
+            formControlName="listTraining"
             name="listTraining"
             multiple
           >
@@ -86,22 +86,12 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="col-md-6" appearance="outline">
-          <mat-label>Calorías quemadas :</mat-label>
-          <input
-            [(ngModel)]="trainingTable.caloriesBurned"
-            type="number"
-            name="caloriesBurned"
-            matInput
-          />
-        </mat-form-field>
-
         <mat-form-field class="col-md-6 mt20" appearance="outline">
           <mat-label>Inicio de la tabla</mat-label>
           <input
             matInput
             [matDatepicker]="pickerInitDate"
-            [(ngModel)]="trainingTable.initDate"
+            formControlName="initDate"
             required
             name="initDate"
           />
@@ -119,7 +109,7 @@
             matInput
             required
             [matDatepicker]="pickerEndDate"
-            [(ngModel)]="trainingTable.endDate"
+            formControlName="endDate"
             name="endDate"
           />
           <mat-hint>MM/DD/YYYY</mat-hint>
@@ -130,20 +120,20 @@
           <mat-datepicker #pickerEndDate></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field class="w100 mt20" appearance="outline">
+        <!-- <mat-form-field class="w100 mt20" appearance="outline">
           <mat-label>Seleccionar usuario</mat-label>
           <mat-select [(ngModel)]="trainingTable.user" name="user" required>
             <mat-option></mat-option>
-            <mat-option *ngFor="let user of users" [value]="user">{{
+            <mat-option *ngFor="let user of users" [value]="user.id">{{
               user.username
             }}</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
 
         <mat-form-field class="w100" appearance="outline">
           <mat-label>Observaciones:</mat-label>
           <textarea
-            [(ngModel)]="trainingTable.observation"
+            formControlName="observation"
             name="observation"
             matInput
             placeholder="Ej. Descripción breve de mejoras del usuario ..."
@@ -151,7 +141,17 @@
         </mat-form-field>
 
         <div class="container text-center">
-          <button mat-raised-button color="primary">Guardar</button>
+          <button
+            [routerLink]="'/admin/tables/'"
+            (click)="modeConsult()"
+            mat-raised-button
+            color="accent"
+          >
+            Cancelar
+          </button>
+          <button mat-raised-button class="ml20" color="primary">
+            Guardar
+          </button>
         </div>
       </form>
     </mat-card-content>
@@ -176,7 +176,7 @@
         <mat-card-content>
           <b>
             <i>
-              {{ trainingTable.name }}
+              {{ myForm.controls["name"].value }}
             </i>
           </b>
         </mat-card-content>
@@ -185,7 +185,7 @@
         <mat-card-subtitle class="mt20">Fecha de creación:</mat-card-subtitle>
         <mat-card-content class="text-center">
           <b>
-            {{ trainingTable.creationDate | date : "dd/MM/yy " }}
+            {{ trainingTable?.creationDate | date : "dd/MM/yy " }}
           </b>
         </mat-card-content>
       </div>
@@ -193,16 +193,22 @@
       <div class="col-md-2 text-center">
         <mat-card-subtitle class="mt20">Última modificación:</mat-card-subtitle>
         <mat-card-content class="text-center">
-          <b> </b>
+          <b>
+            {{ trainingTable?.lastUpdateDate | date : "dd/MM/yy " }}
+          </b>
         </mat-card-content>
       </div>
 
       <div class="col-md-12">
         <mat-card-title class="mt20"> Descripción:</mat-card-title>
         <mat-card-content>
+          <span *ngIf="!trainingTable?.description"
+            >No se ha introducido ninguna descripción</span
+          >
+
           <b>
             <i>
-              {{ trainingTable.description }}
+              {{ myForm.controls["description"].value }}
             </i>
           </b>
         </mat-card-content>
@@ -212,7 +218,7 @@
         <mat-card-title class="mt20"> Tipo de entrenamiento:</mat-card-title>
         <mat-card-content>
           <span>
-            {{ trainingTable.typeTraining }}
+            {{ myForm.controls["typeTraining"].value }}
           </span>
         </mat-card-content>
       </div>
@@ -223,79 +229,90 @@
           <span> <mat-icon>whatshot</mat-icon> </span>:
         </mat-card-title>
         <mat-card-content>
+          <span *ngIf="!trainingTable?.caloriesBurned"
+            >No hay ningún ejercicio asociado a la tabla
+          </span>
           <i>
-            <b> {{ trainingTable.caloriesBurned }} </b>
+            {{ trainingTable?.caloriesBurned || undefined }}
           </i>
         </mat-card-content>
       </div>
 
-      <div class="col-md-6 text-center">
+      <div *ngIf="trainingTable" class="col-md-6 text-center">
         <mat-card-title class="mt20"> Inicio de la tabla:</mat-card-title>
         <mat-card-content class="text-center">
           <span>
-            {{ trainingTable.initDate | date : "dd/MM/yy" }}
+            {{ trainingTable!.initDate | date : "dd/MM/yy" }}
           </span>
         </mat-card-content>
       </div>
-      <div class="col-md-6 text-center">
+
+      <div *ngIf="trainingTable" class="col-md-6 text-center">
         <mat-card-title class="mt20"> Finalización de la tabla:</mat-card-title>
         <mat-card-content class="text-center">
           <span>
-            {{ trainingTable.endDate | date : "dd/MM/yy" }}
+            {{ trainingTable!.endDate | date : "dd/MM/yy" }}
           </span>
         </mat-card-content>
       </div>
-      <div class="col-md-6">
+
+      <div class="col-md-6 text-center">
         <mat-card-title class="mt20"> Tiempo de descanso (seg):</mat-card-title>
         <mat-card-content>
+          <mat-icon
+            *ngIf="!trainingTable?.breakTime"
+            color="warn"
+            class="blink-icon"
+            >warning</mat-icon
+          >
           <b>
             <i>
-              {{ trainingTable.breakTime }}
+              {{ myForm.controls["breakTime"].value || undefined }}
             </i>
           </b>
         </mat-card-content>
       </div>
-      <div class="col-md-6">
+
+      <div class="col-md-6 text-center">
         <mat-card-title class="mt20">
           Tiempo de duración (días):</mat-card-title
         >
         <mat-card-content>
+          <mat-icon
+            *ngIf="!trainingTable?.trainingDuration"
+            color="warn"
+            class="blink-icon"
+            >warning</mat-icon
+          >
           <b>
             <i>
-              {{ trainingTable.trainingDuration }}
+              {{ myForm.controls["trainingDuration"].value || undefined }}
             </i>
           </b>
         </mat-card-content>
       </div>
 
       <div
-        *ngIf="
-          trainingTable.user &&
-          trainingTable.user.username &&
-          rolLogin === 'ADMIN'
-        "
-        [routerLink]="'/admin/users/' + trainingTable.user.id"
+        *ngIf="userInTable && rolLogin === 'ADMIN'"
+        [routerLink]="'/admin/users/' + userInTable.id"
         class="user cursorHand col-md-6"
       >
         <mat-card-title class="mt20"> Usuario asignado:</mat-card-title>
         <mat-card-content>
-          {{ trainingTable.user.username }}
+          {{ userInTable.username }}
+        </mat-card-content>
+      </div>
+
+      <div *ngIf="userInTable && rolLogin === 'ADMIN'" class="col-md-6">
+        <mat-card-title class="mt20">Nombre del usuario:</mat-card-title>
+        <mat-card-content>
+          {{ userInTable.name }}
         </mat-card-content>
       </div>
 
       <div
         *ngIf="
-          trainingTable.user && trainingTable.user.name && rolLogin === 'ADMIN'
-        "
-        class="col-md-6"
-      >
-        <mat-card-title class="mt20">Nombre del usuario:</mat-card-title>
-        <mat-card-content>
-          {{ trainingTable.user.name }}
-        </mat-card-content>
-      </div>
-      <div
-        *ngIf="
+          trainingTable &&
           trainingTable.listTraining &&
           trainingTable.listTraining.length != 0 &&
           rolLogin === 'ADMIN'
@@ -306,7 +323,7 @@
           <u> <b> Ejercicios de entrenamiento: </b></u>
         </mat-card-title>
       </div>
-      <div class="card" *ngFor="let t of trainingTable.listTraining">
+      <div class="card" *ngFor="let t of trainingTable?.listTraining">
         <mat-card
           *ngIf="rolLogin === 'ADMIN'"
           [routerLink]="'/admin/trainings/' + t.id"
@@ -327,6 +344,7 @@
       </div>
       <div
         *ngIf="
+          trainingTable &&
           trainingTable.listTraining &&
           trainingTable.listTraining.length != 0 &&
           rolLogin === 'USER'
@@ -337,7 +355,7 @@
           <u> <b> Ejercicios de entrenamiento: </b></u>
         </mat-card-title>
       </div>
-      <div class="card" *ngFor="let t of trainingTable.listTraining">
+      <div class="card" *ngFor="let t of trainingTable?.listTraining">
         <mat-card
           *ngIf="rolLogin === 'USER'"
           [routerLink]="
@@ -359,5 +377,10 @@
         <ng-template #templateName> </ng-template>
       </div>
     </div>
+    <mat-card-actions class="text-center">
+      <button mat-raised-button color="primary" (click)="modeEdit()">
+        Actualizar
+      </button>
+    </mat-card-actions>
   </mat-card>
 </div>

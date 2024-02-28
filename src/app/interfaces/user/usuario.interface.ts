@@ -1,9 +1,9 @@
-import { IAuthority } from '../security/authority.interface';
-import { IRol } from '../security/rol.interface';
-import { IFatPercentage } from './fatPercentage.interface';
-import { IWeight } from './weight.interface';
+import { Authority } from '../security/authority.interface';
+import { Rol } from '../security/rol.interface';
+import { FatPercentage } from './fatPercentage.interface';
+import { Weight } from './weight.interface';
 
-export interface IUser {
+export interface User {
   id?: string;
   username: string;
   password: string;
@@ -16,11 +16,12 @@ export interface IUser {
   height?: number;
   weight?: number;
   caloriesBurned?: number;
+  heartRate?: number;
   enabled?: boolean;
-  authorities: IAuthority[];
-  userRoles?: IRol[];
-  listUserWeight?: IWeight[];
-  listFatPercentage?: IFatPercentage[];
+  authorities: Authority[];
+  userRoles?: Rol[];
+  listUserWeight?: Weight[];
+  listFatPercentage?: FatPercentage[];
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
   credentialsNonExpired?: boolean;

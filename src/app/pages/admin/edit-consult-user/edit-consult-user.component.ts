@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
-import { IWeight } from 'src/app/interfaces/user/weight.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
+import { Weight } from 'src/app/interfaces/user/weight.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,11 +17,11 @@ import Swal from 'sweetalert2';
 export class EditConsultUserComponent implements OnInit, OnDestroy {
   userId: string = '';
 
-  listUserWeight: IWeight[] | undefined;
+  listUserWeight: Weight[] | undefined;
   editMode: boolean | undefined;
   navigateProfile: boolean | undefined;
 
-  user: IUser = {
+  user: User = {
     id: '',
     authorities: [],
     name: '',
@@ -38,6 +40,7 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private snack: MatSnackBar,
     private router: Router,
+    private viewModeService: ViewModeService,
     private loginService: LoginService,
     private route: ActivatedRoute
   ) {}
@@ -47,27 +50,33 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
     this.userId = this.route.snapshot.params['userId'];
 
     this.userService.getUser(this.userId).subscribe(
-      (data: IUser) => {
-        this.user = data;
+      (response: ResponseHTTP<User>) => {
+        this.user = response.body;
         this.listUserWeight = this.user.listUserWeight;
         console.log(this.user);
       },
       (error) => {
         console.error(error);
+        Swal.fire(
+          'Error en el sistema',
+          'Ha ocurrido un error en el sistema...',
+          'error'
+        );
+
+        this.router.navigate(['/error']);
       }
     );
 
     this.navigateProfile = this.userService.navigateProfile;
 
-    this.editMode = this.userService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
   }
 
   ngOnDestroy(): void {
-    this.userService.removeItem();
+    this.viewModeService.removeItem();
   }
 
   formSubmit() {
-
     if (this.editMode) {
       if (this.user.username == '' || this.user.username == null) {
         this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
@@ -110,6 +119,6 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
    */
   modeConsult() {
     this.editMode = false;
-    this.userService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

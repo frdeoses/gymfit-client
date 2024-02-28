@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ITraining } from 'src/app/interfaces/training-table/training.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { Training } from 'src/app/interfaces/training-table/training.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { TrainingService } from 'src/app/services/training/training.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 
 @Component({
   selector: 'app-load-training',
@@ -14,9 +15,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['./load-training.component.css'],
 })
 export class LoadTrainingComponent implements OnInit {
-  trainings: ITraining[] = [];
+  trainings: Training[] = [];
   subscription: Subscription = new Subscription();
-  userLogin: IUser = {
+  userLogin: User = {
     id: '',
     name: '',
     username: '',
@@ -48,9 +49,11 @@ export class LoadTrainingComponent implements OnInit {
       if (_.isUndefined(this.typeTraining)) {
         console.log('Cargando todas las tablas de entrenamiento...');
 
-        this.trainingService.listTrainingByUser(this.userLogin).subscribe(
-          (data: ITraining[]) => {
-            this.trainings = data;
+        if (!this.userLogin.id) throw new Error('Falta el id del usuario');
+
+        this.trainingService.listTrainingByUser(this.userLogin.id).subscribe(
+          (response: ResponseHTTP<Training[]>) => {
+            this.trainings = response.body;
             this.typeTraining = 'ALL';
             console.log(this.trainings);
           },
@@ -65,8 +68,8 @@ export class LoadTrainingComponent implements OnInit {
           this.trainingService
             .getTrainingByTypeTraining(this.typeTraining, this.userLogin.id)
             .subscribe(
-              (data: ITraining[]) => {
-                this.trainings = data;
+              (response: ResponseHTTP<Training[]>) => {
+                this.trainings = response.body;
 
                 console.log(this.trainings);
               },

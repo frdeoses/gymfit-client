@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IWorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
+import { WorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
 import * as _ from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
@@ -20,7 +20,7 @@ export class WeightDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<WeightDialogComponent>,
     private snack: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public workedWeights: IWorkedWeights
+    @Inject(MAT_DIALOG_DATA) public workedWeights: WorkedWeights
   ) {}
 
   ngOnInit(): void {}

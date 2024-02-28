@@ -1,4 +1,4 @@
-export interface IGymMachine {
+export interface GymMachine {
   id: string;
   name: string;
   model: string;
@@ -6,4 +6,6 @@ export interface IGymMachine {
   exercisedArea?: string;
   description?: string;
   like: number;
+  creationDate?: Date;
+  lastUpdateDate?: Date;
 }

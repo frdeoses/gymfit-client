@@ -164,6 +164,33 @@
           </div>
         </mat-card>
       </mat-card-content>
+      <!-- <hr /> -->
+
+      <!-- <mat-card-actions align="end"> -->
+      <div
+        *ngIf="notificationsCount != 0"
+        class="mt20"
+        style="display: flex; justify-content: flex-end; align-items: center"
+      >
+        <mat-divider></mat-divider>
+        <mat-checkbox
+          class="mt20"
+          color="primary"
+          (change)="markAllAsRead()"
+          [disabled]="isMarkAllAsRead()"
+        >
+          Marcar todo como leído
+        </mat-checkbox>
+        <button
+          class="ml20 mt20"
+          mat-raised-button
+          color="warn"
+          (click)="deleteAllNotification()"
+        >
+          Limpiar
+        </button>
+      </div>
+      <!-- </mat-card-actions> -->
     </mat-card>
   </div>
 </div>

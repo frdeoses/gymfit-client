@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ITraining } from 'src/app/interfaces/training-table/training.interface';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import { Training } from 'src/app/interfaces/training-table/training.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import { TrainingService } from 'src/app/services/training/training.service';
-import Swal from 'sweetalert2';
-import * as _ from 'lodash';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ValidatorService } from 'src/app/services/validator/validator.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-training',
@@ -17,50 +17,40 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./create-training.component.css'],
 })
 export class CreateTrainingComponent implements OnInit {
-  training: ITraining = {
-    id: '',
-    name: '',
-    description: '',
-    exercisedArea: '',
-    user: {
-      id: '',
-      name: '',
-      username: '',
-      password: '',
-      userRoles: [],
-      surname: '',
-      email: '',
-      birthDate: new Date(),
-      height: undefined,
-      phone: '',
-      authorities: [],
-    },
-    gymMachine: undefined,
-    like: 0,
-    listWorkedWeights: [],
-    typeTraining: '',
-    creationDate: new Date(),
-    lastUpdateDate: new Date(),
-  };
+  training?: Training;
 
-  users: IUser[] = [];
+  myForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    description: [''],
+    typeTraining: [''],
+    exercisedArea: [''],
+    user: [undefined, []],
+    gymMachine: [undefined, []],
+    numRepetitions: [undefined, []],
+    numSeries: [undefined, []],
+    caloriesBurned: [undefined, []],
+    supervised: [undefined, []],
+    // Agrega las otras propiedades y validaciones aquí
+  });
+
+  users: User[] = [];
 
   trainingTypes: string[] = [];
-  gymMachines: IGymMachine[] = [];
+  gymMachines: GymMachine[] = [];
 
   constructor(
     private trainingService: TrainingService,
     private machineService: MachineService,
     private userService: UserService,
-    private loginService: LoginService,
-    private snack: MatSnackBar,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.machineService.allTrainingType().subscribe(
-      (data: string[]) => {
-        this.trainingTypes = data;
+    this.trainingService.allTrainingType().subscribe(
+      (response: ResponseHTTP<string[]>) => {
+        this.trainingTypes = response.body;
         console.log(this.trainingTypes);
       },
       (error) => {
@@ -70,8 +60,8 @@ export class CreateTrainingComponent implements OnInit {
     );
 
     this.machineService.listGymMachines().subscribe(
-      (data: IGymMachine[]) => {
-        this.gymMachines = data;
+      (response: ResponseHTTP<GymMachine[]>) => {
+        this.gymMachines = response.body;
         console.log(this.gymMachines);
       },
       (error) => {
@@ -80,9 +70,9 @@ export class CreateTrainingComponent implements OnInit {
       }
     );
 
-    this.userService.listUser().subscribe(
-      (data: IUser[]) => {
-        this.users = data;
+    this.userService.allRoleUser().subscribe(
+      (response: ResponseHTTP<User[]>) => {
+        this.users = response.body;
         console.log(this.users);
       },
       (error) => {
@@ -93,32 +83,48 @@ export class CreateTrainingComponent implements OnInit {
   }
 
   createTraining() {
-    this.training.user.authorities = [];
+    this.myForm.markAllAsTouched();
 
-    if (_.isNull(this.training) || _.isEmpty(this.training.name)) {
-      this.snack.open('El nombre es obligatorio introducirlo!!', '', {
-        duration: 3000,
-      });
-      return;
-    }
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.training = {
+      ...this.training,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.training) return;
+
+    // if (_.isNull(this.training) || _.isEmpty(this.training.name)) {
+    //   this.snack.open('El nombre es obligatorio introducirlo!!', '', {
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
 
     this.trainingService.createTraining(this.training).subscribe(
-      (data: ITraining) => {
-        this.training.name = '';
-        this.training.description = '';
-        this.training.typeTraining = '';
+      (trainingData: ResponseHTTP<Training>) => {
         Swal.fire(
-          'Entrenamiento creado!!',
-          'El entrenamiento ha sido creado con éxito',
+          'Entrenamiento creado:',
+          `El entrenamiento '${trainingData.body.name}' ha sido creado con éxito`,
           'success'
         );
 
         this.router.navigate(['/admin/trainings']);
+
+        this.myForm.reset();
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error', 'Error al crear la tabla', 'error');
+        const message = error.error.error || 'Error en el sistema';
+        Swal.fire('Error', error, 'error');
       }
     );
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }

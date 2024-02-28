@@ -1,6 +1,74 @@
 <mat-card>
   <mat-action-list>
     <div mat-subheader>Perfil del usuario</div>
+    <div *ngFor="let item of menuItems">
+      <div *ngIf="item.subMenu">
+        <mat-divider></mat-divider>
+
+        <div mat-subheader>{{ item.title }}</div>
+
+        <mat-accordion>
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <button [routerLink]="item.path" mat-list-item>
+                  <mat-icon mat-list-icon>
+                    {{ item.icon }}
+                  </mat-icon>
+                  {{ item.title }}
+                </button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <button
+              [routerLink]="item.subPath + t"
+              mat-list-item
+              *ngFor="let t of trainingTypes"
+            >
+              <mat-icon mat-list-icon>folder</mat-icon> {{ t }}
+            </button>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-divider class="mt10"></mat-divider>
+      </div>
+
+      <button
+        class="mt10"
+        *ngIf="!item.subMenu"
+        mat-list-item
+        [routerLink]="item.path"
+      >
+        <mat-icon mat-list-icon>
+          {{ item.icon }}
+        </mat-icon>
+        {{ item.title }}
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+    <br />
+
+    <button
+      class="mt10"
+      mat-list-item
+      matBadgeColor="warn"
+      [matBadge]="newNotificationsCount"
+      [matBadgeHidden]="newNotificationsCount === 0"
+      routerLink="/user-dashboard/notification"
+    >
+      <mat-icon mat-list-icon>notifications</mat-icon> Notificaciones
+    </button>
+
+    <button mat-list-item (click)="logout()">
+      <mat-icon mat-list-icon>logout</mat-icon> Salir
+    </button>
+  </mat-action-list>
+</mat-card>
+
+<!-- <mat-card>
+  <mat-action-list>
+    <div mat-subheader>Perfil del usuario</div>
     <button mat-list-item routerLink="/user-dashboard">
       <mat-icon mat-list-icon>home</mat-icon> Inicio
     </button>
@@ -69,8 +137,18 @@
     <mat-divider></mat-divider>
     <br />
 
+    <button
+      mat-list-item
+      matBadgeColor="warn"
+      [matBadge]="newNotificationsCount"
+      [matBadgeHidden]="newNotificationsCount === 0"
+      routerLink="/user-dashboard/notification"
+    >
+      <mat-icon mat-list-icon>notifications</mat-icon> Notificaciones
+    </button>
+
     <button mat-list-item (click)="logout()">
       <mat-icon mat-list-icon>logout</mat-icon> Salir
     </button>
   </mat-action-list>
-</mat-card>
+</mat-card> -->

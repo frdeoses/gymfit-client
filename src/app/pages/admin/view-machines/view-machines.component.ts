@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,15 +12,18 @@ import Swal from 'sweetalert2';
   styleUrls: ['./view-machines.component.css'],
 })
 export class ViewMachinesComponent implements OnInit, OnDestroy {
-  gymMachines: IGymMachine[] = [];
+  gymMachines: GymMachine[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private machineService: MachineService) {}
+  constructor(
+    private machineService: MachineService,
+    private viewModeService: ViewModeService
+  ) {}
 
   ngOnInit(): void {
     this.machineService.listGymMachines().subscribe(
-      (data: IGymMachine[]) => {
-        this.gymMachines = data;
+      (response: ResponseHTTP<GymMachine[]>) => {
+        this.gymMachines = response.body;
         console.log(this.gymMachines);
       },
       (error) => {
@@ -29,9 +34,9 @@ export class ViewMachinesComponent implements OnInit, OnDestroy {
 
     this.subscription = this.machineService.refresh$.subscribe(() => {
       this.machineService.listGymMachines().subscribe(
-        (data: IGymMachine[]) => {
-          this.gymMachines = data;
-          console.log(data);
+        (response: ResponseHTTP<GymMachine[]>) => {
+          this.gymMachines = response.body;
+          console.log(response);
         },
         (error) => {
           console.error(error);
@@ -62,7 +67,7 @@ export class ViewMachinesComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.machineService.deleteGymMachine(gymMachineId).subscribe(
-          (eventIdDeleted: string) => {
+          (response: ResponseHTTP<string>) => {
             Swal.fire(
               'Máquina eliminado',
               'La máquina ha sido eliminado correctamente...',
@@ -85,13 +90,13 @@ export class ViewMachinesComponent implements OnInit, OnDestroy {
    * Entrar en modo edicion
    */
   modeEdit() {
-    this.machineService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
   }
 
   /**
    * Entrar en modo consulta
    */
   modeConsult() {
-    this.machineService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

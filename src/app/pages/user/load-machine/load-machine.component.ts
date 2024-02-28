@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import Swal from 'sweetalert2';
 
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./load-machine.component.css'],
 })
 export class LoadMachineComponent implements OnInit, OnDestroy {
-  gymMachines: IGymMachine[] = [];
+  gymMachines: GymMachine[] = [];
   subscription: Subscription = new Subscription();
 
   like: number = 0;
@@ -19,8 +20,8 @@ export class LoadMachineComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.machineService.listGymMachines().subscribe(
-      (data: IGymMachine[]) => {
-        this.gymMachines = data;
+      (response: ResponseHTTP<GymMachine[]>) => {
+        this.gymMachines = response.body;
         console.log(this.gymMachines);
       },
       (error) => {
@@ -31,9 +32,9 @@ export class LoadMachineComponent implements OnInit, OnDestroy {
 
     this.subscription = this.machineService.refresh$.subscribe(() => {
       this.machineService.listGymMachines().subscribe(
-        (data: IGymMachine[]) => {
-          this.gymMachines = data;
-          console.log(data);
+        (response: ResponseHTTP<GymMachine[]>) => {
+          this.gymMachines = response.body;
+          console.log(response);
         },
         (error) => {
           console.error(error);
@@ -50,25 +51,4 @@ export class LoadMachineComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
-  // likeMachine(id: string): void {
-
-  //   let machine = this.gymMachines.find((m) => m.id === id);
-
-  //   if (machine == undefined || machine.like == undefined)
-  //     return console.error('Error: Variable like indefinida');
-
-  //   this.like = machine.like;
-
-  //   machine.like++;
-
-  //   this.machineService.editGymMachine(machine).subscribe(
-  //     (data: IGymMachine) => {
-  //       console.log('Máquina de entrenamiento actualizado');
-  //     },
-  //     (error) => {
-  //       console.error(error);
-  //     }
-  //   );
-  // }
 }

@@ -1,7 +1,7 @@
 <div *ngIf="!editMode" class="bootstrap-wrapper" style="padding-top: 20px">
   <div class="container">
     <mat-card>
-      <div class="row">
+      <div class="row ml10">
         <div class="col-md-10" style="display: flex; align-items: flex-end">
           <div class="ml10" style="padding: 4px">
             <img
@@ -12,7 +12,9 @@
           </div>
           <mat-card-title>
             Consultar Máquina:
-            <span> {{ gymMachine.name }}</span>
+            <span>
+              {{ myForm.controls["name"].value }}
+            </span>
           </mat-card-title>
         </div>
 
@@ -47,52 +49,104 @@
 
         <br />
 
-        <div class="col-md-12">
-          <mat-card-subtitle class="mt10 letter">Nombre</mat-card-subtitle>
-          <mat-card-content class="letter">
-            {{ gymMachine.name }}
+        <div class="col-md-8">
+          <mat-card-title class="mt10">Nombre</mat-card-title>
+          <mat-card-content class="">
+            <b>
+              <i>
+                {{ myForm.controls["name"].value }}
+              </i>
+            </b>
           </mat-card-content>
         </div>
-        <div class="col-md-6">
-          <mat-card-subtitle class="mt10 letter">Modelo</mat-card-subtitle>
-          <mat-card-content class="letter">
-            {{ gymMachine.model }}
+
+        <div *ngIf="gymMachine" class="col-md-2 text-center">
+          <mat-card-subtitle class="mt20">Fecha de creación:</mat-card-subtitle>
+          <mat-card-content>
+            <b>
+              {{ gymMachine.creationDate | date : "dd/MM/yy " }}
+            </b>
           </mat-card-content>
         </div>
-        <div class="col-md-6">
-          <mat-card-subtitle class="mt10 letter"
-            >Nº de maquinas</mat-card-subtitle
+
+        <div *ngIf="gymMachine" class="col-md-2 text-center">
+          <mat-card-subtitle class="mt20"
+            >Última modificación:</mat-card-subtitle
           >
-          <mat-card-content class="letter">
-            {{ gymMachine.numMachine }}
+          <mat-card-content>
+            <b>
+              {{ gymMachine.lastUpdateDate | date : "dd/MM/yy " }}
+            </b>
           </mat-card-content>
         </div>
-        <div class="col-md-12">
-          <mat-card-subtitle class="mt10 letter">Descripción</mat-card-subtitle>
-          <mat-card-content class="letter">
-            {{ gymMachine.description }}
+
+        <div class="col-md-6 text-center">
+          <mat-card-title class="mt10">Modelo</mat-card-title>
+          <mat-card-content class="">
+            <b>
+              <i>
+                {{ myForm.controls["model"].value }}
+              </i>
+            </b>
           </mat-card-content>
         </div>
-        <div *ngIf="gymMachine.exercisedArea" class="col-md-12">
-          <mat-card-subtitle class="mt10 letter"
-            >Músculos ejercitados</mat-card-subtitle
-          >
-          <mat-card-content class="letter">
-            {{ gymMachine.exercisedArea }}
+
+        <div class="col-md-3 text-center">
+          <mat-card-title class="mt10">Nº de maquinas</mat-card-title>
+          <mat-card-content class="">
+            <b>
+              <i>
+                {{ myForm.controls["numMachine"].value }}
+              </i>
+            </b>
           </mat-card-content>
         </div>
-        <div class="col-md-12">
-          <mat-card-subtitle class="mt10 letter">Me gusta</mat-card-subtitle>
-          <mat-card-content class="letter">
+
+        <div class="col-md-3 text-center">
+          <mat-card-title class="mt10">Me gusta</mat-card-title>
+          <mat-card-content class="">
             <span>
-              {{ gymMachine.like }}
+              <b>
+                {{ gymMachine?.like || 0 }}
+              </b>
             </span>
           </mat-card-content>
         </div>
+
+        <div class="col-md-12">
+          <mat-card-title class="mt10">Descripción</mat-card-title>
+          <mat-card-content class="">
+            <span *ngIf="!gymMachine?.description">
+              {{ getMessage("description") }}
+            </span>
+            <b>
+              <i>
+                {{ myForm.controls["description"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="gymMachine" class="col-md-12 text-center">
+          <mat-card-title class="mt10">Músculos ejercitados</mat-card-title>
+          <mat-card-content class="">
+            <span *ngIf="!gymMachine?.exercisedArea">
+              {{ getMessage("exercisedArea") }}
+            </span>
+            <b>
+              <i>
+                {{ myForm.controls["exercisedArea"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
       </div>
+
       <div class="col-md-12 text-center">
         <mat-card-title class="mt10">Video explicativo:</mat-card-title>
+
         <img style="width: 40%" src="../../../../assets/gif/bench-press.gif" />
+
         <div class="container text-center">
           <a
             mat-fab
@@ -120,33 +174,42 @@
         </u>
       </div>
       <div class="col-md-8 offset-md-2">
-        <form (ngSubmit)="editGymMachine()">
+        <form [formGroup]="myForm" (ngSubmit)="editGymMachine()">
           <mat-form-field class="w100 mt20" appearance="fill">
             <mat-label>Nombre</mat-label>
             <input
-              [(ngModel)]="gymMachine.name"
+              formControlName="name"
               type="text"
               name="name"
               placeholder="Introduzca el título.."
               required
               matInput
             />
+
+            <mat-error *ngIf="isValidField('name')">
+              {{ getFieldError("name") }}
+            </mat-error>
           </mat-form-field>
-          <mat-form-field class="w100" appearance="fill">
+
+          <mat-form-field class="w100 mt10" appearance="fill">
             <mat-label>Modelo</mat-label>
             <input
-              [(ngModel)]="gymMachine.model"
+              formControlName="model"
               type="text"
               name="model"
               placeholder="Introduzca el modelo de la máquina.."
               required
               matInput
             />
+
+            <mat-error *ngIf="isValidField('model')">
+              {{ getFieldError("model") }}
+            </mat-error>
           </mat-form-field>
 
           <!-- hideToggle -->
           <mat-expansion-panel
-            class="w100"
+            class="w100 mt10"
             (opened)="panelOpenState = true"
             (closed)="panelOpenState = false"
           >
@@ -158,11 +221,12 @@
                 Desplegar en caso afirmativo
               </mat-panel-description>
             </mat-expansion-panel-header>
+
             <mat-form-field class="col-md-6" appearance="outline">
               <mat-label>Numero de maquina:</mat-label>
               <input
                 matInput
-                [(ngModel)]="gymMachine.numMachine"
+                formControlName="numMachine"
                 name="numMachine"
                 type="number"
                 placeholder="Introduzca el numero de maquinas con el mismo modelo..."
@@ -173,19 +237,19 @@
           <mat-form-field class="w100 mt20" appearance="fill">
             <mat-label>Descripción</mat-label>
             <textarea
-              [(ngModel)]="gymMachine.description"
+              formControlName="description"
               type="text"
               name="descripción"
               placeholder="Introduzca la descripción"
               matInput
-              disabled="false"
               rows="8"
             ></textarea>
           </mat-form-field>
+
           <mat-form-field class="w100" appearance="fill">
             <mat-label>Zona de trabajo</mat-label>
             <input
-              [(ngModel)]="gymMachine.exercisedArea"
+              formControlName="exercisedArea"
               type="text"
               name="exercisedArea"
               placeholder="Introduzca el area de la zona que trabaja.."
@@ -194,7 +258,26 @@
           </mat-form-field>
 
           <div class="container text-center">
-            <button mat-raised-button color="primary">Guardar</button>
+            <button
+              [routerLink]="'/admin/gym-machines/' + gymMachine?.id"
+              (click)="modeConsult()"
+              mat-raised-button
+              color="accent"
+            >
+              <mat-icon>cancel</mat-icon>
+              Cancelar
+            </button>
+
+            <button
+              mat-raised-button
+              class="ml20"
+              color="primary"
+              [disabled]="!myForm.valid"
+            >
+              <mat-icon>save</mat-icon>
+
+              Guardar
+            </button>
           </div>
         </form>
       </div>

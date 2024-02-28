@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import baseUrl from '../helper';
 import { NotificationService } from '../notification/notification.service';
 import { INotification } from 'src/app/interfaces/notification.interface';
 import * as uuid from 'uuid';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -22,19 +23,9 @@ export class MachineService {
    * Lista las maquinas de entrenamiento
    * @returns
    */
-  public listGymMachines(): Observable<IGymMachine[]> {
-    return this.http.get<IGymMachine[]>(
+  public listGymMachines(): Observable<ResponseHTTP<GymMachine[]>> {
+    return this.http.get<ResponseHTTP<GymMachine[]>>(
       `${baseUrl[1]}/api/gymfit/training-tables/gym-machines`
-    );
-  }
-
-  /**
-   * Lita tipos de entrenamiento (Pecho, hombro,etc.)
-   * @returns
-   */
-  public allTrainingType(): Observable<string[]> {
-    return this.http.get<string[]>(
-      `${baseUrl[1]}/api/gymfit/training-tables/type-training`
     );
   }
 
@@ -44,18 +35,20 @@ export class MachineService {
    * @param machine
    * @returns
    */
-  public createGymMachine(machine: IGymMachine): Observable<IGymMachine> {
+  public createGymMachine(
+    machine: GymMachine
+  ): Observable<ResponseHTTP<GymMachine>> {
     return this.http
-      .post<IGymMachine>(
+      .post<ResponseHTTP<GymMachine>>(
         `${baseUrl[1]}/api/gymfit/training-tables/gym-machine`,
         machine
       )
       .pipe(
-        tap(() => {
+        tap((response: ResponseHTTP<GymMachine>) => {
           const notification: INotification = {
             id: uuid.v4(),
             title: 'Nueva Maquina',
-            description: `Se ha creado una nueva máquina: ${machine.name}`,
+            description: `Se ha creado una nueva máquina: ${response.body.name}`,
             date: new Date(),
             read: false,
             page: `/gym-machines/${machine.id}`,
@@ -76,9 +69,11 @@ export class MachineService {
    * @param gymMachineId
    * @returns
    */
-  public deleteGymMachine(gymMachineId: string): Observable<string> {
+  public deleteGymMachine(
+    gymMachineId: string
+  ): Observable<ResponseHTTP<string>> {
     return this.http
-      .delete<string>(
+      .delete<ResponseHTTP<string>>(
         `${baseUrl[1]}/api/gymfit/training-tables/gym-machines/${gymMachineId}`
       )
       .pipe(
@@ -106,8 +101,10 @@ export class MachineService {
    * @param gymMachineId
    * @returns
    */
-  public getGymMachine(gymMachineId: string): Observable<IGymMachine> {
-    return this.http.get<IGymMachine>(
+  public getGymMachine(
+    gymMachineId: string
+  ): Observable<ResponseHTTP<GymMachine>> {
+    return this.http.get<ResponseHTTP<GymMachine>>(
       `${baseUrl[1]}/api/gymfit/training-tables/gym-machines/${gymMachineId}`
     );
   }
@@ -118,18 +115,20 @@ export class MachineService {
    * @param gymMachine
    * @returns
    */
-  public editGymMachine(gymMachine: IGymMachine): Observable<IGymMachine> {
+  public editGymMachine(
+    gymMachine: GymMachine
+  ): Observable<ResponseHTTP<GymMachine>> {
     return this.http
-      .put<IGymMachine>(
+      .patch<ResponseHTTP<GymMachine>>(
         `${baseUrl[1]}/api/gymfit/training-tables/gym-machine`,
         gymMachine
       )
       .pipe(
-        tap(() => {
+        tap((response: ResponseHTTP<GymMachine>) => {
           const notification: INotification = {
             id: uuid.v4(),
             title: 'Actualizar Máquina',
-            description: `Se ha actualizado la máquina: ${gymMachine.name}`,
+            description: `Se ha actualizado la máquina: ${response.body.name}`,
             date: new Date(),
             read: false,
             page: `/gym-machines/${gymMachine.id}`,
@@ -149,24 +148,10 @@ export class MachineService {
    * en modo consulta
    * @param value
    */
-  modeEdit(value: string) {
-    localStorage.setItem('modeView', value);
-  }
-
-  /**
-   * Cambiamos el valor de la var de la sesión
-   *  que nos permiten entrar en modo edición o
-   * en modo consulta
-   * @param value
-   */
   likeAdd(value: string) {
     localStorage.setItem('likeAdd', value);
   }
 
-  // Obtenemos en que modo estamos
-  public getModeEdit() {
-    return localStorage.getItem('modeView');
-  }
   // Obtenemos en que modo estamos
   public getLikeAdd() {
     return localStorage.getItem('likeAdd');
@@ -174,7 +159,6 @@ export class MachineService {
 
   //  eliminamos el token
   public removeItems() {
-    localStorage.removeItem('modeView');
     localStorage.removeItem('likeAdd');
   }
 }

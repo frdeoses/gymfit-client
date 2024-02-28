@@ -1,4 +1,4 @@
-export interface IWorkedWeights {
+export interface WorkedWeights {
   id?: string;
   weight?: number;
   date?: Date;

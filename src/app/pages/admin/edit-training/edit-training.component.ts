@@ -1,16 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+  GymMachine,
+  ResponseHTTP,
+  Training,
+  User,
+  WorkedWeights,
+} from '@interfaces/index';
+import { MachineService } from '@services/gym-machine/machine.service';
+import { LoginService } from '@services/login/login.service';
+import { TrainingService } from '@services/training/training.service';
+import { UserService } from '@services/user/user.service';
+import { ValidatorService } from '@services/validator/validator.service';
+import { ViewModeService } from '@services/view-mode/view-mode.service';
 import * as _ from 'lodash';
+import { switchMap } from 'rxjs';
 import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-dialog.component';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import { ITraining } from 'src/app/interfaces/training-table/training.interface';
-import { IWorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
-import { LoginService } from 'src/app/services/login/login.service';
-import { TrainingService } from 'src/app/services/training/training.service';
-import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
 
@@ -21,39 +28,29 @@ import * as uuid from 'uuid';
 })
 export class EditTrainingComponent implements OnInit {
   trainingId: string = '';
-  editMode: boolean | undefined;
-  training: ITraining = {
-    id: '',
-    name: '',
-    user: {
-      id: '',
-      name: '',
-      username: '',
-      password: '',
-      userRoles: [],
-      surname: '',
-      email: '',
-      birthDate: new Date(),
-      height: undefined,
-      phone: '',
-      authorities: [],
-    },
-    description: '',
-    exercisedArea: '',
-    gymMachine: undefined,
-    like: 0,
-    listWorkedWeights: [],
-    numRepetitions: 0,
-    numSeries: 0,
-    typeTraining: '',
 
-    creationDate: new Date(),
-    lastUpdateDate: new Date(),
-  };
+  editMode: boolean | undefined;
+
+  myForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    description: [''],
+    typeTraining: [''],
+    exercisedArea: [''],
+    userId: [undefined, []],
+    gymMachine: [undefined, []],
+    numRepetitions: [undefined, []],
+    numSeries: [undefined, []],
+    caloriesBurned: [undefined, []],
+    needBeSupervised: [undefined, []],
+    // Agrega las otras propiedades y validaciones aquí
+  });
+
+  training?: Training;
 
   trainingTypes: string[] = [];
-  gymMachines: IGymMachine[] = [];
-  users: IUser[] = [];
+  gymMachines: GymMachine[] = [];
+  users: User[] = [];
+  userInTraining?: User;
   rolLogin: string = '';
 
   constructor(
@@ -62,31 +59,41 @@ export class EditTrainingComponent implements OnInit {
     private loginService: LoginService,
     private userService: UserService,
     private machineService: MachineService,
+    private viewModeService: ViewModeService,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
     private trainingService: TrainingService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    let rolUser: undefined | string = this.loginService.getCurrentUserRole();
+    const rolUser: undefined | string = this.loginService.getCurrentUserRole();
 
     if (!_.isUndefined(rolUser)) {
       this.rolLogin = rolUser.toUpperCase();
     }
+
     this.trainingId = this.route.snapshot.params['trainingId'];
 
-    this.trainingService.getTraining(this.trainingId).subscribe(
-      (data: ITraining) => {
-        this.training = data;
-        console.log(this.training);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    this.userService
+      .allRoleUser()
+      .pipe(
+        switchMap((response: ResponseHTTP<User[]>) => {
+          this.users = response.body;
+          // Asumiendo que getTraining también retorna un Observable
+          return this.trainingService.getTraining(this.trainingId);
+        })
+      )
+      .subscribe((response: ResponseHTTP<Training>) => {
+        this.training = response.body;
+        this.userInTraining = this.users.find(
+          (user) => user.id === this.training?.userId
+        );
+      });
 
-    this.machineService.allTrainingType().subscribe(
-      (data: string[]) => {
-        this.trainingTypes = data;
+    this.trainingService.allTrainingType().subscribe(
+      (response: ResponseHTTP<string[]>) => {
+        this.trainingTypes = response.body;
         console.log(this.trainingTypes);
       },
       (error) => {
@@ -96,8 +103,8 @@ export class EditTrainingComponent implements OnInit {
     );
 
     this.machineService.listGymMachines().subscribe(
-      (data: IGymMachine[]) => {
-        this.gymMachines = data;
+      (response: ResponseHTTP<GymMachine[]>) => {
+        this.gymMachines = response.body;
         console.log(this.gymMachines);
       },
       (error) => {
@@ -106,49 +113,61 @@ export class EditTrainingComponent implements OnInit {
       }
     );
 
-    this.userService.listUser().subscribe(
-      (data: IUser[]) => {
-        this.users = data;
-        console.log(this.users);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
-      }
-    );
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
+  }
 
-    this.editMode = this.trainingService.getModeEdit() === 'yes' ? true : false;
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.viewModeService.modeEdit('no');
   }
 
   public editTraining() {
-    if (!_.isUndefined(this.training.user) && !_.isNull(this.training.user))
-      this.training.user.authorities = [];
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.training = {
+      ...this.training,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.training) return;
+    debugger;
+    if (this.training.id === null) this.training.id = this.trainingId;
 
     this.trainingService.editTraining(this.training).subscribe(
-      (data: ITraining) => {
+      (response: ResponseHTTP<Training>) => {
         Swal.fire(
           'Entrenamiento actualizado',
-          'El entrenamiento se ha modificado con éxito...',
+          `El entrenamiento '${response.body.name}' se ha modificado con éxito..`,
           'success'
         );
         this.router.navigate(['/admin/trainings']);
+
+        this.myForm.reset();
       },
       (error) => {
-        Swal.fire(
-          'Error en el sistema',
-          'El entrenamiento no se ha modificado con éxito...',
-          'error'
-        );
+        const msjError =
+          error.error ||
+          'Ha ocurrido un error en el sistema y no se ha podido actualizar el entrenamiento.';
+
+        Swal.fire('Error en el sistema', msjError, 'error');
         console.error(error);
       }
     );
   }
 
   createWorkedWeight() {
-    let listWorkedWeights: IWorkedWeights[] = [];
+    let listWorkedWeights: WorkedWeights[] = [];
 
-    if (!_.isUndefined(this.training.listWorkedWeights)) {
-      // listWorkedWeights = this.training.listWorkedWeights;
+    if (!this.training) return;
+
+    if (
+      this.training.listWorkedWeights &&
+      this.training.listWorkedWeights.length >= 0
+    ) {
       this.training.listWorkedWeights.forEach((w) => {
         listWorkedWeights.push(w);
       });
@@ -160,7 +179,7 @@ export class EditTrainingComponent implements OnInit {
         date: new Date(),
         serie: 0,
         weight: 0,
-      } as IWorkedWeights,
+      } as WorkedWeights,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -177,21 +196,39 @@ export class EditTrainingComponent implements OnInit {
     });
   }
 
-  addWorkedWeight(listWorkedWeight: IWorkedWeights[] | undefined) {
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
+  }
+
+  getMessage(field: string) {
+    return this.validatorService.getMessageErrorFieldOptional(field);
+  }
+
+  addWorkedWeight(listWorkedWeight: WorkedWeights[] | undefined) {
+    if (!this.training) return;
     if (!_.isEqual(this.training.listWorkedWeights, listWorkedWeight)) {
       this.training.listWorkedWeights = listWorkedWeight;
 
-      if (!_.isUndefined(this.training.user) && !_.isNull(this.training.user))
-        this.training.user.authorities = [];
-
       this.trainingService.editTraining(this.training).subscribe(
-        (data: ITraining) => {
-          console.log(data);
+        (response: ResponseHTTP<Training>) => {
+          console.log(response);
         },
         (error) => {
           console.error(error);
         }
       );
     }
+  }
+
+  /**
+   * Entrar en modo edición
+   */
+  modeEdit() {
+    this.viewModeService.modeEdit('yes');
+    this.editMode = true;
   }
 }

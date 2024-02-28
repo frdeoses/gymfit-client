@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { INotification } from 'src/app/interfaces/notification.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
+import * as uuid from 'uuid';
 import baseUrl from '../helper';
 import { NotificationService } from '../notification/notification.service';
-import * as uuid from 'uuid';
-import { INotification } from 'src/app/interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -24,19 +24,21 @@ export class TablesService {
    * Lista las tablas
    * @returns
    */
-  public listTrainingTable(): Observable<ITrainingTable[]> {
-    return this.http.get<ITrainingTable[]>(
+  public listTrainingTable(): Observable<ResponseHTTP<TrainingTable[]>> {
+    return this.http.get<ResponseHTTP<TrainingTable[]>>(
       `${baseUrl[1]}/api/gymfit/training-tables`
     );
   }
+
   /**
    * Lista las tablas por el usuario
    * @returns
    */
-  public listTrainingTableByUser(user: IUser): Observable<ITrainingTable[]> {
-    return this.http.post<ITrainingTable[]>(
-      `${baseUrl[1]}/api/gymfit/training-tables/user`,
-      user
+  public listTrainingTableByUser(
+    userId: string
+  ): Observable<ResponseHTTP<TrainingTable[]>> {
+    return this.http.get<ResponseHTTP<TrainingTable[]>>(
+      `${baseUrl[1]}/api/gymfit/training-tables/users/${userId}`
     );
   }
 
@@ -45,15 +47,20 @@ export class TablesService {
    * @param table
    * @returns
    */
-  public createTable(table: ITrainingTable): Observable<ITrainingTable> {
+  public createTable(
+    table: TrainingTable
+  ): Observable<ResponseHTTP<TrainingTable>> {
     return this.http
-      .post<ITrainingTable>(`${baseUrl[1]}/api/gymfit/training-table`, table)
+      .post<ResponseHTTP<TrainingTable>>(
+        `${baseUrl[1]}/api/gymfit/training-table`,
+        table
+      )
       .pipe(
-        tap(() => {
+        tap((response: ResponseHTTP<TrainingTable>) => {
           const notification: INotification = {
             id: uuid.v4(),
             title: 'Nueva Tabla de Entrenamiento',
-            description: `Se ha creado una nueva tabla de entrenamiento: ${table.name}`,
+            description: `Se ha creado una nueva tabla de entrenamiento: ${response.body.name}`,
             date: new Date(),
             read: false,
             page: `/tables/${table.id}`,
@@ -74,9 +81,11 @@ export class TablesService {
    * @param trainingTableId
    * @returns
    */
-  public deleteTrainingTable(trainingTableId: string): Observable<string> {
+  public deleteTrainingTable(
+    trainingTableId: string
+  ): Observable<ResponseHTTP<string>> {
     return this.http
-      .delete<string>(
+      .delete<ResponseHTTP<string>>(
         `${baseUrl[1]}/api/gymfit/training-tables/${trainingTableId}`
       )
       .pipe(
@@ -104,14 +113,16 @@ export class TablesService {
    * @param trainingTableId
    * @returns
    */
-  public getTrainingTable(trainingTableId: string): Observable<ITrainingTable> {
-    return this.http.get<ITrainingTable>(
+  public getTrainingTable(
+    trainingTableId: string
+  ): Observable<ResponseHTTP<TrainingTable>> {
+    return this.http.get<ResponseHTTP<TrainingTable>>(
       `${baseUrl[1]}/api/gymfit/training-tables/${trainingTableId}`
     );
   }
 
   /**
-   * Obtiene tablas de entrenamiento segun el tipo de entrenamiento
+   * Obtiene tablas de entrenamiento según el tipo de entrenamiento
    * y el usuario logeado en la aplicación
    *
    * @param typeTrainingTable
@@ -120,8 +131,8 @@ export class TablesService {
   public getTrainingTableByTypeTraining(
     typeTraining: string,
     idUser: string
-  ): Observable<ITrainingTable[]> {
-    return this.http.get<ITrainingTable[]>(
+  ): Observable<ResponseHTTP<TrainingTable[]>> {
+    return this.http.get<ResponseHTTP<TrainingTable[]>>(
       `${baseUrl[1]}` + '/api/gymfit/training-tables/find-type-training',
       {
         params: {
@@ -139,19 +150,19 @@ export class TablesService {
    * @returns
    */
   public editTrainingTable(
-    trainingTable: ITrainingTable
-  ): Observable<ITrainingTable> {
+    trainingTable: TrainingTable
+  ): Observable<ResponseHTTP<TrainingTable>> {
     return this.http
-      .put<ITrainingTable>(
+      .patch<ResponseHTTP<TrainingTable>>(
         `${baseUrl[1]}/api/gymfit/training-table/`,
         trainingTable
       )
       .pipe(
-        tap(() => {
+        tap((response: ResponseHTTP<TrainingTable>) => {
           const notification: INotification = {
             id: uuid.v4(),
             title: 'Actualizar Tabla de Entrenamiento',
-            description: `Se ha actualizado la tabla de entrenamiento: ${trainingTable.name}`,
+            description: `Se ha actualizado la tabla de entrenamiento: ${response.body.name}`,
             date: new Date(),
             read: false,
             page: `/tables/${trainingTable.id}`,
@@ -163,24 +174,5 @@ export class TablesService {
           this.refresh$.next();
         })
       );
-  }
-
-  /**
-   * Cambiamos el valor de la var de la sesion
-   *  que nos permiten entrar en modo edicion o
-   * en modo consulta
-   * @param value
-   */
-  modeEdit(value: string) {
-    localStorage.setItem('modeView', value);
-  }
-
-  // Obtenemos en que modo estamos
-  public getModeEdit() {
-    return localStorage.getItem('modeView');
-  }
-  //  eliminamos el token
-  public removeItem() {
-    localStorage.removeItem('modeView');
   }
 }

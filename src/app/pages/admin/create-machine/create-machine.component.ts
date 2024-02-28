@@ -1,11 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { TrainingService } from 'src/app/services/training/training.service';
 
 @Component({
   selector: 'app-create-machine',
@@ -13,15 +17,25 @@ import * as uuid from 'uuid';
   styleUrls: ['./create-machine.component.css'],
 })
 export class CreateMachineComponent implements OnInit, OnDestroy {
-  machine: IGymMachine = {
-    id: '',
-    name: '',
-    model: '',
-    numMachine: 0,
-    like: 0,
-    description: '',
-    exercisedArea: '',
-  };
+  machine?: GymMachine;
+  //  = {
+  //   id: '',
+  //   name: '',
+  //   model: '',
+  //   numMachine: 0,
+  //   like: 0,
+  //   description: '',
+  //   exercisedArea: '',
+  // };
+
+  myForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    model: ['', Validators.required],
+    description: [''],
+    numMachine: [undefined, []],
+    exercisedArea: [''],
+    // Agrega las otras propiedades y validaciones aquí
+  });
 
   panelOpenState: boolean = false;
 
@@ -29,19 +43,22 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
 
   constructor(
     private machineService: MachineService,
+    private trainingService: TrainingService,
     private snack: MatSnackBar,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.machineService.allTrainingType().subscribe(
-      (data: string[]) => {
-        this.trainingTypes = data;
+    this.trainingService.allTrainingType().subscribe(
+      (response: ResponseHTTP<string[]>) => {
+        this.trainingTypes = response.body;
         console.log(this.trainingTypes);
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error!!', 'Error al cargar los tipos de ejercicios');
+        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios', 'error');
       }
     );
   }
@@ -49,45 +66,36 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   createMachine() {
-    if (_.isNull(this.machine) || _.isEmpty(this.machine.name)) {
-      this.snack.open('El nombre es obligatorio introducirlo!!', 'Aceptar', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center',
-      });
-      return;
-    }
-    if (_.isNull(this.machine) || _.isEmpty(this.machine.model)) {
-      this.snack.open(
-        'El modelo de la máquina es obligatorio introducirlo!!',
-        'Aceptar',
-        {
-          duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'right',
-        }
-      );
-      return;
-    }
-    this.machine.id = uuid.v4();
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.machine = {
+      ...this.machine,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.machine) return;
+
+    this.machine.numMachine === 0 || !this.machine.numMachine
+      ? this.machine.numMachine++
+      : this.machine.numMachine;
 
     this.machineService.createGymMachine(this.machine).subscribe(
-      (data: IGymMachine) => {
-        this.machine.name = '';
-        this.machine.model = '';
-        this.machine.description = '';
+      (response: ResponseHTTP<GymMachine>) => {
         Swal.fire(
-          'Máquina creada!!',
-          'La maquina ha sido creada con éxito',
+          'Máquina de entrenamiento creada:',
+          `La maquina de entre entrenamiento '${response.body.name}' ha sido creada con éxito`,
           'success'
         );
 
         this.router.navigate(['/admin/gym-machines']);
+
+        this.myForm.reset();
       },
       (error) => {
         console.error(error);
         Swal.fire(
-          'Error',
+          'Error:',
           'Error al crear la máquina de entrenamiento',
           'error'
         );
@@ -100,5 +108,13 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
    */
   printPage() {
     window.print();
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }

@@ -37,6 +37,18 @@ export class NotificationService {
     }
   }
 
+  markAllNotificationAsRead() {
+    const notifications = this.notificationsSubject.value;
+
+    notifications.forEach((notification) => (notification.read = true));
+
+    this.notificationsSubject.next(notifications);
+
+    this.saveNotificationsToLocalStorage(notifications);
+
+    this.separateNotifications(notifications); // Separar las notificaciones nuevamente
+  }
+
   clearOldNotifications(daysToKeep: number = 30) {
     const currentDate = new Date();
     const notifications = this.notificationsSubject.value.filter(
@@ -68,6 +80,16 @@ export class NotificationService {
       this.saveNotificationsToLocalStorage(currentNotifications);
       this.separateNotifications(currentNotifications); // Agregado para actualizar las listas de notificaciones
     }
+  }
+
+  deleteAllNotification(): void {
+    let currentNotifications = this.notificationsSubject.value;
+
+    currentNotifications = [];
+
+    this.notificationsSubject.next(currentNotifications);
+    this.saveNotificationsToLocalStorage(currentNotifications);
+    this.separateNotifications(currentNotifications); // Agregado para actualizar las listas de notificaciones
   }
 
   separateNotifications(notifications: INotification[]): void {

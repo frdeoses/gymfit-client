@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IEvent } from 'src/app/interfaces/calendars/event.interface';
+import { Event } from 'src/app/interfaces/calendars/event.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { EventService } from 'src/app/services/event/event.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,16 +12,20 @@ import Swal from 'sweetalert2';
   styleUrls: ['./view-events.component.css'],
 })
 export class ViewEventsComponent implements OnInit, OnDestroy {
-  events: IEvent[] = [];
+  events: Event[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+
+    private viewModeService: ViewModeService
+  ) {}
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(
-      (data: IEvent[]) => {
-        this.events = data;
-        console.log(data);
+      (response: ResponseHTTP<Event[]>) => {
+        this.events = response.body;
+        console.log(response);
       },
       (error) => {
         console.error(error);
@@ -29,9 +35,9 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
 
     this.subscription = this.eventService.refresh$.subscribe(() => {
       this.eventService.listEvents().subscribe(
-        (data: IEvent[]) => {
-          this.events = data;
-          console.log(data);
+        (response: ResponseHTTP<Event[]>) => {
+          this.events = response.body;
+          console.log(response);
         },
         (error) => {
           console.error(error);
@@ -59,7 +65,7 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.eventService.deleteEvent(eventId).subscribe(
-          (eventIdDeleted: string) => {
+          (response: ResponseHTTP<string>) => {
             Swal.fire(
               'Evento eliminado',
               'El evento ha sido eliminado correctamente...',
@@ -79,13 +85,13 @@ export class ViewEventsComponent implements OnInit, OnDestroy {
    * Entrar en modo edición
    */
   modeEdit() {
-    this.eventService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
   }
 
   /**
    * Entrar en modo consulta
    */
   modeConsult() {
-    this.eventService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

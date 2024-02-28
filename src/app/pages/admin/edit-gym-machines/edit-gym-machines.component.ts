@@ -1,11 +1,15 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { IGymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import * as _ from 'lodash';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { MachineService } from 'src/app/services/gym-machine/machine.service';
 import { LoginService } from 'src/app/services/login/login.service';
+import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-edit-gym-machines',
@@ -15,19 +19,18 @@ import * as _ from 'lodash';
 export class EditGymMachinesComponent implements OnInit, OnDestroy {
   gymMachineId: string = '';
   editMode: boolean | undefined;
-  subscription: Subscription = new Subscription();
   likeAdd: boolean = false;
   rolLoginUser: string = '';
-  gymMachine: IGymMachine = {
-    id: '',
-    name: '',
-    model: '',
-    numMachine: 0,
-    like: 0,
-    // listWorkedWeights: [],
-    description: '',
-    exercisedArea: '',
-  };
+  gymMachine?: GymMachine;
+
+  myForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    model: ['', Validators.required],
+    description: [''],
+    numMachine: [undefined, []],
+    exercisedArea: [''],
+    // Agrega las otras propiedades y validaciones aquí
+  });
 
   panelOpenState: boolean = false;
 
@@ -35,6 +38,9 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private machineService: MachineService,
     private loginService: LoginService,
+    private viewModeService: ViewModeService,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
     private router: Router
   ) {}
 
@@ -42,12 +48,19 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
     this.gymMachineId = this.route.snapshot.params['gymMachineId'];
 
     this.machineService.getGymMachine(this.gymMachineId).subscribe(
-      (data: IGymMachine) => {
-        this.gymMachine = data;
-        console.log(this.gymMachine);
+      (response: ResponseHTTP<GymMachine>) => {
+        this.myForm.reset(response.body);
+        this.gymMachine = response.body;
       },
-      (error) => {
+      (error: HttpErrorResponse) => {
         console.error(error);
+
+        const msjError =
+          error.error.error || 'Ha ocurrido un error en el sistema...';
+
+        Swal.fire('Error en el sistema', msjError, 'error');
+
+        this.router.navigate(['/error']);
       }
     );
     let role = this.loginService.getCurrentUserRole();
@@ -56,42 +69,58 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
       this.rolLoginUser = role;
     }
 
-    this.editMode = this.machineService.getModeEdit() === 'yes' ? true : false;
+    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
     this.likeAdd = this.machineService.getLikeAdd() === 'yes' ? true : false;
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
     this.machineService.removeItems();
   }
 
   public editGymMachine() {
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.gymMachine = {
+      ...this.gymMachine,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.gymMachine) return;
+
+    this.gymMachine.numMachine === 0 || !this.gymMachine.numMachine
+      ? this.gymMachine.numMachine++
+      : this.gymMachine.numMachine;
+
     this.machineService.editGymMachine(this.gymMachine).subscribe(
-      (data: IGymMachine) => {
+      (response: ResponseHTTP<GymMachine>) => {
         Swal.fire(
-          'Máquina de entrenamiento actualizado',
-          'La máquina de entrenamiento se ha modificado con éxito...',
+          'Máquina de entrenamiento actualizada',
+          `La máquina de entrenamiento '${response.body.name}' se ha actualizado con éxito...`,
           'success'
         );
         this.router.navigate(['/admin/gym-machines']);
+        this.myForm.reset();
       },
       (error) => {
-        Swal.fire(
-          'Error en el sistema',
-          'La máquina de entrenamiento no se ha modificado con éxito...',
-          'error'
-        );
+        const msjError =
+          error.error ||
+          'Ha ocurrido un error en el sistema y no se ha podido actualizar la máquina de entrenamiento';
+
+        Swal.fire('Error en el sistema', msjError, 'error');
         console.error(error);
       }
     );
   }
 
   like() {
-    this.gymMachine.like++;
+    this.gymMachine!.like++;
     this.machineService.likeAdd('yes');
     this.likeAdd = true;
+    if (!this.gymMachine) return;
     this.machineService.editGymMachine(this.gymMachine).subscribe(
-      (data: IGymMachine) => {
+      (response: ResponseHTTP<GymMachine>) => {
         console.log('like add and update success');
       },
       (error) => {
@@ -101,7 +130,26 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
   }
 
   modeEdit() {
-    this.machineService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
     this.editMode = true;
+  }
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.editMode = false;
+    this.viewModeService.modeEdit('no');
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
+  }
+
+  getMessage(field: string) {
+    return this.validatorService.getMessageErrorFieldOptional(field);
   }
 }

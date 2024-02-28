@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IEvent } from 'src/app/interfaces/calendars/event.interface';
+import { Event } from 'src/app/interfaces/calendars/event.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { EventService } from 'src/app/services/event/event.service';
 import Swal from 'sweetalert2';
 
@@ -10,16 +11,16 @@ import Swal from 'sweetalert2';
   styleUrls: ['./load-events.component.css'],
 })
 export class LoadEventsComponent implements OnInit, OnDestroy {
-  events: IEvent[] = [];
+  events: Event[] = [];
   subscription: Subscription = new Subscription();
 
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     this.eventService.listEventsPublished().subscribe(
-      (data: IEvent[]) => {
-        this.events = data;
-        console.log(data);
+      (response: ResponseHTTP<Event[]>) => {
+        this.events = response.body;
+        console.log(response);
       },
       (error) => {
         console.error(error);
@@ -29,9 +30,9 @@ export class LoadEventsComponent implements OnInit, OnDestroy {
 
     this.subscription = this.eventService.refresh$.subscribe(() => {
       this.eventService.listEventsPublished().subscribe(
-        (data: IEvent[]) => {
-          this.events = data;
-          console.log(data);
+        (response: ResponseHTTP<Event[]>) => {
+          this.events = response.body;
+          console.log(response);
         },
         (error) => {
           console.error(error);

@@ -3,24 +3,90 @@ import { Subscription } from 'rxjs';
 import { LoginService } from 'src/app/services/login/login.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 
+export interface MenuItems {
+  title: string;
+  path: string;
+  icon: string;
+  newNotificationsCount?: number;
+  matBadgeHidden?: boolean;
+  matBadgeColor?: string;
+}
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-
-
   newNotificationsCount: number = 0;
-  subscription: Subscription;
-  constructor(public loginService: LoginService, 
-    public notificationService: NotificationService) {
 
+  menuItems: MenuItems[] = [
+    {
+      title: 'Inicio',
+      path: '/admin',
+      icon: 'home',
+    },
+    {
+      title: 'Perfil',
+      path: '/admin/profile',
+      icon: 'account_circle',
+    },
+    {
+      title: 'Usuarios',
+      path: '/admin/users',
+      icon: 'people',
+    },
+    {
+      title: 'Máquina',
+      path: '/admin/gym-machines',
+      icon: 'fitness_center',
+    },
+    {
+      title: 'Crear Maquina',
+      path: '/admin/create-gym-machines',
+      icon: 'add_circle',
+    },
+    {
+      title: 'Ejercicios',
+      path: '/admin/trainings',
+      icon: 'directions_run',
+    },
+    {
+      title: 'Crear Ejercicio',
+      path: '/admin/create-training',
+      icon: 'add_circle_outline',
+    },
+    {
+      title: 'Tabla de Entrenamiento',
+      path: '/admin/tables',
+      icon: 'list',
+    },
+    {
+      title: 'Crear tabla de Entrenamientos',
+      path: '/admin/create-table',
+      icon: 'note_add',
+    },
+    {
+      title: 'Eventos',
+      path: '/admin/events',
+      icon: 'event',
+    },
+    {
+      title: 'Crear evento',
+      path: '/admin/create-event',
+      icon: 'add_box',
+    },
+  ];
+
+  subscription: Subscription;
+  constructor(
+    public loginService: LoginService,
+    public notificationService: NotificationService
+  ) {
     this.subscription = new Subscription();
   }
 
   ngOnInit(): void {
-
     this.subscription = this.notificationService.newNotifications$.subscribe(
       (notifications) => {
         this.newNotificationsCount = notifications.length;

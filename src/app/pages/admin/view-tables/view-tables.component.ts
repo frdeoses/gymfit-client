@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ITrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { TablesService } from 'src/app/services/tables/tables.service';
+import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,15 +12,18 @@ import Swal from 'sweetalert2';
   styleUrls: ['./view-tables.component.css'],
 })
 export class ViewTablesComponent implements OnInit, OnDestroy {
-  tables: ITrainingTable[] = [];
+  tables: TrainingTable[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private tableService: TablesService) {}
+  constructor(
+    private tableService: TablesService,
+    private viewModeService: ViewModeService
+  ) {}
 
   ngOnInit(): void {
     this.tableService.listTrainingTable().subscribe(
-      (data: ITrainingTable[]) => {
-        this.tables = data;
+      (response: ResponseHTTP<TrainingTable[]>) => {
+        this.tables = response.body;
         console.log(this.tables);
       },
       (error) => {
@@ -26,11 +31,12 @@ export class ViewTablesComponent implements OnInit, OnDestroy {
         Swal.fire('Error!!', 'Error al cargar las tablas', 'error');
       }
     );
+
     this.subscription = this.tableService.refresh$.subscribe(() => {
       this.tableService.listTrainingTable().subscribe(
-        (data: ITrainingTable[]) => {
-          this.tables = data;
-          console.log(data);
+        (response: ResponseHTTP<TrainingTable[]>) => {
+          this.tables = response.body;
+          console.log(response);
         },
         (error) => {
           console.error(error);
@@ -57,7 +63,7 @@ export class ViewTablesComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.tableService.deleteTrainingTable(trainingTableId).subscribe(
-          (trainingTableId: string) => {
+          (response: ResponseHTTP<string>) => {
             Swal.fire(
               'Tabla de entrenamiento eliminada',
               'La tabla de entrenamiento ha sido eliminado correctamente...',
@@ -81,13 +87,13 @@ export class ViewTablesComponent implements OnInit, OnDestroy {
    * Entrar en modo edicion
    */
   modeEdit() {
-    this.tableService.modeEdit('yes');
+    this.viewModeService.modeEdit('yes');
   }
 
   /**
    * Entrar en modo consulta
    */
   modeConsult() {
-    this.tableService.modeEdit('no');
+    this.viewModeService.modeEdit('no');
   }
 }

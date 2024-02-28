@@ -4,22 +4,26 @@
   <div class="bootstrap-wrapper">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <form (ngSubmit)="saveEvent()">
+        <form [formGroup]="myForm" (ngSubmit)="saveEvent()">
           <mat-form-field class="w100 mt20" appearance="fill">
             <mat-label>Título</mat-label>
             <input
-              [(ngModel)]="eventData.title"
+              formControlName="title"
               type="text"
               name="titulo"
               placeholder="Introduzca el título.."
               required
               matInput
             />
+            <mat-error *ngIf="isValidField('title')">
+              {{ getFieldError("title") }}
+            </mat-error>
           </mat-form-field>
-          <mat-form-field class="w100" appearance="fill">
+
+          <mat-form-field class="w100 mt10" appearance="fill">
             <mat-label>Descripción</mat-label>
             <textarea
-              [(ngModel)]="eventData.description"
+              formControlName="description"
               type="text"
               name="descripción"
               placeholder="Introduzca la descripción"
@@ -31,14 +35,29 @@
           <mat-slide-toggle
             class="mt20"
             name="published"
-            [(ngModel)]="eventData.published"
+            formControlName="published"
             color="primary"
           >
             Estado de publicación</mat-slide-toggle
           >
 
           <div class="container text-center">
-            <button mat-raised-button color="primary">Crear evento</button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="!myForm.valid"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <mat-icon>save</mat-icon>
+                Guardar
+              </div>
+            </button>
           </div>
         </form>
       </div>

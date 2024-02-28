@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
 import * as Chart from 'chart.js';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
-import { IWeight } from 'src/app/interfaces/user/weight.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
+import { Weight } from 'src/app/interfaces/user/weight.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import * as _ from 'lodash';
 
@@ -13,7 +13,7 @@ import * as _ from 'lodash';
   styleUrls: ['./user-graph.component.css'],
 })
 export class UserGraphComponent implements OnInit {
-  user: IUser = {
+  user: User = {
     id: undefined,
     name: '',
     username: '',
@@ -121,7 +121,7 @@ export class UserGraphComponent implements OnInit {
     },
   };
 
-  groupWeightsByMonth(listUserWeight: IWeight[]): number[] {
+  groupWeightsByMonth(listUserWeight: Weight[]): number[] {
     const groupedWeights = new Array(12).fill(0);
 
     for (const { date, weightData } of listUserWeight) {

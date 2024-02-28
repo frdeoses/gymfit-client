@@ -5,7 +5,7 @@
     <div class="bootstrap-wrapper">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          <form (ngSubmit)="formSubmit()">
+          <form [formGroup]="myForm" (ngSubmit)="formSubmit()">
             <mat-form-field class="w100 mt20" appearance="outline">
               <mat-label>Nombre: </mat-label>
               <input
@@ -15,18 +15,21 @@
                 name="name"
                 matInput
                 placeholder="Introduzca el titulo de la tabla..."
-                [(ngModel)]="table.name"
+                formControlName="name"
               />
+              <mat-error *ngIf="isValidField('name')">
+                {{ getFieldError("name") }}
+              </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="w100" appearance="outline">
+            <mat-form-field class="w100 mt10" appearance="outline">
               <mat-label>Descripción</mat-label>
               <textarea
                 matInput
                 name="description"
                 placeholder="Introduzca una breve explicación ...."
                 rows="15"
-                [(ngModel)]="table.description"
+                formControlName="description"
               ></textarea>
             </mat-form-field>
 
@@ -35,20 +38,24 @@
               <mat-select
                 required
                 name="trainingTypes"
-                [(ngModel)]="table.typeTraining"
+                formControlName="typeTraining"
               >
                 <mat-option></mat-option>
                 <mat-option *ngFor="let t of trainingTypes" [value]="t">
                   {{ t }}</mat-option
                 >
               </mat-select>
+
+              <mat-error *ngIf="isValidField('typeTraining')">
+                {{ getFieldError("typeTraining") }}
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field class="col-md-4" appearance="outline">
               <mat-label>Tiempo de descanso (seg):</mat-label>
               <input
                 matInput
-                [(ngModel)]="table.breakTime"
+                formControlName="breakTime"
                 name="breakTime"
                 type="number"
                 placeholder="Introduzca el tiempo de descanso..."
@@ -60,17 +67,17 @@
               <input
                 matInput
                 matTooltip="Introduzca el nº de días de entrenamiento"
-                [(ngModel)]="table.trainingDuration"
+                formControlName="trainingDuration"
                 name="breakTime"
                 type="number"
                 placeholder="Introduzca el nº de días de entrenamiento..."
               />
             </mat-form-field>
 
-            <mat-form-field class="col-md-6" appearance="outline">
+            <mat-form-field class="w100" appearance="outline">
               <mat-label>Seleccionar ejercicios:</mat-label>
               <mat-select
-                [(ngModel)]="table.listTraining"
+                formControlName="listTraining"
                 name="listTraining"
                 multiple
               >
@@ -83,21 +90,11 @@
             </mat-form-field>
 
             <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Calorías quemadas :</mat-label>
-              <input
-                [(ngModel)]="table.caloriesBurned"
-                type="number"
-                name="caloriesBurned"
-                matInput
-              />
-            </mat-form-field>
-
-            <mat-form-field class="col-md-6" appearance="outline">
               <mat-label>Inicio de la tabla</mat-label>
               <input
                 matInput
                 [matDatepicker]="pickerInitDate"
-                [(ngModel)]="table.initDate"
+                formControlName="initDate"
                 required
                 name="initDate"
               />
@@ -107,15 +104,19 @@
                 [for]="pickerInitDate"
               ></mat-datepicker-toggle>
               <mat-datepicker #pickerInitDate></mat-datepicker>
+
+              <mat-error *ngIf="isValidField('initDate')">
+                {{ getFieldError("initDate") }}
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Finalizacion de la tabla</mat-label>
+              <mat-label>Finalización de la tabla</mat-label>
               <input
                 matInput
                 required
                 [matDatepicker]="pickerEndDate"
-                [(ngModel)]="table.endDate"
+                formControlName="endDate"
                 name="endDate"
               />
               <mat-hint>MM/DD/YYYY</mat-hint>
@@ -124,14 +125,18 @@
                 [for]="pickerEndDate"
               ></mat-datepicker-toggle>
               <mat-datepicker #pickerEndDate></mat-datepicker>
+
+              <mat-error *ngIf="isValidField('endDate')">
+                {{ getFieldError("endDate") }}
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w100 mt20" appearance="outline">
               <mat-label>Seleccionar usuario</mat-label>
-              <mat-select [(ngModel)]="table.user" name="user" required>
+              <mat-select formControlName="user" name="user">
                 <mat-option></mat-option>
-                <mat-option *ngFor="let user of users" [value]="user">{{
-                  user.username
+                <mat-option *ngFor="let user of users" [value]="user.id">{{
+                  user.name
                 }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -139,15 +144,30 @@
             <mat-form-field class="w100" appearance="outline">
               <mat-label>Observaciones:</mat-label>
               <textarea
-                [(ngModel)]="table.observation"
+                formControlName="observation"
                 name="observation"
                 matInput
                 placeholder="Ej. Descripción breve de mejoras del usuario ..."
               ></textarea>
             </mat-form-field>
 
-            <div class="container text-center mt15">
-              <button mat-raised-button color="primary">Guardar</button>
+            <div class="container text-center">
+              <button
+                [disabled]="!myForm.valid"
+                mat-raised-button
+                color="primary"
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <mat-icon>save</mat-icon>
+                  Guardar
+                </div>
+              </button>
             </div>
           </form>
         </div>

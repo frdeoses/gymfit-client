@@ -2,18 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { IEvent } from 'src/app/interfaces/calendars/event.interface';
+import { Event } from 'src/app/interfaces/calendars/event.interface';
 import baseUrl from '../helper';
 import { INotification } from 'src/app/interfaces/notification.interface';
 import * as uuid from 'uuid';
 import { NotificationService } from '../notification/notification.service';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
   public refresh$ = new Subject<void>();
-  numNewEventCreated: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -24,31 +24,33 @@ export class EventService {
     this.refresh$;
   }
 
-  public listEvents(): Observable<IEvent[]> {
-    return this.http.get<IEvent[]>(`${baseUrl[2]}/api/gymfit/calendars`);
+  public listEvents(): Observable<ResponseHTTP<Event[]>> {
+    return this.http.get<ResponseHTTP<Event[]>>(
+      `${baseUrl[2]}/api/gymfit/calendars`
+    );
   }
 
   /**
    * Lista los eventos publicados en el sistema
    */
-  public listEventsPublished(): Observable<IEvent[]> {
-    return this.http.get<IEvent[]>(
+  public listEventsPublished(): Observable<ResponseHTTP<Event[]>> {
+    return this.http.get<ResponseHTTP<Event[]>>(
       `${baseUrl[2]}/api/gymfit/calendars/published`
     );
   }
 
-  public createEvent(event: IEvent): Observable<IEvent> {
+  public createEvent(event: Event): Observable<ResponseHTTP<Event>> {
     return this.http
-      .post<IEvent>(`${baseUrl[2]}/api/gymfit/calendar`, event)
+      .post<ResponseHTTP<Event>>(`${baseUrl[2]}/api/gymfit/calendar`, event)
       .pipe(
-        tap(() => {
+        tap((response: ResponseHTTP<Event>) => {
           const notification: INotification = {
             id: uuid.v4(),
             title: 'Nuevo Evento',
-            description: `Se ha creado un nuevo evento: ${event.title}`,
+            description: `Se ha creado un nuevo evento: ${response.body.title}`,
             date: new Date(),
             read: false,
-            page: `/gym-machines/${event.id}`,
+            page: `/events/${response.body.id}`,
           };
           // Agregar la notificación al servicio de notificaciones
 
@@ -58,9 +60,11 @@ export class EventService {
       );
   }
 
-  public deleteEvent(eventId: string): Observable<string> {
+  public deleteEvent(eventId: string): Observable<ResponseHTTP<string>> {
     return this.http
-      .delete<string>(`${baseUrl[2]}/api/gymfit/calendars/${eventId}`)
+      .delete<ResponseHTTP<string>>(
+        `${baseUrl[2]}/api/gymfit/calendars/${eventId}`
+      )
       .pipe(
         tap(() => {
           const notification: INotification = {
@@ -78,15 +82,15 @@ export class EventService {
         })
       );
   }
-  public getEvent(eventId: string): Observable<IEvent> {
-    return this.http.get<IEvent>(
+  public getEvent(eventId: string): Observable<ResponseHTTP<Event>> {
+    return this.http.get<ResponseHTTP<Event>>(
       `${baseUrl[2]}/api/gymfit/calendars/${eventId}`
     );
   }
 
-  public editEvent(event: IEvent): Observable<IEvent> {
+  public editEvent(event: Event): Observable<ResponseHTTP<Event>> {
     return this.http
-      .put<IEvent>(`${baseUrl[2]}/api/gymfit/calendar`, event)
+      .patch<ResponseHTTP<Event>>(`${baseUrl[2]}/api/gymfit/calendar`, event)
       .pipe(
         tap(() => {
           const notification: INotification = {
@@ -95,7 +99,7 @@ export class EventService {
             description: `Se ha actualizado el evento: ${event.title}`,
             date: new Date(),
             read: false,
-            page: `/tables/${event.id}`,
+            page: `/events/${event.id}`,
           };
           // Agregar la notificación al servicio de notificaciones
 
@@ -104,25 +108,5 @@ export class EventService {
           this.refresh$.next();
         })
       );
-  }
-
-  /**
-   * Cambiamos el valor de la var de la sesion
-   *  que nos permiten entrar en modo edición o
-   * en modo consulta
-   * @param value
-   */
-  modeEdit(value: string) {
-    localStorage.setItem('modeView', value);
-  }
-
-  // Obtenemos en que modo estamos
-  public getModeEdit() {
-    return localStorage.getItem('modeView');
-  }
-
-  //  eliminamos el token
-  public removeItem() {
-    localStorage.removeItem('modeView');
   }
 }
