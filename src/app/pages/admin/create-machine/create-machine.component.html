@@ -4,33 +4,41 @@
   <div class="bootstrap-wrapper">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <form (ngSubmit)="createMachine()">
+        <form [formGroup]="myForm" (ngSubmit)="createMachine()">
           <mat-form-field class="w100 mt20" appearance="fill">
             <mat-label>Nombre</mat-label>
             <input
-              [(ngModel)]="machine.name"
+              formControlName="name"
               type="text"
               name="name"
               placeholder="Introduzca el título.."
               required
               matInput
             />
+
+            <mat-error *ngIf="isValidField('name')">
+              {{ getFieldError("name") }}
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field class="w100" appearance="fill">
+          <mat-form-field class="w100 mt10" appearance="fill">
             <mat-label>Modelo de la máquina</mat-label>
             <input
-              [(ngModel)]="machine.model"
+              formControlName="model"
               type="text"
               name="model"
               placeholder="Introduzca el modelo de la máquina de entrenamiento.."
               required
               matInput
             />
+
+            <mat-error *ngIf="isValidField('model')">
+              {{ getFieldError("model") }}
+            </mat-error>
           </mat-form-field>
 
           <mat-expansion-panel
-            class="w100"
+            class="w100 mt10"
             (opened)="panelOpenState = true"
             (closed)="panelOpenState = false"
           >
@@ -46,7 +54,7 @@
               <mat-label>Numero de maquina:</mat-label>
               <input
                 matInput
-                [(ngModel)]="machine.numMachine"
+                formControlName="numMachine"
                 name="numMachine"
                 type="number"
                 placeholder="Introduzca el numero de maquinas con el mismo modelo..."
@@ -57,7 +65,7 @@
           <mat-form-field class="w100 mt20" appearance="fill">
             <mat-label>Descripción</mat-label>
             <textarea
-              [(ngModel)]="machine.description"
+              formControlName="description"
               type="text"
               name="descripción"
               placeholder="Introduzca la descripción"
@@ -69,7 +77,7 @@
           <mat-form-field class="w100" appearance="fill">
             <mat-label>Zona ejercitada</mat-label>
             <input
-              [(ngModel)]="machine.exercisedArea"
+              formControlName="exercisedArea"
               type="text"
               name="exercisedArea"
               placeholder="Introduzca la zona ejercitada.."
@@ -78,7 +86,22 @@
           </mat-form-field>
 
           <div class="container text-center">
-            <button mat-raised-button color="primary">Crear maquina</button>
+            <button
+              mat-raised-button
+              [disabled]="!myForm.valid"
+              color="primary"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <mat-icon>save</mat-icon>
+                Guardar
+              </div>
+            </button>
           </div>
         </form>
       </div>

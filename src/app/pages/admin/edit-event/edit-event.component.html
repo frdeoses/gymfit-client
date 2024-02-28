@@ -6,22 +6,26 @@
       </u>
     </div>
     <div class="col-md-8 offset-md-2">
-      <form *ngIf="event" (submit)="editEvent()">
+      <form *ngIf="event" [formGroup]="myForm" (submit)="editEvent()">
         <mat-form-field class="w100 mt20" appearance="fill">
           <mat-label>Título</mat-label>
           <input
-            [(ngModel)]="event.title"
+            formControlName="title"
             type="text"
             name="titulo"
             placeholder="Introduzca el título.."
             required
             matInput
           />
+
+          <mat-error *ngIf="isValidField('title')">
+            {{ getFieldError("title") }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="w100" appearance="fill">
           <mat-label>Descripción</mat-label>
           <textarea
-            [(ngModel)]="event.description"
+            formControlName="description"
             type="text"
             name="descripción"
             placeholder="Introduzca la descripción"
@@ -33,7 +37,7 @@
         <mat-slide-toggle
           class="mt20"
           name="published"
-          [(ngModel)]="event.published"
+          formControlName="published"
           color="primary"
         >
           Estado de publicación</mat-slide-toggle
@@ -46,9 +50,16 @@
             mat-raised-button
             color="accent"
           >
+            <mat-icon>cancel</mat-icon>
             Cancelar
           </button>
-          <button mat-raised-button class="ml20" color="primary">
+          <button
+            mat-raised-button
+            class="ml20"
+            color="primary"
+            [disabled]="!myForm.valid"
+          >
+            <mat-icon>save</mat-icon>
             Guardar
           </button>
         </div>
@@ -63,7 +74,9 @@
       <div class="container">
         <div class="row">
           <div class="ml20 col-md-12 text-center">
-            <h1>{{ event.title }}</h1>
+            <h1>
+              {{ myForm.controls["title"].value }}
+            </h1>
           </div>
           <div class="col-md-12">
             <mat-divider></mat-divider>
@@ -81,8 +94,12 @@
             class="col-md-12 mt20"
           >
             <mat-card-content>
+              <span *ngIf="!event?.description">
+                {{ getMessage("description") }}
+              </span>
+
               <p>
-                {{ event.description }}
+                {{ myForm.controls["description"].value }}
               </p>
             </mat-card-content>
           </div>
@@ -103,6 +120,7 @@
                   {{ c.text }}
                 </mat-card-subtitle>
               </mat-card-header>
+
               <mat-card-content class="content">
                 Fecha:
                 <span>{{ c.date | date : "dd/MM/yy HH:mm" }}</span>
@@ -113,11 +131,11 @@
           <div class="mt20 container text-center">
             <button
               matTooltip="Añadir un comentario"
-              mat-mini-fab
+              mat-raised-button
               color="primary"
               (click)="createComment()"
             >
-              <mat-icon>add_comment</mat-icon>
+              <mat-icon>add_comment</mat-icon> Comentar
             </button>
           </div>
         </div>
@@ -127,4 +145,7 @@
 </div>
 
 <!-- Mirar el objeto  -->
-<!-- {{ eventData | json }} -->
+<pre>
+
+  {{ myForm.controls["title"].value | json }}
+</pre>

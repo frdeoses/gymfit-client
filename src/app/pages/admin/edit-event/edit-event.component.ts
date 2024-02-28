@@ -1,13 +1,17 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { CommentDialogComponent } from 'src/app/components/dialog/comment/comment-dialog.component';
-import { IComment } from 'src/app/interfaces/calendars/comment.interface';
-import { IEvent } from 'src/app/interfaces/calendars/event.interface';
+import { Comment } from 'src/app/interfaces/calendars/comment.interface';
+import { Event } from 'src/app/interfaces/calendars/event.interface';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { EventService } from 'src/app/services/event/event.service';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ValidatorService } from 'src/app/services/validator/validator.service';
 import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
@@ -19,15 +23,16 @@ import * as uuid from 'uuid';
 })
 export class EditEventComponent implements OnInit {
   eventId: string = '';
-  event: IEvent = {
-    comments: [],
-    description: '',
-    id: '',
-    published: false,
-    title: '',
-  };
+  event?: Event;
 
-  comments: IComment[] = [];
+  myForm: FormGroup = this.fb.group({
+    title: ['', Validators.required],
+    description: [''],
+    published: [false],
+    // Agrega las otras propiedades y validaciones aquí
+  });
+
+  comments: Comment[] = [];
   editMode: boolean | undefined;
 
   constructor(
@@ -35,7 +40,8 @@ export class EditEventComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private eventService: EventService,
-    private userService: UserService,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
     private viewModeService: ViewModeService,
     private router: Router
   ) {}
@@ -46,8 +52,11 @@ export class EditEventComponent implements OnInit {
     this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
 
     this.eventService.getEvent(this.eventId).subscribe(
-      (data: IEvent) => {
-        this.event = data;
+      (response: ResponseHTTP<Event>) => {
+        this.event = response.body;
+
+        this.myForm.reset(this.event);
+
         this.comments =
           !_.isUndefined(this.event.comments) &&
           !_.isNull(this.event.comments) &&
@@ -56,21 +65,40 @@ export class EditEventComponent implements OnInit {
             : [];
         console.log(this.event);
       },
-      (error) => {
+      (error: HttpErrorResponse) => {
         console.error(error);
+
+        debugger;
+        const msjError =
+          error.error.error || 'Ha ocurrido un error en el sistema...';
+
+        Swal.fire('Error en el sistema', msjError, 'error');
+
+        this.router.navigate(['/error']);
       }
     );
   }
 
   public editEvent() {
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.event = {
+      ...this.event,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.event) return;
+
     this.eventService.editEvent(this.event).subscribe(
-      (data: IEvent) => {
+      (response: ResponseHTTP<Event>) => {
         Swal.fire(
           'Evento actualizado',
-          'El evento se ha modificado con éxito...',
+          `El evento ${response.body.title} se ha modificado con éxito...`,
           'success'
         );
         this.router.navigate(['/admin/events']);
+        this.myForm.reset();
       },
       (error) => {
         Swal.fire(
@@ -93,7 +121,7 @@ export class EditEventComponent implements OnInit {
         userName: user.username,
         text: '',
         date: new Date(),
-      } as IComment,
+      } as Comment,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -113,15 +141,28 @@ export class EditEventComponent implements OnInit {
   }
 
   addComment() {
+    if (!this.event) return;
     this.event.comments = this.comments;
 
     this.eventService.editEvent(this.event).subscribe(
-      (data: IEvent) => {
+      (data: ResponseHTTP<Event>) => {
         console.log(data);
       },
       (error) => {
         console.error(error);
       }
     );
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
+  }
+
+  getMessage(field: string) {
+    return this.validatorService.getMessageErrorFieldOptional(field);
   }
 }
