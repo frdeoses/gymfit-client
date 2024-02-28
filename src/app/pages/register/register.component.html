@@ -156,9 +156,6 @@
               ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
 
-              <!-- <mat-error *ngIf="isValidField('birthDate')"
-                >La fecha de nacimiento es obligatorio introducirlo</mat-error
-              > -->
               <mat-error *ngIf="isValidField('birthDate')">
                 {{ getFieldError("birthDate") }}
               </mat-error>
