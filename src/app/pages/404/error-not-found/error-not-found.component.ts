@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { LoginService } from 'src/app/services/login/login.service';
 })
 export class ErrorNotFoundComponent implements OnInit {
   isLoggedIn: boolean = false;
-  user: IUser = {
+  user: User = {
     id: undefined,
     name: '',
     username: '',
@@ -30,7 +30,7 @@ export class ErrorNotFoundComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
-    this.loginService.loginStatusSubject.subscribe((data) => {
+    this.loginService.loginStatusSubject.subscribe(() => {
       this.isLoggedIn = this.loginService.isLoggedIn();
       this.user = this.loginService.getUser();
     });

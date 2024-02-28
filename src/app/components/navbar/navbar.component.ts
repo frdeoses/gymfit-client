@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 
@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   newNotificationsCount: number = 0;
   subscription: Subscription;
   role: string = '';
-  user: IUser = {
+  user: User = {
     id: undefined,
     name: '',
     username: '',
@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
-    
+
     if (
       this.user.userRoles !== undefined &&
       this.user.userRoles.length > 0 &&
@@ -50,7 +50,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     ) {
       this.role = this.user.userRoles[0].roleList;
     }
-  
+
     this.loginService.loginStatusSubject.subscribe((data) => {
       this.isLoggedIn = this.loginService.isLoggedIn();
       this.user = this.loginService.getUser();
