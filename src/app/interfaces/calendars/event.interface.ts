@@ -1,11 +1,11 @@
-import { IComment } from './comment.interface';
+import { Comment } from './comment.interface';
 
-export interface IEvent {
+export interface Event {
   id: string;
   title: string;
   description?: string;
   published: boolean;
   lastUpdateDate?: Date;
   creationDate?: Date;
-  comments?: IComment[];
+  comments?: Comment[];
 }

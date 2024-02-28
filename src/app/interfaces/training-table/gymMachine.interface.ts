@@ -1,4 +1,4 @@
-export interface IGymMachine {
+export interface GymMachine {
   id: string;
   name: string;
   model: string;

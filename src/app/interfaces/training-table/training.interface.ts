@@ -1,8 +1,8 @@
-import { IUser } from '../user/usuario.interface';
-import { IGymMachine } from './gymMachine.interface';
-import { IWorkedWeights } from './workedWeights.interface';
+import { User } from '../user/usuario.interface';
+import { GymMachine } from './gymMachine.interface';
+import { WorkedWeights } from './workedWeights.interface';
 
-export interface ITraining {
+export interface Training {
   id: string;
   name: string;
   typeTraining?: string;
@@ -12,10 +12,11 @@ export interface ITraining {
   needBeSupervised?: boolean;
   description?: string;
   like?: number;
-  user: IUser;
-  listWorkedWeights?: IWorkedWeights[];
+  // user: User;
+  userId: string;
+  listWorkedWeights?: WorkedWeights[];
   caloriesBurned?: number;
-  gymMachine?: IGymMachine;
+  gymMachine?: GymMachine;
   creationDate: Date;
   lastUpdateDate: Date;
 }

@@ -1,4 +1,4 @@
-export interface IFatPercentage {
+export interface FatPercentage {
   date?: Date;
   fatPercentage?: number;
 }
