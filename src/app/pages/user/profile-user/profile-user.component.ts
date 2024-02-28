@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
-import { IWeight } from 'src/app/interfaces/user/weight.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
+import { Weight } from 'src/app/interfaces/user/weight.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 
 @Component({
   selector: 'app-profile-user',
@@ -15,7 +16,7 @@ import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
   styleUrls: ['./profile-user.component.css'],
 })
 export class ProfileUserComponent implements OnInit, OnDestroy {
-  user: IUser = {
+  user: User = {
     id: undefined,
     name: '',
     username: '',
@@ -35,7 +36,7 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
 
   editMode: boolean | undefined;
 
-  listUserWeight: IWeight[] | undefined;
+  listUserWeight: Weight[] | undefined;
 
   constructor(
     private loginService: LoginService,
@@ -48,11 +49,11 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user = this.loginService.getUser();
     this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
-    
+
     if (!_.isUndefined(this.user.id)) {
       this.userService.getUser(this.user.id).subscribe(
-        (data: IUser) => {
-          this.user = data;
+        (response: ResponseHTTP<User>) => {
+          this.user = response.body;
           this.listUserWeight = this.user.listUserWeight;
           console.log(this.user);
         },
@@ -86,7 +87,9 @@ export class ProfileUserComponent implements OnInit, OnDestroy {
           'success'
         );
         this.editMode = false;
-        this.listUserWeight = _.isUndefined(data.body.listUserWeight) ? [] : data.body.listUserWeight;
+        this.listUserWeight = _.isUndefined(data.body.listUserWeight)
+          ? []
+          : data.body.listUserWeight;
         this.viewModeService.modeEdit('no');
         this.router.navigate(['/user-dashboard/profile']);
       },

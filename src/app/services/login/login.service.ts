@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ILoginData } from 'src/app/interfaces/login.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
 
 @Injectable({
@@ -38,9 +38,10 @@ export class LoginService {
   // Cerramos sesión y eliminamos el token
 
   public logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('modeView');
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('user');
+    // localStorage.removeItem('modeView');
+    localStorage.clear();
 
     return true;
   }
@@ -50,11 +51,11 @@ export class LoginService {
     return localStorage.getItem('token');
   }
 
-  public setUser(user: IUser) {
+  public setUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  public getUser(): IUser {
+  public getUser(): User {
     let userStr = localStorage.getItem('user');
 
     if (userStr != null) {

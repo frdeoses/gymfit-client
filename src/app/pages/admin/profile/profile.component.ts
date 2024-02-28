@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { User } from 'src/app/interfaces/user/usuario.interface';
 import { LoginService } from 'src/app/services/login/login.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
@@ -10,7 +10,7 @@ import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-  user: IUser = {
+  user: User = {
     id: undefined,
     name: '',
     username: '',
