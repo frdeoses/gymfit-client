@@ -5,10 +5,10 @@ import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
 import { Training } from 'src/app/interfaces/training-table/training.interface';
 import { User } from 'src/app/interfaces/user/usuario.interface';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
-import { TrainingService } from 'src/app/services/training/training.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { MachineService } from '@services/machine.service';
+import { TrainingService } from '@services/training.service';
+import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
 import Swal from 'sweetalert2';
 
 @Component({

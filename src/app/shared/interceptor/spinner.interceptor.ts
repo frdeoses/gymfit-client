@@ -8,7 +8,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { SpinnerService } from 'src/app/services/spinner/spinner.service';
+import { SpinnerService } from '@services/spinner.service';
 
 @Injectable()
 export class SpinnerInterceptor implements HttpInterceptor {

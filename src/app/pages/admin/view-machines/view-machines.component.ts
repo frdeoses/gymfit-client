@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+import { MachineService } from '@services/machine.service';
+import { ViewModeService } from '@services/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({

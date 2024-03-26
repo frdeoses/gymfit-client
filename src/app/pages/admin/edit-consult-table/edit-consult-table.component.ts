@@ -2,17 +2,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+
+import { LoginService } from '@services/login/login.service';
+import { TablesService } from '@services/tables.service';
+import { TrainingService } from '@services/training.service';
+import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
+import { ViewModeService } from '@services/view-mode.service';
+
 import * as _ from 'lodash';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { Training } from 'src/app/interfaces/training-table/training.interface';
-import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { TablesService } from 'src/app/services/tables/tables.service';
-import { TrainingService } from 'src/app/services/training/training.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({

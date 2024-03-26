@@ -1,18 +1,19 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from 'lodash';
+
+import { Comment, Event, ResponseHTTP } from '@interfaces/index';
+
+import { EventService } from '@services/event.service';
+import { LoginService } from '@services/login/login.service';
+import { ValidatorService } from '@services/validator.service';
+import { ViewModeService } from '@services/view-mode.service';
+
 import { CommentDialogComponent } from 'src/app/components/dialog/comment/comment-dialog.component';
-import { Comment } from 'src/app/interfaces/calendars/comment.interface';
-import { Event } from 'src/app/interfaces/calendars/event.interface';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { EventService } from 'src/app/services/event/event.service';
-import { LoginService } from 'src/app/services/login/login.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+
+import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
 

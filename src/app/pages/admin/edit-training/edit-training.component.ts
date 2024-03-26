@@ -9,12 +9,12 @@ import {
   User,
   WorkedWeights,
 } from '@interfaces/index';
-import { MachineService } from '@services/gym-machine/machine.service';
 import { LoginService } from '@services/login/login.service';
-import { TrainingService } from '@services/training/training.service';
-import { UserService } from '@services/user/user.service';
-import { ValidatorService } from '@services/validator/validator.service';
-import { ViewModeService } from '@services/view-mode/view-mode.service';
+import { MachineService } from '@services/machine.service';
+import { TrainingService } from '@services/training.service';
+import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
+import { ViewModeService } from '@services/view-mode.service';
 import * as _ from 'lodash';
 import { switchMap } from 'rxjs';
 import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-dialog.component';

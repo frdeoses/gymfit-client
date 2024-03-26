@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { INotification } from 'src/app/interfaces/notification.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { NotificationService } from 'src/app/services/notification/notification.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+
+import { INotification } from '@interfaces/index';
+
+import { LoginService } from '@services/login/login.service';
+import { NotificationService } from '@services/notification.service';
+import { ViewModeService } from '@services/view-mode.service';
+
 import Swal from 'sweetalert2';
 
 @Component({

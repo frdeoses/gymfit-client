@@ -4,9 +4,9 @@ import * as _ from 'lodash';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { TablesService } from 'src/app/services/tables/tables.service';
+import { TablesService } from '@services/tables.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '@services/login/login.service';
 
 @Component({
   selector: 'app-load-table',

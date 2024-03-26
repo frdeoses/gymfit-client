@@ -3,12 +3,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user/usuario.interface';
 import { Weight } from 'src/app/interfaces/user/weight.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { UserService } from 'src/app/services/user/user.service';
+import { UserService } from '@services/user.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+import { ViewModeService } from '@services/view-mode.service';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { LoginService } from '@services/login/login.service';
 
 @Component({
   selector: 'app-profile-user',

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { LoginService } from 'src/app/services/login/login.service';
-import { NotificationService } from 'src/app/services/notification/notification.service';
+import { NotificationService } from '@services/notification.service';
+import { LoginService } from '@services/login/login.service';
 
 export interface MenuItems {
   title: string;

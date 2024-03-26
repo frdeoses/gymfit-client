@@ -1,15 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
-import * as _ from 'lodash';
-import Swal from 'sweetalert2';
-import * as uuid from 'uuid';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { Router } from '@angular/router';
+import { MachineService } from '@services/machine.service';
+import { TrainingService } from '@services/training.service';
+import { ValidatorService } from '@services/validator.service';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { TrainingService } from 'src/app/services/training/training.service';
+import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-machine',
@@ -18,15 +15,6 @@ import { TrainingService } from 'src/app/services/training/training.service';
 })
 export class CreateMachineComponent implements OnInit, OnDestroy {
   machine?: GymMachine;
-  //  = {
-  //   id: '',
-  //   name: '',
-  //   model: '',
-  //   numMachine: 0,
-  //   like: 0,
-  //   description: '',
-  //   exercisedArea: '',
-  // };
 
   myForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -44,7 +32,6 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
   constructor(
     private machineService: MachineService,
     private trainingService: TrainingService,
-    private snack: MatSnackBar,
     private fb: FormBuilder,
     private validatorService: ValidatorService,
     private router: Router

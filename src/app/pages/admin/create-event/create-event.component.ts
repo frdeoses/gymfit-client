@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { EventService } from 'src/app/services/event/event.service';
+import { EventService } from '@services/event.service';
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { Event } from 'src/app/interfaces/calendars/event.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { ValidatorService } from '@services/validator.service';
 import { error } from 'console';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 

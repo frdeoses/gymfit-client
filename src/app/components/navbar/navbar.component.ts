@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { NotificationService } from 'src/app/services/notification/notification.service';
+
+import { User } from '@interfaces/index';
+
+import { NotificationService } from '@services/notification.service';
+import { LoginService } from '@services/login/login.service';
 
 const routeAdmin = '/admin';
 @Component({

@@ -2,13 +2,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { GymMachine, ResponseHTTP } from '@interfaces/index';
+
+import { LoginService } from '@services/login/login.service';
+import { MachineService } from '@services/machine.service';
+import { ValidatorService } from '@services/validator.service';
+import { ViewModeService } from '@services/view-mode.service';
+
 import * as _ from 'lodash';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
-import { LoginService } from 'src/app/services/login/login.service';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({

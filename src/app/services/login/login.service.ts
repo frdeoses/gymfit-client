@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ILoginData } from 'src/app/interfaces/login.interface';
 import { User } from 'src/app/interfaces/user/usuario.interface';
 import baseUrl from '../helper';
+import { LoginData } from '@interfaces/login.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class LoginService {
 
   // Generar el token
 
-  public generateToken(loginData: ILoginData) {
+  public generateToken(loginData: LoginData) {
     return this.http.post(`${baseUrl[0]}/generate-token`, loginData);
   }
 
