@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { INotification } from '@interfaces/index';
+import { Notification } from '@interfaces/notification.interface';
 
 import { LoginService } from '@services/login/login.service';
 import { NotificationService } from '@services/notification.service';
@@ -49,7 +48,7 @@ export class NotificationComponent implements OnInit {
    *
    * @param n
    */
-  markRead(n: INotification): void {
+  markRead(n: Notification): void {
     this.notificationService.markNotificationAsRead(n);
   }
 
@@ -57,7 +56,7 @@ export class NotificationComponent implements OnInit {
     this.notificationService.markAllNotificationAsRead();
   }
 
-  deleteNotification(notification: INotification): void {
+  deleteNotification(notification: Notification): void {
     Swal.fire({
       title: 'Eliminar notificación',
       text: '¿Estas seguro de que quieres eliminar la siguiente notificación?',
@@ -95,7 +94,7 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  goToPage(notification: INotification): void {
+  goToPage(notification: Notification): void {
     const role = this.loginService.getCurrentUserRole();
     this.notificationService.markNotificationAsRead(notification);
 

@@ -4,10 +4,10 @@ import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/calendars/event.interface';
 import baseUrl from './helper';
-import { INotification } from 'src/app/interfaces/notification.interface';
 import * as uuid from 'uuid';
 import { NotificationService } from './notification.service';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { Notification } from '@interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +44,7 @@ export class EventService {
       .post<ResponseHTTP<Event>>(`${baseUrl[2]}/api/gymfit/calendar`, event)
       .pipe(
         tap((response: ResponseHTTP<Event>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Nuevo Evento',
             description: `Se ha creado un nuevo evento: ${response.body.title}`,
@@ -67,7 +67,7 @@ export class EventService {
       )
       .pipe(
         tap(() => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Eliminar Evento',
             description: `Se ha eliminado el evento correctamente`,
@@ -93,7 +93,7 @@ export class EventService {
       .patch<ResponseHTTP<Event>>(`${baseUrl[2]}/api/gymfit/calendar`, event)
       .pipe(
         tap(() => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Actualizar Evento',
             description: `Se ha actualizado el evento: ${event.title}`,
