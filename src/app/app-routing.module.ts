@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+// Componentes
 import { ErrorNotFoundComponent } from './pages/404/error-not-found/error-not-found.component';
 import { CreateEventComponent } from './pages/admin/create-event/create-event.component';
 import { CreateMachineComponent } from './pages/admin/create-machine/create-machine.component';
@@ -28,10 +30,13 @@ import { LoadTrainingComponent } from './pages/user/load-training/load-training.
 import { ProfileUserComponent } from './pages/user/profile-user/profile-user.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.component';
-import { AdminGuard } from './services/guards/admin/admin.guard';
-import { UserGuard } from './services/guards/user/user.guard';
 import { ProfileComponent } from './pages/admin/profile/profile.component';
 import { NotificationComponent } from './components/notification/notification.component';
+
+// Guards
+import { AdminGuard } from './services/guards/admin.guard';
+import { UserGuard } from './services/guards/user.guard';
+
 const routes: Routes = [
   {
     path: '',

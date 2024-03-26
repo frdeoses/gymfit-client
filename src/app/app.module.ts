@@ -1,26 +1,4 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module';
+// Componentes
 import { AppComponent } from './app.component';
 import { CommentDialogComponent } from './components/dialog/comment/comment-dialog.component';
 import { WeightDialogComponent } from './components/dialog/weight/weight-dialog.component';
@@ -52,7 +30,6 @@ import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboa
 import { SidebarComponent as UserSidebar } from './pages/user/sidebar/sidebar.component';
 import { LoadTableComponent } from './pages/user/load-table/load-table.component';
 import { InstructionsComponent } from './pages/user/instructions/instructions.component';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { WelcomeUserComponent } from './pages/user/welcome-user/welcome-user.component';
 import { LoadEventsComponent } from './pages/user/load-events/load-events.component';
 import { LoadMachineComponent } from './pages/user/load-machine/load-machine.component';
@@ -60,12 +37,38 @@ import { LoadTrainingComponent } from './pages/user/load-training/load-training.
 import { ProfileUserComponent } from './pages/user/profile-user/profile-user.component';
 import { ErrorNotFoundComponent } from './pages/404/error-not-found/error-not-found.component';
 import { ProfileComponent } from './pages/admin/profile/profile.component';
-import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
-import { NgChartsModule } from 'ng2-charts';
 import { UserGraphComponent } from './components/user-graph/user-graph.component';
-import { MatMenuModule } from '@angular/material/menu';
 import { NotificationComponent } from './components/notification/notification.component';
+
+// Módulos
+import { NgChartsModule } from 'ng2-charts';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
+import { MatMenuModule } from '@angular/material/menu';
+import { AppRoutingModule } from './app-routing.module';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+
 @NgModule({
   declarations: [
     AppComponent,
