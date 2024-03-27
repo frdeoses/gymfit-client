@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/services/login/login.service';
+import { LoginService } from '@services/login/login.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
       (error) => {
         console.error(error);
         this.snack.open(
-          'Detalles invalidos, vuelva a intentarlo!!',
+          'Detalles inválidos, vuelva a intentarlo!!',
           'Aceptar',
           {
             duration: 3000,

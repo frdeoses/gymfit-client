@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ResponseHTTP, User } from '@interfaces/index';
+import { LoginService } from '@services/login/login.service';
+import { UserService } from '@services/user.service';
+import { ViewModeService } from '@services/view-mode.service';
 import { Subscription } from 'rxjs';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({

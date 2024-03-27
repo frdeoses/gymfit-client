@@ -6,25 +6,26 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
+import { LoginService } from '@services/login/login.service';
 import { Observable } from 'rxjs';
-import { LoginService } from '../../login/login.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private loginService: LoginService, private router: Router) {}
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
     | boolean
-    | UrlTree {
+    | UrlTree
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree> {
     if (
       this.loginService.isLoggedIn() &&
-      this.loginService.getCurrentUserRole() == 'USER'
+      this.loginService.getCurrentUserRole() == 'ADMIN'
     ) {
       return true;
     }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '@services/login/login.service';
 import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
   selector: 'app-error-not-found',

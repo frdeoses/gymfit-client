@@ -24,7 +24,7 @@
     "typeRoots": [
       "node_modules/@types"
      ],
-    "types" : ["lodash"],
+    "types" : ["lodash","jest",],
     "module": "es2020",
     "lib": [
       "es2020",

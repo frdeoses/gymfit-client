@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Event } from 'src/app/interfaces/calendars/event.interface';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { EventService } from 'src/app/services/event/event.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+import { EventService } from '@services/event.service';
+import { ViewModeService } from '@services/view-mode.service';
 import Swal from 'sweetalert2';
 
 @Component({

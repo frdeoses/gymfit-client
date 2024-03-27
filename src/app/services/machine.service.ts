@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import baseUrl from '../helper';
-import { NotificationService } from '../notification/notification.service';
-import { INotification } from 'src/app/interfaces/notification.interface';
+import baseUrl from './helper';
+import { NotificationService } from './notification.service';
 import * as uuid from 'uuid';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { Notification } from '@interfaces/notification.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -45,7 +45,7 @@ export class MachineService {
       )
       .pipe(
         tap((response: ResponseHTTP<GymMachine>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Nueva Maquina',
             description: `Se ha creado una nueva máquina: ${response.body.name}`,
@@ -78,7 +78,7 @@ export class MachineService {
       )
       .pipe(
         tap(() => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Eliminar Máquina',
             description: `Se ha eliminado la máquina correctamente`,
@@ -125,7 +125,7 @@ export class MachineService {
       )
       .pipe(
         tap((response: ResponseHTTP<GymMachine>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Actualizar Máquina',
             description: `Se ha actualizado la máquina: ${response.body.name}`,

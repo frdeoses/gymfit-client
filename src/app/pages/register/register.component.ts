@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user/usuario.interface';
-import { UserService } from 'src/app/services/user/user.service';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -44,6 +44,7 @@ export class RegisterComponent implements OnInit {
       ],
       height: [],
       weight: [],
+      authorities: [],
       // Agrega las otras propiedades y validaciones aquí
     },
     {

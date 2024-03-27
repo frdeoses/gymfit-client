@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
+import { Notification } from '@interfaces/notification.interface';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { INotification } from 'src/app/interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private notificationsSubject = new BehaviorSubject<INotification[]>(
+  private notificationsSubject = new BehaviorSubject<Notification[]>(
     this.getNotificationsFromLocalStorage()
   );
 
-  newNotifications$ = new BehaviorSubject<INotification[]>([]);
-  oldNotifications$ = new BehaviorSubject<INotification[]>([]);
+  newNotifications$ = new BehaviorSubject<Notification[]>([]);
+  oldNotifications$ = new BehaviorSubject<Notification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
 
   constructor() {}
 
-  addNotification(notification: INotification) {
+  addNotification(notification: Notification) {
     const currentNotifications = this.notificationsSubject.value;
     currentNotifications.push(notification);
     this.notificationsSubject.next(currentNotifications);
@@ -25,7 +25,7 @@ export class NotificationService {
     this.separateNotifications(currentNotifications);
   }
 
-  markNotificationAsRead(notification: INotification) {
+  markNotificationAsRead(notification: Notification) {
     const notifications = this.notificationsSubject.value;
     const index = notifications.findIndex((n) => n.id === notification.id);
 
@@ -68,7 +68,7 @@ export class NotificationService {
     this.saveNotificationsToLocalStorage(notifications);
   }
 
-  deleteNotification(notification: INotification): void {
+  deleteNotification(notification: Notification): void {
     const currentNotifications = this.notificationsSubject.value;
     const index = currentNotifications.findIndex(
       (n) => n.title === notification.title && n.date === notification.date // asumiendo que título y fecha combinados son únicos
@@ -92,9 +92,9 @@ export class NotificationService {
     this.separateNotifications(currentNotifications); // Agregado para actualizar las listas de notificaciones
   }
 
-  separateNotifications(notifications: INotification[]): void {
-    const newNotifications: INotification[] = [];
-    const oldNotifications: INotification[] = [];
+  separateNotifications(notifications: Notification[]): void {
+    const newNotifications: Notification[] = [];
+    const oldNotifications: Notification[] = [];
 
     for (const notification of notifications) {
       if (notification.read) {
@@ -108,14 +108,12 @@ export class NotificationService {
     this.oldNotifications$.next(oldNotifications);
   }
 
-  public getNotificationsFromLocalStorage(): INotification[] {
+  public getNotificationsFromLocalStorage(): Notification[] {
     const notifications = localStorage.getItem('notifications');
     return notifications ? JSON.parse(notifications) : [];
   }
 
-  private saveNotificationsToLocalStorage(
-    notifications: INotification[]
-  ): void {
+  private saveNotificationsToLocalStorage(notifications: Notification[]): void {
     localStorage.setItem('notifications', JSON.stringify(notifications));
   }
 }

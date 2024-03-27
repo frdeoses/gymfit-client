@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { INotification } from 'src/app/interfaces/notification.interface';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import * as uuid from 'uuid';
-import baseUrl from '../helper';
-import { NotificationService } from '../notification/notification.service';
+import baseUrl from './helper';
+import { NotificationService } from './notification.service';
+import { Notification } from '@interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +57,7 @@ export class TablesService {
       )
       .pipe(
         tap((response: ResponseHTTP<TrainingTable>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Nueva Tabla de Entrenamiento',
             description: `Se ha creado una nueva tabla de entrenamiento: ${response.body.name}`,
@@ -90,7 +90,7 @@ export class TablesService {
       )
       .pipe(
         tap(() => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Eliminar Tabla de Entrenamiento',
             description: `Se ha eliminado la tabla de entrenamiento correctamente`,
@@ -159,7 +159,7 @@ export class TablesService {
       )
       .pipe(
         tap((response: ResponseHTTP<TrainingTable>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Actualizar Tabla de Entrenamiento',
             description: `Se ha actualizado la tabla de entrenamiento: ${response.body.name}`,

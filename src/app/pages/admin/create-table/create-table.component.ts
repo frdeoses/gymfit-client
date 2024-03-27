@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TablesService } from 'src/app/services/tables/tables.service';
+import { TablesService } from '@services/tables.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
 import { Training } from 'src/app/interfaces/training-table/training.interface';
 import { User } from 'src/app/interfaces/user/usuario.interface';
-import { TrainingService } from 'src/app/services/training/training.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
+import { TrainingService } from '@services/training.service';
+import { UserService } from '@services/user.service';
+import { MachineService } from '@services/machine.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ValidatorService } from 'src/app/services/validator/validator.service';
+import { ValidatorService } from '@services/validator.service';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 
 @Component({

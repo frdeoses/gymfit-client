@@ -1,11 +1,9 @@
-import { Training } from './../../../interfaces/training-table/training.interface';
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '@services/login/login.service';
+import { NotificationService } from '@services/notification.service';
+import { TrainingService } from '@services/training.service';
 import { Subscription } from 'rxjs';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { MachineService } from 'src/app/services/gym-machine/machine.service';
-import { LoginService } from 'src/app/services/login/login.service';
-import { NotificationService } from 'src/app/services/notification/notification.service';
-import { TrainingService } from 'src/app/services/training/training.service';
 import Swal from 'sweetalert2';
 
 export interface MenuItems {
@@ -73,7 +71,6 @@ export class SidebarComponent implements OnInit {
   trainingTypes: string[] = [];
 
   constructor(
-    private machineService: MachineService,
     private trainingService: TrainingService,
     private loginService: LoginService,
     public notificationService: NotificationService

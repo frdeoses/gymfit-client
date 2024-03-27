@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { INotification } from 'src/app/interfaces/notification.interface';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 import { Training } from 'src/app/interfaces/training-table/training.interface';
 import * as uuid from 'uuid';
-import baseUrl from '../helper';
-import { NotificationService } from '../notification/notification.service';
+import baseUrl from './helper';
+import { NotificationService } from './notification.service';
+import { Notification } from '@interfaces/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +57,7 @@ export class TrainingService {
       )
       .pipe(
         tap((response: ResponseHTTP<Training>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Nuevo Entrenamiento',
             description: `Se ha creado un nuevo entrenamiento: ${response.body.name}`,
@@ -88,7 +88,7 @@ export class TrainingService {
       )
       .pipe(
         tap(() => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Eliminar Ejercicio',
             description: `Se ha eliminado el ejercicio correctamente`,
@@ -154,7 +154,7 @@ export class TrainingService {
       )
       .pipe(
         tap((response: ResponseHTTP<Training>) => {
-          const notification: INotification = {
+          const notification: Notification = {
             id: uuid.v4(),
             title: 'Actualizar Ejercicio',
             description: `Se ha actualizado el ejercicio: ${response.body.name}`,

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { ViewModeService } from 'src/app/services/view-mode/view-mode.service';
+import { User } from '@interfaces/index';
+import { LoginService } from '@services/login/login.service';
+import { UserService } from '@services/user.service';
+import { ViewModeService } from '@services/view-mode.service';
 
 @Component({
   selector: 'app-profile',

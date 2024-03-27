@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Training } from 'src/app/interfaces/training-table/training.interface';
 import { User } from 'src/app/interfaces/user/usuario.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import { TrainingService } from 'src/app/services/training/training.service';
+import { TrainingService } from '@services/training.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
 import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+import { LoginService } from '@services/login/login.service';
 
 @Component({
   selector: 'app-load-training',

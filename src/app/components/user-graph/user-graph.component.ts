@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { User, Weight } from '@interfaces/index';
 
-import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
-import * as Chart from 'chart.js';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { Weight } from 'src/app/interfaces/user/weight.interface';
-import { LoginService } from 'src/app/services/login/login.service';
-import * as _ from 'lodash';
+import { LoginService } from '@services/login/login.service';
+
+import { ChartDataset, ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-user-graph',
