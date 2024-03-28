@@ -63,7 +63,7 @@ export class LoginService {
     }
     this.logout();
 
-    let userEmpty = {
+    return {
       id: undefined,
       name: '',
       username: '',
@@ -79,8 +79,7 @@ export class LoginService {
           authority: ' ',
         },
       ],
-    };
-    return userEmpty;
+    } as User;
   }
 
   public getCurrentUserRole() {
