@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as _ from 'lodash';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { TablesService } from '@services/tables.service';
-import Swal from 'sweetalert2';
+
+import { ResponseHTTP, TrainingTable, User } from '@interfaces/index';
+
 import { LoginService } from '@services/login/login.service';
+import { TablesService } from '@services/tables.service';
+
+import * as _ from 'lodash';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-load-table',

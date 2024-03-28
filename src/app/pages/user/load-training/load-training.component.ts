@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Training } from 'src/app/interfaces/training-table/training.interface';
-import { User } from 'src/app/interfaces/user/usuario.interface';
+
+import { ResponseHTTP, Training, User } from '@interfaces/index';
+
 import { TrainingService } from '@services/training.service';
+import { LoginService } from '@services/login/login.service';
+
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { LoginService } from '@services/login/login.service';
 
 @Component({
   selector: 'app-load-training',

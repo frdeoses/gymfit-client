@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Event } from 'src/app/interfaces/calendars/event.interface';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+
+import { Event, ResponseHTTP } from '@interfaces/index';
+
 import { EventService } from '@services/event.service';
+
 import Swal from 'sweetalert2';
 
 @Component({

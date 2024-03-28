@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
+
 import { TablesService } from '@services/tables.service';
 import { ViewModeService } from '@services/view-mode.service';
+
+import { ResponseHTTP, TrainingTable } from '@interfaces/index';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -84,7 +86,7 @@ export class ViewTablesComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Entrar en modo edicion
+   * Entrar en modo edición
    */
   modeEdit() {
     this.viewModeService.modeEdit('yes');

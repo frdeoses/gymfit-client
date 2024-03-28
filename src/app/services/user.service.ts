@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { User } from 'src/app/interfaces/user/usuario.interface';
+
+import { ResponseHTTP, User } from '@interfaces/index';
+
 import baseUrl from './helper';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
 
 @Injectable({
   providedIn: 'root',

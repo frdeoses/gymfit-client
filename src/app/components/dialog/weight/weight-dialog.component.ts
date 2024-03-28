@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { WorkedWeights } from 'src/app/interfaces/training-table/workedWeights.interface';
-import * as _ from 'lodash';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import Swal from 'sweetalert2';
 import { FormControl, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { WorkedWeights } from '@interfaces/index';
+
+import * as _ from 'lodash';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-weight-dialog',

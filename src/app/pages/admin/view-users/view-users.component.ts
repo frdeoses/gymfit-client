@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { ResponseHTTP, User } from '@interfaces/index';
+
 import { LoginService } from '@services/login/login.service';
 import { UserService } from '@services/user.service';
 import { ViewModeService } from '@services/view-mode.service';
-import { Subscription } from 'rxjs';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,18 +38,18 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
       }
     );
 
-    // this.subscription = this.userService.refresh$.subscribe(() => {
-    //   this.userService.listUser().subscribe(
-    //     (data: User[]) => {
-    //       this.users = data;
-    //       console.log(this.users);
-    //     },
-    //     (error) => {
-    //       console.error(error);
-    //       Swal.fire('Error:', 'Error al cargar los usuarios...', 'error');
-    //     }
-    //   );
-    // });
+    this.subscription = this.userService.refresh$.subscribe(() => {
+      this.userService.listUser().subscribe(
+        (data: ResponseHTTP<User[]>) => {
+          this.users = data.body;
+          console.log(this.users);
+        },
+        (error) => {
+          console.error(error);
+          Swal.fire('Error:', 'Error al cargar los usuarios...', 'error');
+        }
+      );
+    });
   }
 
   ngOnDestroy(): void {
