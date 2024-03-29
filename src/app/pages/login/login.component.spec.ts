@@ -7,6 +7,7 @@ import { LoginService } from '@services/login/login.service';
 import { LoginComponent } from './login.component';
 import { of, throwError } from 'rxjs';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,6 +22,7 @@ describe('LoginComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule, // Necesario para MatSnackBar
+        ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           { path: 'admin', component: DashboardComponent }, // Configura la ruta 'admin'
           // Puedes agregar otras rutas necesarias aquí
@@ -54,13 +56,15 @@ describe('LoginComponent', () => {
     // Simular getCurrentUserRole para que devuelva un rol válido
     spyOn(loginService, 'getCurrentUserRole').and.returnValue('ADMIN');
 
-    component.loginData.username = 'testUser';
-    component.loginData.password = 'testPass';
+    component.myForm.patchValue({
+      username: 'testUser',
+      password: 'testPass',
+    });
 
     component.formSubmit();
 
     expect(loginService.generateToken).toHaveBeenCalledWith(
-      component.loginData
+      component.myForm.value
     );
     expect(loginService.loginUser).toHaveBeenCalledWith('fakeToken');
     // Verificar si se navega al dashboard del admin o cualquier otro comportamiento esperado
@@ -71,13 +75,15 @@ describe('LoginComponent', () => {
       throwError(() => new Error('Error'))
     );
     const snackSpy = spyOn(TestBed.inject(MatSnackBar), 'open');
+    component.myForm.patchValue({
+      username: 'testUser',
+      password: 'testPass',
+    });
 
-    component.loginData.username = 'testUser';
-    component.loginData.password = 'testPass';
     component.formSubmit();
 
     expect(snackSpy).toHaveBeenCalledWith(
-      'Detalles inválidos, vuelva a intentarlo!!',
+      'Usuario y/o contraseña incorrecta, vuelva a intentarlo!!',
       'Aceptar',
       { duration: 3000 }
     );
