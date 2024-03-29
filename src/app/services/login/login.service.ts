@@ -38,10 +38,10 @@ export class LoginService {
   // Cerramos sesión y eliminamos el token
 
   public logout() {
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('user');
-    // localStorage.removeItem('modeView');
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('modeView');
+    // localStorage.clear();
 
     return true;
   }
