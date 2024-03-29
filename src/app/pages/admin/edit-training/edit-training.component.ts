@@ -91,6 +91,8 @@ export class EditTrainingComponent implements OnInit {
       )
       .subscribe((response: ResponseHTTP<Training>) => {
         this.training = response.body;
+        this.myForm.reset(this.training);
+
         this.userInTraining = this.users.find(
           (user) => user.id === this.training?.userId
         );
@@ -139,7 +141,6 @@ export class EditTrainingComponent implements OnInit {
     };
 
     if (!this.training) return;
-    debugger;
     if (this.training.id === null) this.training.id = this.trainingId;
 
     this.trainingService.editTraining(this.training).subscribe(
