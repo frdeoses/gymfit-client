@@ -28,7 +28,7 @@ WORKDIR /app
 ENV APP_VERSION=${APP_VERSION}
 COPY --from=prod-deps /app/node_modules ./node_modules
 # Ajusta el nombre del directorio según corresponda
-COPY --from=builder /app/dist/gymfit-client ./dist  
+COPY --from=builder /app/dist/gymfit-client ./dist
 
 # Asegúrate de que este comando sea adecuado para servir tu aplicación Angular
-CMD ["node", "dist/main.js"]  
+CMD ["node", "dist/main.js"]
