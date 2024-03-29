@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TablesService } from '@services/tables.service';
-import * as _ from 'lodash';
-import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TrainingTable } from 'src/app/interfaces/training-table/trainingTable.interface';
-import { Training } from 'src/app/interfaces/training-table/training.interface';
-import { User } from 'src/app/interfaces/user/usuario.interface';
+
+import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+
+import { TablesService } from '@services/tables.service';
 import { TrainingService } from '@services/training.service';
 import { UserService } from '@services/user.service';
-import { MachineService } from '@services/machine.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidatorService } from '@services/validator.service';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-table',
@@ -51,9 +48,7 @@ export class CreateTableComponent implements OnInit {
   constructor(
     private tableService: TablesService,
     private userService: UserService,
-    private machineService: MachineService,
     private trainingService: TrainingService,
-    private snack: MatSnackBar,
     private fb: FormBuilder,
     private validatorService: ValidatorService,
     private router: Router

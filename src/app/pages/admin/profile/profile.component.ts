@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { User } from '@interfaces/index';
+
 import { LoginService } from '@services/login/login.service';
 import { UserService } from '@services/user.service';
 import { ViewModeService } from '@services/view-mode.service';

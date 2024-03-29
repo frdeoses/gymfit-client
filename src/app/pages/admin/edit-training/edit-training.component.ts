@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import {
   GymMachine,
   ResponseHTTP,
@@ -9,15 +10,19 @@ import {
   User,
   WorkedWeights,
 } from '@interfaces/index';
+
 import { LoginService } from '@services/login/login.service';
 import { MachineService } from '@services/machine.service';
 import { TrainingService } from '@services/training.service';
 import { UserService } from '@services/user.service';
 import { ValidatorService } from '@services/validator.service';
 import { ViewModeService } from '@services/view-mode.service';
+
+import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-dialog.component';
+
 import * as _ from 'lodash';
 import { switchMap } from 'rxjs';
-import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-dialog.component';
+
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
 
@@ -86,6 +91,8 @@ export class EditTrainingComponent implements OnInit {
       )
       .subscribe((response: ResponseHTTP<Training>) => {
         this.training = response.body;
+        this.myForm.reset(this.training);
+
         this.userInTraining = this.users.find(
           (user) => user.id === this.training?.userId
         );
@@ -134,7 +141,6 @@ export class EditTrainingComponent implements OnInit {
     };
 
     if (!this.training) return;
-    debugger;
     if (this.training.id === null) this.training.id = this.trainingId;
 
     this.trainingService.editTraining(this.training).subscribe(

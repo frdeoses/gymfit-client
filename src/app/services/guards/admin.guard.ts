@@ -6,8 +6,9 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { LoginService } from '@services/login/login.service';
 import { Observable } from 'rxjs';
+
+import { LoginService } from '@services/login/login.service';
 
 @Injectable({
   providedIn: 'root',

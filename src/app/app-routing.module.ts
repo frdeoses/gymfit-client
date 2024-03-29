@@ -34,8 +34,8 @@ import { ProfileComponent } from './pages/admin/profile/profile.component';
 import { NotificationComponent } from './components/notification/notification.component';
 
 // Guards
-import { AdminGuard } from './services/guards/admin.guard';
-import { UserGuard } from './services/guards/user.guard';
+import { UserGuard } from '@services/guards/user.guard';
+import { AdminGuard } from '@services/guards/admin.guard';
 
 const routes: Routes = [
   {

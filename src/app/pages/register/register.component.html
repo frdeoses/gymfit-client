@@ -47,10 +47,6 @@
               <mat-error *ngIf="isValidField('password')">
                 {{ getFieldError("password") }}
               </mat-error>
-
-              <!-- <mat-error *ngIf="userForm.get('password')?.hasError('minlength')"
-                >La contraseña debe tener al menos 8 caracteres</mat-error
-              > -->
             </mat-form-field>
 
             <mat-form-field class="mt10 full-width" appearance="outline">
@@ -67,10 +63,6 @@
               <mat-error *ngIf="isValidField('password2')">
                 {{ getFieldError("password2") }}
               </mat-error>
-
-              <!-- <mat-error *ngIf="userForm.get('password')?.hasError('minlength')"
-                >La contraseña debe tener al menos 8 caracteres</mat-error
-              > -->
             </mat-form-field>
 
             <mat-form-field class="full-width mt10" appearance="outline">
@@ -117,9 +109,6 @@
               <mat-error *ngIf="isValidField('email')">
                 {{ getFieldError("email") }}
               </mat-error>
-              <!-- <mat-error *ngIf="userForm.get('email')?.hasError('email')"
-                >Correo electrónico no es válido</mat-error
-              > -->
             </mat-form-field>
 
             <mat-form-field class="full-width mt10" appearance="outline">
@@ -135,9 +124,6 @@
               <mat-error *ngIf="isValidField('phone')">
                 {{ getFieldError("phone") }}
               </mat-error>
-              <!-- <mat-error *ngIf="userForm.get('phone')?.hasError('pattern')"
-                >El teléfono debe contener solo números</mat-error
-              > -->
             </mat-form-field>
 
             <mat-form-field class="full-width mt10" appearance="outline">

@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { GymMachine, ResponseHTTP } from '@interfaces/index';
+
 import { MachineService } from '@services/machine.service';
 import { TrainingService } from '@services/training.service';
 import { ValidatorService } from '@services/validator.service';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -81,11 +83,8 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error);
-        Swal.fire(
-          'Error:',
-          'Error al crear la máquina de entrenamiento',
-          'error'
-        );
+        const message = error.error.error || 'Error en el sistema';
+        Swal.fire('Error:', message, 'error');
       }
     );
   }

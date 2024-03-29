@@ -2,12 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Event } from 'src/app/interfaces/calendars/event.interface';
-import baseUrl from './helper';
-import * as uuid from 'uuid';
+
 import { NotificationService } from './notification.service';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { Notification } from '@interfaces/notification.interface';
+
+import { ResponseHTTP, Event, Notification } from '@interfaces/index';
+
+import baseUrl from './helper';
+
+import * as uuid from 'uuid';
 
 @Injectable({
   providedIn: 'root',

@@ -2,12 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import baseUrl from './helper';
+
 import { NotificationService } from './notification.service';
+
+import { GymMachine, ResponseHTTP, Notification } from '@interfaces/index';
+
+import baseUrl from './helper';
+
 import * as uuid from 'uuid';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { Notification } from '@interfaces/notification.interface';
+
 @Injectable({
   providedIn: 'root',
 })

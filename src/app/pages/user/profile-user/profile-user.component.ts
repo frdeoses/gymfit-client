@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { User } from 'src/app/interfaces/user/usuario.interface';
-import { Weight } from 'src/app/interfaces/user/weight.interface';
+
+import { ResponseHTTP, User, Weight } from '@interfaces/index';
+
+import { LoginService } from '@services/login/login.service';
 import { UserService } from '@services/user.service';
+import { ViewModeService } from '@services/view-mode.service';
+
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
-import { ViewModeService } from '@services/view-mode.service';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { LoginService } from '@services/login/login.service';
 
 @Component({
   selector: 'app-profile-user',

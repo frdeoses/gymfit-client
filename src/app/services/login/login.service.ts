@@ -38,10 +38,10 @@ export class LoginService {
   // Cerramos sesión y eliminamos el token
 
   public logout() {
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('user');
-    // localStorage.removeItem('modeView');
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('modeView');
+    // localStorage.clear();
 
     return true;
   }
@@ -63,7 +63,7 @@ export class LoginService {
     }
     this.logout();
 
-    let userEmpty = {
+    return {
       id: undefined,
       name: '',
       username: '',
@@ -79,8 +79,7 @@ export class LoginService {
           authority: ' ',
         },
       ],
-    };
-    return userEmpty;
+    } as User;
   }
 
   public getCurrentUserRole() {

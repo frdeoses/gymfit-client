@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ResponseHTTP } from 'src/app/interfaces/response-http.interface';
-import { GymMachine } from 'src/app/interfaces/training-table/gymMachine.interface';
-import { Training } from 'src/app/interfaces/training-table/training.interface';
-import { User } from 'src/app/interfaces/user/usuario.interface';
+
+import { GymMachine, ResponseHTTP, Training, User } from '@interfaces/index';
+
 import { MachineService } from '@services/machine.service';
 import { TrainingService } from '@services/training.service';
 import { UserService } from '@services/user.service';
 import { ValidatorService } from '@services/validator.service';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -92,13 +92,6 @@ export class CreateTrainingComponent implements OnInit {
     };
 
     if (!this.training) return;
-
-    // if (_.isNull(this.training) || _.isEmpty(this.training.name)) {
-    //   this.snack.open('El nombre es obligatorio introducirlo!!', '', {
-    //     duration: 3000,
-    //   });
-    //   return;
-    // }
 
     this.trainingService.createTraining(this.training).subscribe(
       (trainingData: ResponseHTTP<Training>) => {
