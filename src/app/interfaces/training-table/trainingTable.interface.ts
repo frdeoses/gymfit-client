@@ -1,4 +1,3 @@
-import { User } from '../user/usuario.interface';
 import { Training } from './training.interface';
 
 export interface TrainingTable {

@@ -1,6 +1,6 @@
 import { User } from '../user/usuario.interface';
 import { GymMachine } from './gymMachine.interface';
-import { WorkedWeights } from './workedWeights.interface';
+import { WorkedWeight } from './workedWeight.interface';
 
 export interface Training {
   id: string;
@@ -14,7 +14,7 @@ export interface Training {
   like?: number;
   // user: User;
   userId: string;
-  listWorkedWeights?: WorkedWeights[];
+  listWorkedWeights?: WorkedWeight[];
   caloriesBurned?: number;
   gymMachine?: GymMachine;
   creationDate: Date;

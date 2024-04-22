@@ -10,7 +10,8 @@ export * from './security/rol.interface';
 export * from './training-table/gymMachine.interface';
 export * from './training-table/training.interface';
 export * from './training-table/trainingTable.interface';
-export * from './training-table/workedWeights.interface';
+export * from './training-table/workedWeight.interface';
+export * from './training-table/newWorkedWeight.interface';
 
 // User
 export * from './user/fatPercentage.interface';
