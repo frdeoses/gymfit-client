@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { GymMachine, ResponseHTTP } from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 import { MachineService } from '@services/machine.service';
-import { TrainingService } from '@services/training.service';
 import { ValidatorService } from '@services/validator.service';
 
 import Swal from 'sweetalert2';
@@ -29,28 +29,23 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
 
   panelOpenState: boolean = false;
 
-  trainingTypes: string[] = [];
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
 
   constructor(
     private machineService: MachineService,
-    private trainingService: TrainingService,
     private fb: FormBuilder,
     private validatorService: ValidatorService,
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.trainingService.allTrainingType().subscribe(
-      (response: ResponseHTTP<string[]>) => {
-        this.trainingTypes = response.body;
-        console.log(this.trainingTypes);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios', 'error');
-      }
-    );
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {}
 

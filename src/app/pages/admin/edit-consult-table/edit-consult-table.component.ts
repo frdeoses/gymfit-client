@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 import { LoginService } from '@services/login/login.service';
 import { TablesService } from '@services/tables.service';
@@ -12,7 +12,7 @@ import { UserService } from '@services/user.service';
 import { ValidatorService } from '@services/validator.service';
 import { ViewModeService } from '@services/view-mode.service';
 
-import * as _ from 'lodash';
+import { switchMap } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -37,7 +37,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
       listTraining: [undefined],
       initDate: [undefined, [Validators.required]],
       endDate: [undefined, [Validators.required]],
-      user: [''],
+      userId: [''],
       observation: [''],
       // Agrega las otras propiedades y validaciones aquí
     },
@@ -51,7 +51,15 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
 
   trainingTable?: TrainingTable;
 
-  trainingTypes: string[] = [];
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
   listTraining: Training[] = [];
   users: User[] = [];
 
@@ -59,7 +67,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   initADD: boolean = false;
   endADD: boolean = false;
 
-  rolLogin: string = '';
+  rolLogin: string | undefined = '';
 
   constructor(
     private tableService: TablesService,
@@ -77,47 +85,33 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initializeUserRole();
+
+    this.initializeTableId();
+
+    this.initializeEditMode();
+
+    this.loadTraining();
+
+    this.loadTrainingType();
+
+    this.loadUserAndTrainingTable();
+  }
+
+  initializeUserRole(): void {
     const rolUser = this.loginService.getCurrentUserRole();
+    this.rolLogin = rolUser ? rolUser.toUpperCase() : undefined;
+  }
 
-    if (!_.isUndefined(rolUser)) {
-      this.rolLogin = rolUser.toUpperCase();
-    }
-
+  initializeTableId(): void {
     this.tableId = this.route.snapshot.params['tableId'];
+  }
 
-    this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
+  initializeEditMode(): void {
+    this.editMode = this.viewModeService.getModeEdit() === 'yes';
+  }
 
-    this.tableService.getTrainingTable(this.tableId).subscribe(
-      (response: ResponseHTTP<TrainingTable>) => {
-        this.trainingTable = response.body;
-
-        this.myForm.reset(this.trainingTable);
-
-        console.log(this.trainingTable);
-      },
-      (error: HttpErrorResponse) => {
-        console.error(error);
-
-        const msjError =
-          error.error.error || 'Ha ocurrido un error en el sistema...';
-
-        Swal.fire('Error en el sistema', msjError, 'error');
-
-        this.router.navigate(['/error']);
-      }
-    );
-
-    if (this.trainingTable?.userId) {
-      this.userService.getUser(this.trainingTable.userId).subscribe(
-        (response: ResponseHTTP<User>) => {
-          this.userInTable = response.body;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    }
-
+  loadTraining(): void {
     this.trainingService.listTraining().subscribe(
       (response: ResponseHTTP<Training[]>) => {
         this.listTraining = response.body;
@@ -128,28 +122,45 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
         Swal.fire('Error!!', 'Error al cargar los ejercicios', 'error');
       }
     );
+  }
 
-    this.trainingService.allTrainingType().subscribe(
-      (response: ResponseHTTP<string[]>) => {
-        this.trainingTypes = response.body;
-        console.log(this.trainingTypes);
+  loadTrainingType(): void {
+    this.trainingService.listTraining().subscribe(
+      (response: ResponseHTTP<Training[]>) => {
+        this.listTraining = response.body;
+        console.log(this.listTraining);
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
+        Swal.fire('Error!!', 'Error al cargar los ejercicios', 'error');
       }
     );
+  }
 
-    this.userService.allRoleUser().subscribe(
-      (response: ResponseHTTP<User[]>) => {
-        this.users = response.body;
-        console.log(this.users);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
-      }
-    );
+  loadUserAndTrainingTable(): void {
+    this.userService
+      .allRoleUser()
+      .pipe(
+        switchMap((response: ResponseHTTP<User[]>) => {
+          this.users = response.body;
+          // Asumiendo que getTraining también retorna un Observable
+          return this.tableService.getTrainingTable(this.tableId);
+        })
+      )
+      .subscribe(
+        (response: ResponseHTTP<TrainingTable>) => {
+          this.trainingTable = response.body;
+          this.myForm.reset(this.trainingTable);
+
+          this.userInTable = this.users.find(
+            (user) => user.id === this.trainingTable?.userId
+          );
+        },
+        (error) => {
+          console.error(error);
+          Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
+        }
+      );
   }
 
   formSubmit() {

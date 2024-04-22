@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 import { TablesService } from '@services/tables.service';
 import { TrainingService } from '@services/training.service';
@@ -41,7 +42,15 @@ export class CreateTableComponent implements OnInit {
 
   table?: TrainingTable;
 
-  trainingTypes: string[] = [];
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
   listTraining: Training[] = [];
   users: User[] = [];
 
@@ -63,17 +72,6 @@ export class CreateTableComponent implements OnInit {
       (error) => {
         console.error(error);
         Swal.fire('Error!!', 'Error al cargar los ejercicios', 'error');
-      }
-    );
-
-    this.trainingService.allTrainingType().subscribe(
-      (response: ResponseHTTP<string[]>) => {
-        this.trainingTypes = response.body;
-        console.log(this.trainingTypes);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
       }
     );
 
