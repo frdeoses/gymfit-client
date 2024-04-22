@@ -98,11 +98,32 @@ export class NotificationComponent implements OnInit {
     const role = this.loginService.getCurrentUserRole();
     this.notificationService.markNotificationAsRead(notification);
 
-    notification.page =
-      role === 'ADMIN'
-        ? '/admin' + notification.page
-        : '/user-dashboard' + notification.page;
+    // Definir la base del path según el rol
+    const basePath = role === 'ADMIN' ? '/admin' : '/user-dashboard';
+
+    // Verificar si la URL contiene '/trainings/' o '/tables/'
+    const trainingIndex = notification.page.indexOf('/trainings');
+    const tableIndex = notification.page.indexOf('/tables');
+
+    if (role === 'USER' && (trainingIndex !== -1 || tableIndex !== -1)) {
+      // Determinar la posición para insertar '/ALL' basado en lo que se encontró en la URL
+      const insertIndex =
+        trainingIndex !== -1
+          ? trainingIndex + '/trainings'.length
+          : tableIndex + '/tables'.length;
+      // Reconstruir la URL con '/ALL' insertado en la posición correcta
+      notification.page =
+        basePath +
+        notification.page.slice(0, insertIndex) +
+        '/ALL' +
+        notification.page.slice(insertIndex);
+    } else {
+      // Para el rol 'ADMIN' o URLs que no contienen '/trainings/' o '/tables/'
+      notification.page = basePath + notification.page;
+    }
+
     this.modeView.modeEdit('no');
+
     this.router.navigate([notification.page]); // Usa el método navigate para redirigir a la página
   }
 }
