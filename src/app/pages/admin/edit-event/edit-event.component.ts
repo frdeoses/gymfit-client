@@ -69,7 +69,6 @@ export class EditEventComponent implements OnInit {
       (error: HttpErrorResponse) => {
         console.error(error);
 
-        debugger;
         const msjError =
           error.error.error || 'Ha ocurrido un error en el sistema...';
 
