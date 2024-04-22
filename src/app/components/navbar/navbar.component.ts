@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { User } from '@interfaces/index';
 
-import { NotificationService } from '@services/notification.service';
 import { LoginService } from '@services/login/login.service';
+import { NotificationService } from '@services/notification.service';
+import { SidebarService } from '@services/sidebar.service';
 
 const routeAdmin = '/admin';
 @Component({
@@ -35,9 +36,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     ],
   };
 
+  isSmallScreen = window.innerWidth < 768; // Considera pantallas menores de 768px como pequeñas
+
   constructor(
-    public loginService: LoginService,
-    public notificationService: NotificationService
+    private loginService: LoginService,
+    private sidebarService: SidebarService,
+    private notificationService: NotificationService
   ) {
     this.subscription = new Subscription();
   }
@@ -91,5 +95,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
       console.log(this.subscription);
       this.subscription.unsubscribe();
     }
+  }
+
+  get isLogin(): boolean {
+    return this.loginService.isLoggedIn();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isSmallScreen = window.innerWidth < 768;
+  }
+
+  toggleSidebar(): void {
+    // debugger;
+    this.sidebarService.toggleSidebar();
   }
 }
