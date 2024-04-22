@@ -5,7 +5,7 @@
       <div *ngIf="item.subMenu">
         <mat-divider></mat-divider>
 
-        <div mat-subheader>{{ item.title }}</div>
+        <div mat-subheader>{{ item.title | titlecase }}</div>
 
         <mat-accordion>
           <mat-expansion-panel hideToggle>
@@ -15,17 +15,25 @@
                   <mat-icon mat-list-icon>
                     {{ item.icon }}
                   </mat-icon>
-                  {{ item.title }}
+                  {{ item.description | titlecase }}
                 </button>
               </mat-panel-title>
             </mat-expansion-panel-header>
 
             <button
-              [routerLink]="item.subPath + t"
+              [routerLink]="item.subPath + t.subTitle"
               mat-list-item
-              *ngFor="let t of trainingTypes"
+              *ngFor="let t of item.subMenuItem"
             >
-              <mat-icon mat-list-icon>folder</mat-icon> {{ t }}
+              <!-- <div mat-card-avatar class="mr10 example-header-image"></div> -->
+              <img
+                *ngIf="t.icon"
+                [src]="getIconPath(t.icon)"
+                class="mr10 icon-style"
+              />
+
+              <!-- <mat-icon mat-list-icon> tibia_alt </mat-icon> -->
+              {{ t.subTitle | titlecase }}
             </button>
           </mat-expansion-panel>
         </mat-accordion>
