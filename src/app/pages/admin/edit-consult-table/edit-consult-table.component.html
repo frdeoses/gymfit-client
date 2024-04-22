@@ -78,6 +78,9 @@
             name="listTraining"
             multiple
           >
+            <mat-option [disabled]="true" *ngIf="listTraining.length == 0"
+              >No hay ejercicios creados</mat-option
+            >
             <mat-option
               *ngFor="let training of listTraining"
               [value]="training"
@@ -120,15 +123,18 @@
           <mat-datepicker #pickerEndDate></mat-datepicker>
         </mat-form-field>
 
-        <!-- <mat-form-field class="w100 mt20" appearance="outline">
+        <mat-form-field class="w100 mt20" appearance="outline">
           <mat-label>Seleccionar usuario</mat-label>
-          <mat-select [(ngModel)]="trainingTable.user" name="user" required>
+          <mat-select formControlName="userId" name="user">
             <mat-option></mat-option>
+            <mat-option [disabled]="true" *ngIf="users.length == 0"
+              >No hay usuarios en el sistema</mat-option
+            >
             <mat-option *ngFor="let user of users" [value]="user.id">{{
               user.username
             }}</mat-option>
           </mat-select>
-        </mat-form-field> -->
+        </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
           <mat-label>Observaciones:</mat-label>
@@ -377,7 +383,7 @@
         <ng-template #templateName> </ng-template>
       </div>
     </div>
-    <mat-card-actions class="text-center">
+    <mat-card-actions *ngIf="rolLogin === 'ADMIN'" class="text-center">
       <button mat-raised-button color="primary" (click)="modeEdit()">
         Actualizar
       </button>
