@@ -65,7 +65,7 @@ export class TablesService {
             description: `Se ha creado una nueva tabla de entrenamiento: ${response.body.name}`,
             date: new Date(),
             read: false,
-            page: `/tables/${table.id}`,
+            page: `/tables/${response.body.id}`,
           };
           // Agregar la notificación al servicio de notificaciones
 

@@ -167,7 +167,7 @@ export class TrainingService {
             description: `Se ha actualizado el ejercicio: ${response.body.name}`,
             date: new Date(),
             read: false,
-            page: `/trainings/${training.id}`,
+            page: `/trainings/${response.body.id}`,
           };
           // Agregar la notificación al servicio de notificaciones
 
