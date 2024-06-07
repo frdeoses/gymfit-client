@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { User } from '@interfaces/index';
+import { User, UserRsDto } from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
 import { UserService } from '@services/user.service';
@@ -12,23 +12,9 @@ import { ViewModeService } from '@services/view-mode.service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-  user: User = {
-    id: undefined,
-    name: '',
-    username: '',
-    password: '',
-    userRoles: [],
-    surname: '',
-    email: '',
-    birthDate: new Date(),
-    height: undefined,
-    phone: '',
-    authorities: [
-      {
-        authority: ' ',
-      },
-    ],
-  };
+  user?: UserRsDto;
+
+  userRole: string = '';
 
   constructor(
     private loginService: LoginService,
@@ -38,6 +24,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
+    const [firstRole] = this.user.userRoles;
+    this.userRole = firstRole.nameRole || '';
   }
 
   /**
