@@ -1,4 +1,4 @@
-import { WorkedWeight } from './workedWeight.interface';
+import { WorkedWeight } from './worked-weight.interface';
 
 export interface NewWorkedWeight {
   trainingId?: string;

@@ -4,10 +4,11 @@ import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import {
+  NewWorkedWeight,
+  Notification,
   ResponseHTTP,
   Training,
-  Notification,
-  NewWorkedWeight,
+  TrainingDto,
 } from '@interfaces/index';
 
 import { NotificationService } from './notification.service';
@@ -55,7 +56,7 @@ export class TrainingService {
    * @returns
    */
   public createTraining(
-    training: Training
+    training: TrainingDto
   ): Observable<ResponseHTTP<Training>> {
     return this.http
       .post<ResponseHTTP<Training>>(
@@ -153,7 +154,9 @@ export class TrainingService {
    * @param training
    * @returns
    */
-  public editTraining(training: Training): Observable<ResponseHTTP<Training>> {
+  public editTraining(
+    training: TrainingDto
+  ): Observable<ResponseHTTP<Training>> {
     return this.http
       .patch<ResponseHTTP<Training>>(
         `${baseUrl[1]}/api/gymfit/training-tables/training`,
@@ -193,18 +196,6 @@ export class TrainingService {
       )
       .pipe(
         tap((response: ResponseHTTP<NewWorkedWeight>) => {
-          // const notification: Notification = {
-          //   id: uuid.v4(),
-          //   title: 'Actualizar Ejercicio',
-          //   description: `Se ha actualizado el ejercicio: ${response.body.name}`,
-          //   date: new Date(),
-          //   read: false,
-          //   page: `/trainings/${training.id}`,
-          // };
-          // // Agregar la notificación al servicio de notificaciones
-
-          // this.notificationService.addNotification(notification);
-
           this.refresh$.next();
         })
       );

@@ -1,6 +1,6 @@
 import { User } from '../user/usuario.interface';
-import { GymMachine } from './gymMachine.interface';
-import { WorkedWeight } from './workedWeight.interface';
+import { GymMachine } from './gym-machine.interface';
+import { WorkedWeight } from './worked-weight.interface';
 
 export interface Training {
   id: string;
@@ -12,7 +12,6 @@ export interface Training {
   needBeSupervised?: boolean;
   description?: string;
   like?: number;
-  // user: User;
   userId: string;
   listWorkedWeights?: WorkedWeight[];
   caloriesBurned?: number;
