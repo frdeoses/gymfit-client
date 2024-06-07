@@ -2,8 +2,8 @@
   <mat-card *ngIf="u.username != userLogin" class="mt10 container">
     <mat-card-header class="headCol">
       <mat-card-title class="mt10 ml20">{{ u.username }}</mat-card-title>
-      <mat-card-subtitle *ngIf="u.authorities" class="ml20">{{
-        u.authorities[0].authority
+      <mat-card-subtitle *ngIf="u" class="ml20">{{
+        getRoleByUser(u)
       }}</mat-card-subtitle>
       <img
         class="ml20"
