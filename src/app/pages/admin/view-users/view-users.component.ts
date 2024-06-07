@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { ResponseHTTP, User } from '@interfaces/index';
+import { ResponseHTTP, Rol, User, UserRsDto } from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
 import { UserService } from '@services/user.service';
@@ -17,19 +17,20 @@ import Swal from 'sweetalert2';
 export class ViewUsersComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   userLogin: string = '';
+  users: UserRsDto[] = [];
+
   constructor(
     private userService: UserService,
     private viewModeService: ViewModeService,
     private loginService: LoginService
   ) {}
 
-  users: User[] = [];
-
   ngOnInit(): void {
-    this.userLogin = this.loginService.getUser().username;
+    const user: UserRsDto = this.loginService.getUser();
+    this.userLogin = user.username;
     this.userService.listUser().subscribe(
-      (data: ResponseHTTP<User[]>) => {
-        this.users = data.body;
+      (response: ResponseHTTP<UserRsDto[]>) => {
+        this.users = response.body;
         console.log(this.users);
       },
       (error) => {
@@ -40,8 +41,8 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
 
     this.subscription = this.userService.refresh$.subscribe(() => {
       this.userService.listUser().subscribe(
-        (data: ResponseHTTP<User[]>) => {
-          this.users = data.body;
+        (response: ResponseHTTP<UserRsDto[]>) => {
+          this.users = response.body;
           console.log(this.users);
         },
         (error) => {
@@ -83,6 +84,16 @@ export class ViewUsersComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  getRoleByUser(user: UserRsDto): string {
+    const role = user.userRoles;
+
+    if (role.length < 0) return 'No tiene rol';
+
+    const [firstRole] = role;
+
+    return firstRole.nameRole || 'No tiene rol';
   }
 
   /**

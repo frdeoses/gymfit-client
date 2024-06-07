@@ -106,12 +106,12 @@ export class EditGymMachinesComponent implements OnInit, OnDestroy {
         this.myForm.reset();
       },
       (error) => {
+        console.error(error);
         const msjError =
-          error.error ||
+          error.error.error ||
           'Ha ocurrido un error en el sistema y no se ha podido actualizar la máquina de entrenamiento';
 
-        Swal.fire('Error en el sistema', msjError, 'error');
-        console.error(error);
+        Swal.fire('Error en el sistema:', msjError, 'error');
       }
     );
   }

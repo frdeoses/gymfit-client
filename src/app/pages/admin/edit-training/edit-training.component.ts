@@ -9,7 +9,8 @@ import {
   NewWorkedWeight,
   ResponseHTTP,
   Training,
-  User,
+  TrainingTypes,
+  UserRsDto,
   WorkedWeight,
 } from '@interfaces/index';
 
@@ -26,7 +27,6 @@ import * as _ from 'lodash';
 
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
-import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 @Component({
   selector: 'app-edit-training',
@@ -71,8 +71,8 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
   ];
 
   gymMachines: GymMachine[] = [];
-  users: User[] = [];
-  userInTraining?: User;
+  users: UserRsDto[] = [];
+  userInTraining?: UserRsDto;
   rolLogin: string = '';
 
   constructor(
@@ -89,7 +89,7 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const rolUser: undefined | string = this.loginService.getCurrentUserRole();
+    const rolUser: string = this.loginService.getCurrentUserRole();
 
     if (!_.isUndefined(rolUser)) {
       this.rolLogin = rolUser.toUpperCase();
@@ -100,7 +100,7 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
     this.userService
       .allRoleUser()
       .pipe(
-        switchMap((response: ResponseHTTP<User[]>) => {
+        switchMap((response: ResponseHTTP<UserRsDto[]>) => {
           this.users = response.body;
 
           // Asumiendo que getTraining también retorna un Observable
@@ -117,17 +117,6 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
           (user) => user.id === this.training?.userId
         );
       });
-
-    // this.trainingService.allTrainingType().subscribe(
-    //   (response: ResponseHTTP<string[]>) => {
-    //     this.trainingTypes = response.body;
-    //     console.log(this.trainingTypes);
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //     Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
-    //   }
-    // );
 
     this.machineService.listGymMachines().subscribe(
       (response: ResponseHTTP<GymMachine[]>) => {
@@ -148,7 +137,10 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          Swal.fire('Error!!', 'Error al cargar los ejercicios...', 'error');
+          const message =
+            error.error.error ||
+            'Ha ocurrido un error en el sistema al actualizar el ejercicio!!';
+          Swal.fire('Error:', error, 'error');
         }
       );
     });
@@ -192,12 +184,12 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
         this.myForm.reset();
       },
       (error) => {
+        console.error(error);
         const msjError =
-          error.error ||
-          'Ha ocurrido un error en el sistema y no se ha podido actualizar el entrenamiento.';
+          error.error.error ||
+          'Ha ocurrido un error en el sistema y no se ha podido actualizar el ejercicio.';
 
         Swal.fire('Error en el sistema', msjError, 'error');
-        console.error(error);
       }
     );
   }
@@ -211,6 +203,7 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
       data: {
         id: uuid.v4(),
         date: new Date(),
+        userId: this.loginService.getUser().id,
         serie: 0,
         weight: 0,
       } as WorkedWeight,
@@ -220,18 +213,19 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
       console.log('The dialog was closed');
       console.log(workedWeight);
 
-      if (this.isInvalidWorkedWeight(workedWeight)) {
-        return;
-      }
+      if (this.isInvalidWorkedWeight(workedWeight)) return;
 
       this.newWorkedWeight.workedWeight = workedWeight;
-      this.newWorkedWeight.workedWeight.userId = this.userInTraining?.id;
+      this.newWorkedWeight.workedWeight.userId = this.loginService.getUser().id;
+      debugger;
 
       this.addWorkedWeight(workedWeight);
     });
   }
 
   isInvalidWorkedWeight(workedWeight: WorkedWeight) {
+    if (!workedWeight) return true;
+
     const { weight, serie } = workedWeight;
 
     if (weight == null || weight < 0 || serie == null || serie < 0) return true;
@@ -250,6 +244,7 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
   getUsernameById(userId: string | undefined) {
     console.log(userId);
     // Primero, verifica si el 'userId' proporcionado es 'undefined' o una cadena vacía
+
     if (!userId) {
       console.error(
         "getUsernameById was called with an undefined or empty 'userId'."
@@ -291,6 +286,8 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error);
+        const message = error.error.error || 'Error en el sistema';
+        Swal.fire('Error', message, 'error');
       }
     );
   }

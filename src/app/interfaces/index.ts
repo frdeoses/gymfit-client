@@ -10,6 +10,7 @@ export * from './security/rol.interface';
 // Security
 export * from './training-table/gym-machine.interface';
 export * from './training-table/training.interface';
+export * from './trainingTypes.enum';
 export * from './training-table/training-table.interface';
 export * from './training-table/worked-weight.interface';
 export * from './training-table/new-worked-weight.interface';

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { User } from '@interfaces/index';
+import { UserRsDto } from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
 import { NotificationService } from '@services/notification.service';
@@ -17,24 +17,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   newNotificationsCount: number = 0;
   subscription: Subscription;
-  role: string = '';
-  user: User = {
-    id: undefined,
-    name: '',
-    username: '',
-    password: '',
-    userRoles: [],
-    surname: '',
-    email: '',
-    birthDate: new Date(),
-    height: undefined,
-    phone: '',
-    authorities: [
-      {
-        authority: ' ',
-      },
-    ],
-  };
+  role: string | undefined;
+  user?: UserRsDto;
 
   isSmallScreen = window.innerWidth < 768; // Considera pantallas menores de 768px como pequeñas
 
@@ -48,25 +32,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.loginService.getUser();
-
-    if (
-      this.user.userRoles !== undefined &&
-      this.user.userRoles.length > 0 &&
-      this.user.userRoles[0].roleList !== undefined
-    ) {
-      this.role = this.user.userRoles[0].roleList;
-    }
+    this.role = this.loginService.getCurrentUserRole();
 
     this.loginService.loginStatusSubject.subscribe((data) => {
       this.isLoggedIn = this.loginService.isLoggedIn();
       this.user = this.loginService.getUser();
-      if (
-        this.user &&
-        this.user.userRoles !== undefined &&
-        this.user.userRoles[0].roleList !== undefined
-      ) {
-        this.role = this.user.userRoles[0].roleList;
-      }
+      this.role = this.loginService.getCurrentUserRole();
     });
 
     this.subscription = this.notificationService.newNotifications$.subscribe(
@@ -92,7 +63,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     console.log(this.subscription);
 
     if (this.subscription) {
-      console.log(this.subscription);
       this.subscription.unsubscribe();
     }
   }
@@ -107,7 +77,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   toggleSidebar(): void {
-    // debugger;
     this.sidebarService.toggleSidebar();
   }
 }

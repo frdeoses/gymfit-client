@@ -121,7 +121,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     console.log(this.subscription);
 
     if (this.subscription) {
-      debugger;
       console.log(this.subscription);
       this.subscription.unsubscribe();
     }

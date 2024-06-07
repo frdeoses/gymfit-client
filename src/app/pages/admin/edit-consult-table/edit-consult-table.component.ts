@@ -2,7 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+import {
+  ResponseHTTP,
+  Training,
+  TrainingTable,
+  User,
+  UserRsDto,
+} from '@interfaces/index';
 import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 import { LoginService } from '@services/login/login.service';
@@ -25,7 +31,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   tableId: string = '';
   editMode: boolean | undefined;
 
-  userInTable?: User;
+  userInTable?: UserRsDto;
 
   myForm: FormGroup = this.fb.group(
     {
@@ -61,7 +67,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   ];
 
   listTraining: Training[] = [];
-  users: User[] = [];
+  users: UserRsDto[] = [];
 
   // TODO: Revisar estas validaciones de fechas
   initADD: boolean = false;
@@ -119,7 +125,8 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error!!', 'Error al cargar los ejercicios', 'error');
+        const message = error.error.error || 'Error en el sistema';
+        Swal.fire('Error', message, 'error');
       }
     );
   }
@@ -141,7 +148,7 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
     this.userService
       .allRoleUser()
       .pipe(
-        switchMap((response: ResponseHTTP<User[]>) => {
+        switchMap((response: ResponseHTTP<UserRsDto[]>) => {
           this.users = response.body;
           // Asumiendo que getTraining también retorna un Observable
           return this.tableService.getTrainingTable(this.tableId);
@@ -184,11 +191,11 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
         );
         this.router.navigate(['/admin/tables']);
       },
-      (error: ResponseHTTP<TrainingTable>) => {
+      (error) => {
         console.error(error);
 
         const msjError =
-          error.error ||
+          error.error.error ||
           'Ha ocurrido un error en el sistema al actualizar la tabla de entrenamiento!!';
 
         Swal.fire('Error:', msjError, 'error');
@@ -207,5 +214,13 @@ export class EditConsultTableComponent implements OnInit, OnDestroy {
   modeEdit() {
     this.viewModeService.modeEdit('yes');
     this.editMode = true;
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }
