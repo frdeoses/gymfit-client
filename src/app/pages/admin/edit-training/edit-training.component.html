@@ -1,4 +1,4 @@
-<div *ngIf="editMode" class="bootstrap-wrapper">
+<div *ngIf="editMode" class="bootstrap-wrapper mt20">
   <mat-card class="mt20">
     <div class="row">
       <div class="col-md-12">
@@ -123,7 +123,12 @@
               Cancelar
             </button>
 
-            <button mat-raised-button class="ml20" color="primary">
+            <button
+              mat-raised-button
+              [disabled]="!myForm.valid"
+              class="ml20"
+              color="primary"
+            >
               <mat-icon>save</mat-icon>
               Guardar
             </button>
@@ -397,6 +402,7 @@
 
             <div class="mt20 container text-center">
               <button
+                [disabled]="rolLogin === 'ADMIN'"
                 (click)="createWorkedWeight()"
                 mat-raised-button
                 color="accent"

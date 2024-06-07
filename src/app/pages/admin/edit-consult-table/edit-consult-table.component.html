@@ -21,6 +21,9 @@
             name="name"
             placeholder="Introduzca su nombre..."
           />
+          <mat-error *ngIf="isValidField('name')">
+            {{ getFieldError("name") }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
@@ -47,6 +50,9 @@
               {{ t }}</mat-option
             >
           </mat-select>
+          <mat-error *ngIf="isValidField('typeTraining')">
+            {{ getFieldError("typeTraining") }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="col-md-4" appearance="outline">
@@ -155,7 +161,12 @@
           >
             Cancelar
           </button>
-          <button mat-raised-button class="ml20" color="primary">
+          <button
+            mat-raised-button
+            class="ml20"
+            [disabled]="!myForm.valid"
+            color="primary"
+          >
             Guardar
           </button>
         </div>
