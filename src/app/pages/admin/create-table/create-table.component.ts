@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+import {
+  ResponseHTTP,
+  Training,
+  TrainingTable,
+  UserRsDto,
+} from '@interfaces/index';
 import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 import { TablesService } from '@services/tables.service';
@@ -52,7 +57,7 @@ export class CreateTableComponent implements OnInit {
   ];
 
   listTraining: Training[] = [];
-  users: User[] = [];
+  users: UserRsDto[] = [];
 
   constructor(
     private tableService: TablesService,
@@ -76,7 +81,7 @@ export class CreateTableComponent implements OnInit {
     );
 
     this.userService.allRoleUser().subscribe(
-      (response: ResponseHTTP<User[]>) => {
+      (response: ResponseHTTP<UserRsDto[]>) => {
         this.users = response.body;
         console.log(this.users);
       },
@@ -112,7 +117,7 @@ export class CreateTableComponent implements OnInit {
       (error) => {
         console.error(error);
         const message = error.error.error || 'Error en el sistema';
-        Swal.fire('Error', error, 'error');
+        Swal.fire('Error', message, 'error');
       }
     );
   }

@@ -78,7 +78,9 @@ export class CreateMachineComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error(error);
-        const message = error.error.error || 'Error en el sistema';
+        const message =
+          error.error.error ||
+          'Error al crear la siguiente maquina de entrenamiento en el sistema';
         Swal.fire('Error:', message, 'error');
       }
     );
