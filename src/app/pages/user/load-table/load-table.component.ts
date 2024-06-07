@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ResponseHTTP, TrainingTable, User } from '@interfaces/index';
+import {
+  ResponseHTTP,
+  TrainingTable,
+  User,
+  UserRsDto,
+} from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
 import { TablesService } from '@services/tables.service';
@@ -19,19 +24,7 @@ export class LoadTableComponent implements OnInit {
 
   tables: TrainingTable[] = [];
 
-  userLogin: User = {
-    id: '',
-    name: '',
-    username: '',
-    password: '',
-    userRoles: [],
-    surname: '',
-    email: '',
-    birthDate: new Date(),
-    height: undefined,
-    phone: '',
-    authorities: [],
-  };
+  userLogin?: UserRsDto;
 
   constructor(
     private tablesService: TablesService,
@@ -42,13 +35,12 @@ export class LoadTableComponent implements OnInit {
   ngOnInit(): void {
     this.userLogin = this.loginService.getUser();
 
-    this.userLogin.authorities = [];
-
     this.route.params.subscribe((params) => {
       this.typeTrainingTable = params['typeTrainingTable'];
       if (_.isUndefined(this.typeTrainingTable)) {
         console.log('Cargando todas las tablas de entrenamiento...');
 
+        if (!this.userLogin) throw new Error('Falta el  usuario...');
         if (!this.userLogin.id) throw new Error('Falta el id del usuario...');
 
         this.tablesService.listTrainingTableByUser(this.userLogin.id).subscribe(
@@ -63,6 +55,7 @@ export class LoadTableComponent implements OnInit {
           }
         );
       } else {
+        if (!this.userLogin) throw new Error('Falta el  usuario...');
         if (this.userLogin.id !== undefined) {
           console.log('Cargando tablas de entrenamiento...');
           this.tablesService

@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { NotificationService } from '@services/notification.service';
 import { LoginService } from '@services/login/login.service';
+import { NotificationService } from '@services/notification.service';
+import { SidebarService } from '@services/sidebar.service';
 
 export interface MenuItems {
   title: string;
@@ -19,6 +20,8 @@ export interface MenuItems {
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  isVisible: boolean = false;
+
   newNotificationsCount: number = 0;
 
   menuItems: MenuItems[] = [
@@ -81,8 +84,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   constructor(
-    public loginService: LoginService,
-    public notificationService: NotificationService
+    private loginService: LoginService,
+    private sidebarService: SidebarService,
+    private notificationService: NotificationService
   ) {
     this.subscription = new Subscription();
   }
@@ -93,6 +97,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.newNotificationsCount = notifications.length;
         console.log('Notificaciones nuevas recibidas:', notifications);
       }
+    );
+
+    this.subscription.add(
+      this.sidebarService.isVisible$.subscribe((state) => {
+        this.isVisible = state;
+      })
     );
   }
 
@@ -114,5 +124,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       console.log(this.subscription);
       this.subscription.unsubscribe();
     }
+  }
+
+  toggleSidebar(): void {
+    this.sidebarService.toggleSidebar(); // Call service method to toggle state
   }
 }

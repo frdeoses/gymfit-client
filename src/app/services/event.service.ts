@@ -10,6 +10,7 @@ import { ResponseHTTP, Event, Notification } from '@interfaces/index';
 import baseUrl from './helper';
 
 import * as uuid from 'uuid';
+import { CommentDto } from '@interfaces/calendars/comment-dto.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -107,6 +108,29 @@ export class EventService {
 
           this.notificationService.addNotification(notification);
 
+          this.refresh$.next();
+        })
+      );
+  }
+  public addComment(event: CommentDto): Observable<ResponseHTTP<CommentDto>> {
+    return this.http
+      .post<ResponseHTTP<CommentDto>>(
+        `${baseUrl[2]}/api/gymfit/calendar/comment`,
+        event
+      )
+      .pipe(
+        tap((response: ResponseHTTP<CommentDto>) => {
+          // const notification: Notification = {
+          //   id: uuid.v4(),
+          //   title: 'Nuevo Evento',
+          //   description: `Se ha creado un nuevo evento: ${response.body.title}`,
+          //   date: new Date(),
+          //   read: false,
+          //   page: `/events/${response.body.id}`,
+          // };
+          // Agregar la notificación al servicio de notificaciones
+
+          // this.notificationService.addNotification(notification);
           this.refresh$.next();
         })
       );

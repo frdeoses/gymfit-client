@@ -1,10 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Comment, Event, ResponseHTTP } from '@interfaces/index';
+import { Comment, Event, ResponseHTTP, CommentDto } from '@interfaces/index';
 
 import { EventService } from '@services/event.service';
 import { LoginService } from '@services/login/login.service';
@@ -13,18 +15,18 @@ import { ViewModeService } from '@services/view-mode.service';
 
 import { CommentDialogComponent } from 'src/app/components/dialog/comment/comment-dialog.component';
 
-import * as _ from 'lodash';
 import Swal from 'sweetalert2';
-import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
   styleUrls: ['./edit-event.component.css'],
 })
-export class EditEventComponent implements OnInit {
+export class EditEventComponent implements OnInit, OnDestroy {
   eventId: string = '';
   event?: Event;
+
+  subscription: Subscription = new Subscription();
 
   myForm: FormGroup = this.fb.group({
     title: ['', Validators.required],
@@ -42,10 +44,15 @@ export class EditEventComponent implements OnInit {
     private loginService: LoginService,
     private eventService: EventService,
     private fb: FormBuilder,
+    private snack: MatSnackBar,
     private validatorService: ValidatorService,
     private viewModeService: ViewModeService,
     private router: Router
   ) {}
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.params['eventId'];
@@ -55,21 +62,15 @@ export class EditEventComponent implements OnInit {
     this.eventService.getEvent(this.eventId).subscribe(
       (response: ResponseHTTP<Event>) => {
         this.event = response.body;
+        this.comments = this.event.comments || [];
 
         this.myForm.reset(this.event);
 
-        this.comments =
-          !_.isUndefined(this.event.comments) &&
-          !_.isNull(this.event.comments) &&
-          !_.isEmpty(this.event.comments)
-            ? this.event.comments
-            : [];
         console.log(this.event);
       },
       (error: HttpErrorResponse) => {
         console.error(error);
 
-        debugger;
         const msjError =
           error.error.error || 'Ha ocurrido un error en el sistema...';
 
@@ -78,6 +79,26 @@ export class EditEventComponent implements OnInit {
         this.router.navigate(['/error']);
       }
     );
+
+    this.subscription = this.eventService.refresh$.subscribe(() => {
+      this.eventService.getEvent(this.eventId).subscribe(
+        (response: ResponseHTTP<Event>) => {
+          this.event = response.body;
+
+          if (this.event && this.event.comments) {
+            this.comments = [...this.event.comments.reverse()];
+          }
+
+          console.log(response);
+        },
+        (error) => {
+          console.error(error);
+
+          const message = error.error.error || 'Error en el sistema';
+          Swal.fire('Error', message, 'error');
+        }
+      );
+    });
   }
 
   public editEvent() {
@@ -95,7 +116,7 @@ export class EditEventComponent implements OnInit {
       (response: ResponseHTTP<Event>) => {
         Swal.fire(
           'Evento actualizado',
-          `El evento ${response.body.title} se ha modificado con éxito...`,
+          `El evento '${response.body.title}' se ha modificado con éxito...`,
           'success'
         );
         this.router.navigate(['/admin/events']);
@@ -113,23 +134,22 @@ export class EditEventComponent implements OnInit {
   }
 
   createComment() {
-    let user = this.loginService.getUser();
+    const username = this.loginService.getUser().username;
 
     const dialogRef = this.dialog.open(CommentDialogComponent, {
       data: {
-        id: uuid.v4(),
-        idUser: user.id,
-        userName: user.username,
-        text: '',
-        date: new Date(),
-      } as Comment,
+        idCalendar: this.event?.id,
+        username: username,
+        comment: '',
+      } as CommentDto,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: CommentDto) => {
       console.log('The dialog was closed');
-      if (!_.isUndefined(result) && !_.isEmpty(result.text))
-        this.comments.push(result);
-      this.addComment();
+
+      if (!this.isValidCommentDto(result)) return;
+
+      this.addComment(result);
     });
   }
 
@@ -141,18 +161,33 @@ export class EditEventComponent implements OnInit {
     this.viewModeService.modeEdit('no');
   }
 
-  addComment() {
-    if (!this.event) return;
-    this.event.comments = this.comments;
-
-    this.eventService.editEvent(this.event).subscribe(
-      (data: ResponseHTTP<Event>) => {
-        console.log(data);
+  addComment(commentDto: CommentDto) {
+    this.eventService.addComment(commentDto).subscribe(
+      () => {
+        Swal.fire(
+          'Comentario añadido:',
+          `El comentario ha sido añadido con éxito...`,
+          'success'
+        );
       },
       (error) => {
         console.error(error);
+        Swal.fire('Error', 'No se ha podido añadir el comentario', 'error');
       }
     );
+  }
+
+  isValidCommentDto(commentDto: CommentDto): boolean {
+    if (!commentDto) return false;
+
+    if (!commentDto.comment || commentDto.comment.length == 0) {
+      this.snack.open('No se ha introducido ningún comentario...', 'Aceptar', {
+        duration: 3000,
+      });
+      return false;
+    }
+
+    return true;
   }
 
   isValidField(field: string) {

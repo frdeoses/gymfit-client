@@ -68,7 +68,9 @@ describe('CreateMachineComponent', () => {
 
   it('should display error when createMachine fails', () => {
     spyOn(machineService, 'createGymMachine').and.returnValue(
-      throwError(() => new Error('Failed to create machine'))
+      throwError(() => {
+        return { error: { error: 'Error en el sistema' } };
+      })
     );
     const spy = spyOn(Swal, 'fire');
 
@@ -76,10 +78,14 @@ describe('CreateMachineComponent', () => {
 
     expect(machineService.createGymMachine).toHaveBeenCalled();
 
+    const expectedErrorTitle = 'Error:';
+    const expectedErrorMessage = 'Error en el sistema'; // Este mensaje debe coincidir con el mensaje genérico que tu componente usaría
+    const expectedErrorType = 'error';
+
     expect(spy).toHaveBeenCalledWith(
-      'Error:',
-      'Error al crear la máquina de entrenamiento',
-      'error'
+      expectedErrorTitle,
+      expectedErrorMessage,
+      expectedErrorType
     );
   });
 });

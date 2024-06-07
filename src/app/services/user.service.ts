@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { ResponseHTTP, User } from '@interfaces/index';
+import { ResponseHTTP, User, UserDto, UserRsDto } from '@interfaces/index';
 
 import baseUrl from './helper';
 
@@ -27,14 +27,14 @@ export class UserService {
    * Lista los usuarios
    * @returns
    */
-  public listUser(): Observable<ResponseHTTP<User[]>> {
-    return this.httpClient.get<ResponseHTTP<User[]>>(
+  public listUser(): Observable<ResponseHTTP<UserRsDto[]>> {
+    return this.httpClient.get<ResponseHTTP<UserRsDto[]>>(
       `${baseUrl[0]}/api/gymfit/users`
     );
   }
 
-  public allRoleUser(): Observable<ResponseHTTP<User[]>> {
-    return this.httpClient.get<ResponseHTTP<User[]>>(
+  public allRoleUser(): Observable<ResponseHTTP<UserRsDto[]>> {
+    return this.httpClient.get<ResponseHTTP<UserRsDto[]>>(
       `${baseUrl[0]}/api/gymfit/users/role/users`
     );
   }
@@ -62,8 +62,8 @@ export class UserService {
    * @param userId
    * @returns
    */
-  public getUser(userId: string): Observable<ResponseHTTP<User>> {
-    return this.httpClient.get<ResponseHTTP<User>>(
+  public getUser(userId: string): Observable<ResponseHTTP<UserRsDto>> {
+    return this.httpClient.get<ResponseHTTP<UserRsDto>>(
       `${baseUrl[0]}/api/gymfit/users/${userId}`
     );
   }
@@ -74,10 +74,9 @@ export class UserService {
    * @param user
    * @returns
    */
-  public editUser(user: User): Observable<ResponseHTTP<User>> {
-    user.authorities = [];
+  public editUser(user: UserDto): Observable<ResponseHTTP<UserRsDto>> {
     return this.httpClient
-      .patch<ResponseHTTP<User>>(`${baseUrl[0]}/api/gymfit/user`, user)
+      .patch<ResponseHTTP<UserRsDto>>(`${baseUrl[0]}/api/gymfit/user`, user)
       .pipe(
         tap(() => {
           this.refresh$.next();

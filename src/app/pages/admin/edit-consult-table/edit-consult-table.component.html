@@ -21,6 +21,9 @@
             name="name"
             placeholder="Introduzca su nombre..."
           />
+          <mat-error *ngIf="isValidField('name')">
+            {{ getFieldError("name") }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
@@ -47,6 +50,9 @@
               {{ t }}</mat-option
             >
           </mat-select>
+          <mat-error *ngIf="isValidField('typeTraining')">
+            {{ getFieldError("typeTraining") }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="col-md-4" appearance="outline">
@@ -78,6 +84,9 @@
             name="listTraining"
             multiple
           >
+            <mat-option [disabled]="true" *ngIf="listTraining.length == 0"
+              >No hay ejercicios creados</mat-option
+            >
             <mat-option
               *ngFor="let training of listTraining"
               [value]="training"
@@ -120,15 +129,18 @@
           <mat-datepicker #pickerEndDate></mat-datepicker>
         </mat-form-field>
 
-        <!-- <mat-form-field class="w100 mt20" appearance="outline">
+        <mat-form-field class="w100 mt20" appearance="outline">
           <mat-label>Seleccionar usuario</mat-label>
-          <mat-select [(ngModel)]="trainingTable.user" name="user" required>
+          <mat-select formControlName="userId" name="user">
             <mat-option></mat-option>
+            <mat-option [disabled]="true" *ngIf="users.length == 0"
+              >No hay usuarios en el sistema</mat-option
+            >
             <mat-option *ngFor="let user of users" [value]="user.id">{{
               user.username
             }}</mat-option>
           </mat-select>
-        </mat-form-field> -->
+        </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
           <mat-label>Observaciones:</mat-label>
@@ -149,7 +161,12 @@
           >
             Cancelar
           </button>
-          <button mat-raised-button class="ml20" color="primary">
+          <button
+            mat-raised-button
+            class="ml20"
+            [disabled]="!myForm.valid"
+            color="primary"
+          >
             Guardar
           </button>
         </div>
@@ -377,7 +394,7 @@
         <ng-template #templateName> </ng-template>
       </div>
     </div>
-    <mat-card-actions class="text-center">
+    <mat-card-actions *ngIf="rolLogin === 'ADMIN'" class="text-center">
       <button mat-raised-button color="primary" (click)="modeEdit()">
         Actualizar
       </button>

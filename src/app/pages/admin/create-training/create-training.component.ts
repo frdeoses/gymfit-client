@@ -2,7 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { GymMachine, ResponseHTTP, Training, User } from '@interfaces/index';
+import {
+  GymMachine,
+  ResponseHTTP,
+  Training,
+  UserRsDto,
+} from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
+import { LoginService } from '@services/login/login.service';
 
 import { MachineService } from '@services/machine.service';
 import { TrainingService } from '@services/training.service';
@@ -33,13 +40,22 @@ export class CreateTrainingComponent implements OnInit {
     // Agrega las otras propiedades y validaciones aquí
   });
 
-  users: User[] = [];
+  users: UserRsDto[] = [];
 
-  trainingTypes: string[] = [];
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
   gymMachines: GymMachine[] = [];
 
   constructor(
     private trainingService: TrainingService,
+    private loginService: LoginService,
     private machineService: MachineService,
     private userService: UserService,
     private fb: FormBuilder,
@@ -48,17 +64,6 @@ export class CreateTrainingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.trainingService.allTrainingType().subscribe(
-      (response: ResponseHTTP<string[]>) => {
-        this.trainingTypes = response.body;
-        console.log(this.trainingTypes);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
-      }
-    );
-
     this.machineService.listGymMachines().subscribe(
       (response: ResponseHTTP<GymMachine[]>) => {
         this.gymMachines = response.body;
@@ -66,18 +71,24 @@ export class CreateTrainingComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error:', 'Error al cargar las maquinas de ejercicios');
+        Swal.fire(
+          'Error:',
+          'Error al cargar las maquinas de ejercicios',
+          'error'
+        );
       }
     );
 
     this.userService.allRoleUser().subscribe(
-      (response: ResponseHTTP<User[]>) => {
+      (response: ResponseHTTP<UserRsDto[]>) => {
         this.users = response.body;
         console.log(this.users);
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
+        const message = error.error.error || 'Error en el sistema';
+
+        Swal.fire('Error', message, 'error');
       }
     );
   }
@@ -89,6 +100,7 @@ export class CreateTrainingComponent implements OnInit {
     this.training = {
       ...this.training,
       ...formValues, // Actualiza el objeto user con los valores del formulario
+      userId: this.loginService.getUser().id,
     };
 
     if (!this.training) return;
@@ -107,8 +119,10 @@ export class CreateTrainingComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-        const message = error.error.error || 'Error en el sistema';
-        Swal.fire('Error', error, 'error');
+        const message =
+          error.error.error ||
+          'Error en el sistema al intentar crear un ejercido...';
+        Swal.fire('Error:', message, 'error');
       }
     );
   }

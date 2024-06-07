@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Weight } from '@interfaces/index';
+import { UserRsDto, Weight } from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
 
@@ -11,23 +11,7 @@ import { ChartDataset, ChartOptions } from 'chart.js';
   styleUrls: ['./user-graph.component.css'],
 })
 export class UserGraphComponent implements OnInit {
-  user: User = {
-    id: undefined,
-    name: '',
-    username: '',
-    password: '',
-    userRoles: [],
-    surname: '',
-    email: '',
-    birthDate: new Date(),
-    height: undefined,
-    phone: '',
-    authorities: [
-      {
-        authority: ' ',
-      },
-    ],
-  };
+  user?: UserRsDto;
 
   weightPerMonth: number[] = [];
 

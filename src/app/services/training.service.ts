@@ -3,7 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { ResponseHTTP, Training, Notification } from '@interfaces/index';
+import {
+  NewWorkedWeight,
+  Notification,
+  ResponseHTTP,
+  Training,
+  TrainingDto,
+} from '@interfaces/index';
 
 import { NotificationService } from './notification.service';
 
@@ -50,7 +56,7 @@ export class TrainingService {
    * @returns
    */
   public createTraining(
-    training: Training
+    training: TrainingDto
   ): Observable<ResponseHTTP<Training>> {
     return this.http
       .post<ResponseHTTP<Training>>(
@@ -148,7 +154,9 @@ export class TrainingService {
    * @param training
    * @returns
    */
-  public editTraining(training: Training): Observable<ResponseHTTP<Training>> {
+  public editTraining(
+    training: TrainingDto
+  ): Observable<ResponseHTTP<Training>> {
     return this.http
       .patch<ResponseHTTP<Training>>(
         `${baseUrl[1]}/api/gymfit/training-tables/training`,
@@ -162,7 +170,7 @@ export class TrainingService {
             description: `Se ha actualizado el ejercicio: ${response.body.name}`,
             date: new Date(),
             read: false,
-            page: `/trainings/${training.id}`,
+            page: `/trainings/${response.body.id}`,
           };
           // Agregar la notificación al servicio de notificaciones
 
@@ -172,14 +180,24 @@ export class TrainingService {
         })
       );
   }
-
   /**
-   * Lita tipos de entrenamiento (Pecho, hombro,etc.)
+   * Edita un entrenamiento
+   *
+   * @param training
    * @returns
    */
-  public allTrainingType(): Observable<ResponseHTTP<string[]>> {
-    return this.http.get<ResponseHTTP<string[]>>(
-      `${baseUrl[1]}/api/gymfit/training-tables/type-training`
-    );
+  public addWorkedWeight(
+    newWorkedWeight: NewWorkedWeight
+  ): Observable<ResponseHTTP<NewWorkedWeight>> {
+    return this.http
+      .post<ResponseHTTP<NewWorkedWeight>>(
+        `${baseUrl[1]}/api/gymfit/training-tables/worked-weights`,
+        newWorkedWeight
+      )
+      .pipe(
+        tap((response: ResponseHTTP<NewWorkedWeight>) => {
+          this.refresh$.next();
+        })
+      );
   }
 }

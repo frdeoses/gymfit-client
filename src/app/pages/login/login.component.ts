@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { UserRsDto } from '@interfaces/index';
 import { LoginService } from '@services/login/login.service';
 import { ValidatorService } from '@services/validator.service';
 import * as _ from 'lodash';
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
 
         this.loginService.loginUser(data.token);
 
-        this.loginService.getCurrentUser().subscribe((user: any) => {
+        this.loginService.getCurrentUser().subscribe((user: UserRsDto) => {
           this.loginService.setUser(user);
           console.log(user);
 

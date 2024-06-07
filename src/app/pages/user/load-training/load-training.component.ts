@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { ResponseHTTP, Training, User } from '@interfaces/index';
+import { ResponseHTTP, Training, User, UserRsDto } from '@interfaces/index';
 
 import { TrainingService } from '@services/training.service';
 import { LoginService } from '@services/login/login.service';
@@ -18,19 +18,7 @@ import Swal from 'sweetalert2';
 export class LoadTrainingComponent implements OnInit {
   trainings: Training[] = [];
   subscription: Subscription = new Subscription();
-  userLogin: User = {
-    id: '',
-    name: '',
-    username: '',
-    password: '',
-    userRoles: [],
-    surname: '',
-    email: '',
-    birthDate: new Date(),
-    height: undefined,
-    phone: '',
-    authorities: [],
-  };
+  userLogin?: UserRsDto;
 
   typeTraining: string = '';
 
@@ -43,12 +31,14 @@ export class LoadTrainingComponent implements OnInit {
   ngOnInit(): void {
     this.userLogin = this.loginService.getUser();
 
-    this.userLogin.authorities = [];
+    // this.userLogin.authorities = [];
 
     this.route.params.subscribe((params) => {
       this.typeTraining = params['typeTrainings'];
       if (_.isUndefined(this.typeTraining)) {
         console.log('Cargando todas las tablas de entrenamiento...');
+
+        if (!this.userLogin) throw new Error('Falta el  usuario');
 
         if (!this.userLogin.id) throw new Error('Falta el id del usuario');
 
@@ -64,6 +54,8 @@ export class LoadTrainingComponent implements OnInit {
           }
         );
       } else {
+        if (!this.userLogin) throw new Error('Falta el  usuario');
+
         if (!_.isUndefined(this.userLogin.id)) {
           console.log('Cargando tablas de entrenamiento...');
           this.trainingService

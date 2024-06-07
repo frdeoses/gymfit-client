@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, switchMap } from 'rxjs';
 
 import {
   GymMachine,
+  NewWorkedWeight,
   ResponseHTTP,
   Training,
-  User,
-  WorkedWeights,
+  TrainingTypes,
+  UserRsDto,
+  WorkedWeight,
 } from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
@@ -21,7 +24,6 @@ import { ViewModeService } from '@services/view-mode.service';
 import { WeightDialogComponent } from 'src/app/components/dialog/weight/weight-dialog.component';
 
 import * as _ from 'lodash';
-import { switchMap } from 'rxjs';
 
 import Swal from 'sweetalert2';
 import * as uuid from 'uuid';
@@ -31,10 +33,12 @@ import * as uuid from 'uuid';
   templateUrl: './edit-training.component.html',
   styleUrls: ['./edit-training.component.css'],
 })
-export class EditTrainingComponent implements OnInit {
+export class EditTrainingComponent implements OnInit, OnDestroy {
   trainingId: string = '';
 
   editMode: boolean | undefined;
+
+  subscription: Subscription = new Subscription();
 
   myForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -50,12 +54,25 @@ export class EditTrainingComponent implements OnInit {
     // Agrega las otras propiedades y validaciones aquí
   });
 
+  newWorkedWeight: NewWorkedWeight = {
+    trainingId: '',
+    workedWeight: undefined,
+  };
+
   training?: Training;
 
-  trainingTypes: string[] = [];
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
   gymMachines: GymMachine[] = [];
-  users: User[] = [];
-  userInTraining?: User;
+  users: UserRsDto[] = [];
+  userInTraining?: UserRsDto;
   rolLogin: string = '';
 
   constructor(
@@ -72,7 +89,7 @@ export class EditTrainingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const rolUser: undefined | string = this.loginService.getCurrentUserRole();
+    const rolUser: string = this.loginService.getCurrentUserRole();
 
     if (!_.isUndefined(rolUser)) {
       this.rolLogin = rolUser.toUpperCase();
@@ -83,8 +100,9 @@ export class EditTrainingComponent implements OnInit {
     this.userService
       .allRoleUser()
       .pipe(
-        switchMap((response: ResponseHTTP<User[]>) => {
+        switchMap((response: ResponseHTTP<UserRsDto[]>) => {
           this.users = response.body;
+
           // Asumiendo que getTraining también retorna un Observable
           return this.trainingService.getTraining(this.trainingId);
         })
@@ -93,21 +111,12 @@ export class EditTrainingComponent implements OnInit {
         this.training = response.body;
         this.myForm.reset(this.training);
 
+        this.newWorkedWeight.trainingId = this.training.id;
+
         this.userInTraining = this.users.find(
           (user) => user.id === this.training?.userId
         );
       });
-
-    this.trainingService.allTrainingType().subscribe(
-      (response: ResponseHTTP<string[]>) => {
-        this.trainingTypes = response.body;
-        console.log(this.trainingTypes);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
-      }
-    );
 
     this.machineService.listGymMachines().subscribe(
       (response: ResponseHTTP<GymMachine[]>) => {
@@ -120,7 +129,27 @@ export class EditTrainingComponent implements OnInit {
       }
     );
 
+    this.subscription = this.trainingService.refresh$.subscribe(() => {
+      this.trainingService.getTraining(this.trainingId).subscribe(
+        (response: ResponseHTTP<Training>) => {
+          this.training = response.body;
+          console.log(response);
+        },
+        (error) => {
+          console.error(error);
+          const message =
+            error.error.error ||
+            'Ha ocurrido un error en el sistema al actualizar el ejercicio!!';
+          Swal.fire('Error:', error, 'error');
+        }
+      );
+    });
+
     this.editMode = this.viewModeService.getModeEdit() === 'yes' ? true : false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   /**
@@ -155,51 +184,53 @@ export class EditTrainingComponent implements OnInit {
         this.myForm.reset();
       },
       (error) => {
+        console.error(error);
         const msjError =
-          error.error ||
-          'Ha ocurrido un error en el sistema y no se ha podido actualizar el entrenamiento.';
+          error.error.error ||
+          'Ha ocurrido un error en el sistema y no se ha podido actualizar el ejercicio.';
 
         Swal.fire('Error en el sistema', msjError, 'error');
-        console.error(error);
       }
     );
   }
 
   createWorkedWeight() {
-    let listWorkedWeights: WorkedWeights[] = [];
-
     if (!this.training) return;
 
-    if (
-      this.training.listWorkedWeights &&
-      this.training.listWorkedWeights.length >= 0
-    ) {
-      this.training.listWorkedWeights.forEach((w) => {
-        listWorkedWeights.push(w);
-      });
-    }
+    if (!this.newWorkedWeight.trainingId) return;
 
     const dialogRef = this.dialog.open(WeightDialogComponent, {
       data: {
         id: uuid.v4(),
         date: new Date(),
+        userId: this.loginService.getUser().id,
         serie: 0,
         weight: 0,
-      } as WorkedWeights,
+      } as WorkedWeight,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((workedWeight: WorkedWeight) => {
       console.log('The dialog was closed');
-      if (
-        !_.isUndefined(listWorkedWeights) &&
-        !_.isUndefined(result) &&
-        result.serie > 0 &&
-        result.weight > 0
-      )
-        listWorkedWeights.push(result);
+      console.log(workedWeight);
 
-      this.addWorkedWeight(listWorkedWeights);
+      if (this.isInvalidWorkedWeight(workedWeight)) return;
+
+      this.newWorkedWeight.workedWeight = workedWeight;
+      this.newWorkedWeight.workedWeight.userId = this.loginService.getUser().id;
+      debugger;
+
+      this.addWorkedWeight(workedWeight);
     });
+  }
+
+  isInvalidWorkedWeight(workedWeight: WorkedWeight) {
+    if (!workedWeight) return true;
+
+    const { weight, serie } = workedWeight;
+
+    if (weight == null || weight < 0 || serie == null || serie < 0) return true;
+
+    return false;
   }
 
   isValidField(field: string) {
@@ -210,24 +241,55 @@ export class EditTrainingComponent implements OnInit {
     return this.validatorService.getFieldError(field, this.myForm);
   }
 
+  getUsernameById(userId: string | undefined) {
+    console.log(userId);
+    // Primero, verifica si el 'userId' proporcionado es 'undefined' o una cadena vacía
+
+    if (!userId) {
+      console.error(
+        "getUsernameById was called with an undefined or empty 'userId'."
+      );
+      return null; // Retorna 'null' o maneja este caso según sea necesario
+    }
+
+    // Encuentra el usuario por 'userId'
+    const user = this.users.find((user) => user.id === userId);
+
+    // Si el usuario no se encuentra, puedes manejar este caso de manera adecuada
+    if (!user) {
+      console.error(`User not found for userId: ${userId}`);
+      return null; // Retorna 'null' o ajusta según la necesidad de tu aplicación
+    }
+
+    // Retorna el 'username' del usuario encontrado
+    return user.username;
+  }
+
   getMessage(field: string) {
     return this.validatorService.getMessageErrorFieldOptional(field);
   }
 
-  addWorkedWeight(listWorkedWeight: WorkedWeights[] | undefined) {
-    if (!this.training) return;
-    if (!_.isEqual(this.training.listWorkedWeights, listWorkedWeight)) {
-      this.training.listWorkedWeights = listWorkedWeight;
+  addWorkedWeight(workedWeight: WorkedWeight) {
+    if (!workedWeight) return;
 
-      this.trainingService.editTraining(this.training).subscribe(
-        (response: ResponseHTTP<Training>) => {
-          console.log(response);
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-    }
+    this.trainingService.addWorkedWeight(this.newWorkedWeight).subscribe(
+      () => {
+        Swal.fire(
+          'Peso ejercitado añadido',
+          `Se ha añadido el peso  '${
+            this.newWorkedWeight.workedWeight?.weight || 0
+          }' en la serie ${
+            this.newWorkedWeight.workedWeight?.serie
+          } en el ejercicio ' ${this.training?.name || ''} ' `,
+          'success'
+        );
+      },
+      (error) => {
+        console.error(error);
+        const message = error.error.error || 'Error en el sistema';
+        Swal.fire('Error', message, 'error');
+      }
+    );
   }
 
   /**

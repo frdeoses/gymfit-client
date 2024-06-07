@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ResponseHTTP, User, Weight } from '@interfaces/index';
+import { ResponseHTTP, UserDto, UserRsDto, Weight } from '@interfaces/index';
 
 import { LoginService } from '@services/login/login.service';
 import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
 import { ViewModeService } from '@services/view-mode.service';
 import Swal from 'sweetalert2';
 
@@ -21,25 +22,47 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
   editMode: boolean | undefined;
   navigateProfile: boolean | undefined;
 
-  user: User = {
-    id: '',
-    authorities: [],
-    name: '',
-    surname: '',
-    email: '',
-    phone: '',
-    password: '',
-    birthDate: new Date(),
-    username: '',
-    height: 0,
-  };
+  myForm: FormGroup = this.fb.group(
+    {
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.pattern(this.validatorService.emailPattern),
+        ],
+      ],
+      phone: [
+        undefined,
+        [
+          Validators.pattern(this.validatorService.phonePattern),
+          Validators.required,
+          Validators.minLength(9),
+        ],
+      ],
+      birthDate: [undefined, [Validators.required]],
+      height: [],
+      weight: [],
+      authorities: [],
+      // Agrega las otras propiedades y validaciones aquí
+    },
+    {
+      validators: [this.validatorService.validarFecha('birthDate')],
+    }
+  );
+
+  user?: UserRsDto;
+  userDto?: UserDto;
 
   userLogin: string = '';
 
   constructor(
     private userService: UserService,
-    private snack: MatSnackBar,
+    private fb: FormBuilder,
     private router: Router,
+    private validatorService: ValidatorService,
     private viewModeService: ViewModeService,
     private loginService: LoginService,
     private route: ActivatedRoute
@@ -50,8 +73,10 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
     this.userId = this.route.snapshot.params['userId'];
 
     this.userService.getUser(this.userId).subscribe(
-      (response: ResponseHTTP<User>) => {
+      (response: ResponseHTTP<UserRsDto>) => {
         this.user = response.body;
+
+        this.myForm.reset(this.user);
         this.listUserWeight = this.user.listUserWeight;
         console.log(this.user);
       },
@@ -77,41 +102,52 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
   }
 
   formSubmit() {
-    if (this.editMode) {
-      if (this.user.username == '' || this.user.username == null) {
-        this.snack.open('El nombre del usuario es requerido', 'Aceptar', {
-          duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'right',
-        });
-        return;
-      }
-      this.userService.editUser(this.user).subscribe(
-        (data) => {
-          console.log(data);
-          Swal.fire(
-            'Usuario actualizado:',
-            'Usuario actualizado con éxito!!',
-            'success'
-          );
+    this.myForm.markAllAsTouched();
 
-          if (this.navigateProfile) {
-            this.router.navigate(['/admin/profile']);
-          } else {
-            this.router.navigate(['/admin/users']);
-          }
-        },
-        (error) => {
-          console.error(error);
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
 
-          Swal.fire(
-            'Error:',
-            'Ha ocurrido un error en el sistema al actualizar el usuario!!',
-            'error'
-          );
+    if (!this.user) throw new Error('User is undefined!!');
+
+    this.userDto = {
+      ...formValues,
+      id: this.userId,
+      username: this.user.username,
+    };
+
+    if (!this.userDto) throw new Error(`UserDto is undefined`);
+
+    this.userService.editUser(this.userDto).subscribe(
+      (response: ResponseHTTP<UserRsDto>) => {
+        console.log(response);
+        const userUpdated = response.body;
+        if (!this.user) throw new Error('User is undefined!!');
+
+        this.user = {
+          ...userUpdated,
+        };
+
+        Swal.fire(
+          'Usuario actualizado:',
+          `El usuario: '${userUpdated.username}' , ha sido actualizado con éxito..`,
+          'success'
+        );
+
+        if (this.navigateProfile) {
+          this.loginService.setUser(this.user);
+          this.router.navigate(['/admin/profile']);
+        } else {
+          this.router.navigate(['/admin/users']);
         }
-      );
-    }
+      },
+      (error) => {
+        console.error(error);
+
+        const message =
+          error.error.error ||
+          'Error en el sistema al actualizar el usuario...';
+        Swal.fire('Error:', message, 'error');
+      }
+    );
   }
 
   /**
@@ -120,5 +156,13 @@ export class EditConsultUserComponent implements OnInit, OnDestroy {
   modeConsult() {
     this.editMode = false;
     this.viewModeService.modeEdit('no');
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }

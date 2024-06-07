@@ -85,8 +85,10 @@ export class CreateEventComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-        const message = error.error.error || 'Error en el sistema';
-        Swal.fire('Error', message, 'error');
+        const message =
+          error.error.error ||
+          'Error en el sistema al crear el siguiente evento';
+        Swal.fire('Error:', message, 'error');
       }
     );
   }

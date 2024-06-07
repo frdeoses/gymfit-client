@@ -1,4 +1,4 @@
-<div *ngIf="editMode" class="bootstrap-wrapper">
+<div *ngIf="editMode" class="bootstrap-wrapper mt20">
   <mat-card class="mt20">
     <div class="row">
       <div class="col-md-12">
@@ -123,7 +123,12 @@
               Cancelar
             </button>
 
-            <button mat-raised-button class="ml20" color="primary">
+            <button
+              mat-raised-button
+              [disabled]="!myForm.valid"
+              class="ml20"
+              color="primary"
+            >
               <mat-icon>save</mat-icon>
               Guardar
             </button>
@@ -381,8 +386,14 @@
                     <mat-card-subtitle>Serie: {{ w.serie }} </mat-card-subtitle>
                   </mat-card-header>
                   <br />
-                  <mat-card-content class="content"
-                    >Fecha:
+                  Usuario:
+                  <span>
+                    {{ getUsernameById(w.userId) }}
+                  </span>
+                  <mat-card-content class="content">
+                    <br />
+
+                    Fecha:
                     <span>{{ w.date | date : "dd/MM/yy HH:mm" }}</span>
                   </mat-card-content>
                 </mat-list>
@@ -391,6 +402,7 @@
 
             <div class="mt20 container text-center">
               <button
+                [disabled]="rolLogin === 'ADMIN'"
                 (click)="createWorkedWeight()"
                 mat-raised-button
                 color="accent"
@@ -399,6 +411,7 @@
               </button>
 
               <button
+                *ngIf="rolLogin === 'ADMIN'"
                 class="ml10"
                 mat-raised-button
                 color="primary"

@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { WorkedWeights } from '@interfaces/index';
+import { WorkedWeight } from '@interfaces/index';
+import { ValidatorService } from '@services/validator.service';
 
 import * as _ from 'lodash';
 import Swal from 'sweetalert2';
@@ -14,15 +14,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./weight-dialog.component.css'],
 })
 export class WeightDialogComponent implements OnInit {
-  weightFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+  myForm: FormGroup = this.fb.group({
+    serie: [undefined, Validators.required],
+    weight: [undefined, Validators.required],
+    // Agrega las otras propiedades y validaciones aquí
+  });
 
   constructor(
     private dialogRef: MatDialogRef<WeightDialogComponent>,
-    private snack: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public workedWeights: WorkedWeights
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
+    @Inject(MAT_DIALOG_DATA) public workedWeights: WorkedWeight
   ) {}
 
   ngOnInit(): void {}
@@ -31,28 +33,27 @@ export class WeightDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  // validateFields(): boolean {
   validateFields(): void {
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value;
+
+    this.workedWeights.serie = formValues['serie'];
+    this.workedWeights.weight = formValues['weight'];
+
+    // debugger;
+
+    if (!this.workedWeights) return;
+
     if (
       _.isUndefined(this.workedWeights.serie) ||
       this.workedWeights.serie <= 0
     ) {
-      // this.snack.open(
-      //   'El numero de serie no es correcto. (0 o menor)',
-      //   'Aceptar',
-      //   {
-      //     duration: 3000,
-      //     verticalPosition: 'top',
-      //     horizontalPosition: 'right',
-      //   }
-      // );
-
       Swal.fire(
         'Error:',
         'El numero de serie no es correcto (0 o menor) y no se ha podido introducir.... ',
         'error'
       );
-      // return true;
       return;
     }
 
@@ -65,19 +66,15 @@ export class WeightDialogComponent implements OnInit {
         'El peso introducido no es correcto. (0 o menor)...',
         'error'
       );
-      // this.snack.open(
-      //   'El peso en la serie no es correcto (0 o menor) y no se ha podido introducir....',
-      //   'Aceptar',
-      //   {
-      //     duration: 3000,
-      //     verticalPosition: 'top',
-      //     horizontalPosition: 'right',
-      //   }
-      // );
-      // return true;
       return;
     }
+  }
 
-    // return false;
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }

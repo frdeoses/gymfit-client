@@ -1,3 +1,49 @@
-.example-spacer{
+/* .example-spacer{
     flex: 1 1 auto;
+} */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: black;
+  color: red;
+}
+
+.toolbar-icon {
+  margin-right: 20px; /* Espaciado entre iconos */
+}
+
+.toolbar-spacer {
+  flex: 1; /* Empuja los siguientes elementos hacia el extremo derecho */
+}
+
+.auth-link {
+  /* padding: 10px 15px; Asegura espacio adecuado alrededor del texto */
+  min-width: 85px; /* Asegura un ancho mínimo para cada enlace */
+  white-space: nowrap; /* Evita que los textos se partan */
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1024px) {
+  .auth-link {
+    margin-right: 10px; /* Aumenta el margen en pantallas grandes */
+    min-width: 100px; /* Asegura un ancho mínimo para cada enlace */
+  }
+}
+
+@media (max-width: 600px) {
+  .toolbar-icon {
+    margin-right: 10px; /* Reducción del margen derecho en pantallas pequeñas */
+  }
+
+  .auth-link, .favorite-icon {
+    margin-right: 5px; /* Reducción del margen para enlaces de autenticación y botones */
+    min-width: 0px;
+    /* padding: 5px; Ajuste del padding para que los botones no sean demasiado grandes */
+  }
+
+  .favorite-icon {
+    margin-right: 10px; /* Un poco más de margen para el último ícono si es necesario */
+  }
 }

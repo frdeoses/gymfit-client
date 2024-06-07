@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { Comment } from '@interfaces/index';
+import { CommentDto } from '@interfaces/calendars/comment-dto.interface';
 
 @Component({
   selector: 'app-comment-dialog',
@@ -11,7 +11,7 @@ import { Comment } from '@interfaces/index';
 export class CommentDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CommentDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public comment: Comment
+    @Inject(MAT_DIALOG_DATA) public commentDto: CommentDto
   ) {}
 
   ngOnInit(): void {}

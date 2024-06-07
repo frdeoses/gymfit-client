@@ -38,16 +38,9 @@ export class RegisterComponent implements OnInit {
           Validators.minLength(9),
         ],
       ],
-      birthDate: [
-        undefined,
-        [
-          Validators.required,
-          // this.validarFecha
-        ],
-      ],
+      birthDate: [undefined, [Validators.required]],
       height: [],
       weight: [],
-      authorities: [],
       // Agrega las otras propiedades y validaciones aquí
     },
     {
@@ -58,18 +51,7 @@ export class RegisterComponent implements OnInit {
     }
   );
 
-  user: User = {
-    //   // Inicializa los valores del modelo aquí si es necesario
-    username: '',
-    password: '',
-    name: '',
-    surname: '',
-    email: '',
-    phone: '',
-    birthDate: new Date(),
-    authorities: [],
-    userRoles: [],
-  };
+  user?: User;
 
   constructor(
     private userService: UserService,
@@ -103,7 +85,8 @@ export class RegisterComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-        const message = error.error.error || 'Error en el sistema';
+        const message =
+          error.error.error || 'Error la registrar usuario en el sistema';
         Swal.fire('Error:', message, 'error');
       }
     );

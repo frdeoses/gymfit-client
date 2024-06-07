@@ -14,6 +14,7 @@
           <!-- TODO: LLevar a una clase el estilo -->
 
           <h1
+            *ngIf="user"
             style="
               background: aliceblue;
               border-radius: 20px;
@@ -28,7 +29,7 @@
           <div class="col-md-4 text-center">
             <mat-card-title class="mt20"> Usuario:</mat-card-title>
             <mat-card-content>
-              {{ user.username }}
+              {{ user!.username }}
             </mat-card-content>
           </div>
           <div class="col-md-4 text-center">
@@ -38,31 +39,35 @@
           <div class="col-md-4 text-center">
             <mat-card-title class="mt20"> Rol:</mat-card-title>
 
-            <mat-card-content>
+            <mat-card-content *ngIf="user">
               <span>
-                {{ user.authorities[0].authority }}
+                {{ userRole }}
               </span>
             </mat-card-content>
           </div>
           <div class="col-md-3 text-center">
             <mat-card-title class="mt20"> Nombre:</mat-card-title>
             <mat-card-content>
-              {{ user.name }}
+              {{ user?.name }}
             </mat-card-content>
           </div>
           <div class="col-md-3 text-center">
             <mat-card-title class="mt20"> Apellidos:</mat-card-title>
-            <mat-card-content> {{ user.surname }} </mat-card-content>
+            <mat-card-content>
+              {{ user?.surname }}
+            </mat-card-content>
           </div>
           <div class="col-md-3 text-center">
             <mat-card-title class="mt20"> Correo:</mat-card-title>
             <mat-card-content>
-              {{ user.email }}
+              {{ user?.email }}
             </mat-card-content>
           </div>
           <div class="col-md-3 text-center">
             <mat-card-title class="mt20"> Teléfono:</mat-card-title>
-            <mat-card-content> {{ user.phone }} </mat-card-content>
+            <mat-card-content>
+              {{ user?.phone }}
+            </mat-card-content>
           </div>
         </div>
       </div>
@@ -70,7 +75,7 @@
     <mat-card-actions class="text-center">
       <button
         mat-raised-button
-        [routerLink]="'/admin/users/' + user.id"
+        [routerLink]="'/admin/users/' + user!.id"
         (click)="modeEdit()"
         color="primary"
       >

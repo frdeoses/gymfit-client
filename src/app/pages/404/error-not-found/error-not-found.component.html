@@ -4,11 +4,7 @@
       <img src="../../../../assets/gif/404-error-doodle-animation.gif" />
       <div class="container text-center">
         <button
-          *ngIf="
-            loginService.isLoggedIn() &&
-            user.userRoles &&
-            user.userRoles[0].roleList === 'USER'
-          "
+          *ngIf="loginService.isLoggedIn() && userRole === 'USER'"
           mat-icon-button
           color="primary"
           routerLink="/user-dashboard"
@@ -16,11 +12,7 @@
           <mat-icon mat-list-icon>home</mat-icon> Inicio
         </button>
         <button
-          *ngIf="
-            loginService.isLoggedIn() &&
-            user.userRoles &&
-            user.userRoles[0].roleList === 'ADMIN'
-          "
+          *ngIf="loginService.isLoggedIn() && userRole === 'ADMIN'"
           mat-icon-button
           color="primary"
           routerLink="/admin"

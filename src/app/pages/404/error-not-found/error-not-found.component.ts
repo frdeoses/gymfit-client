@@ -11,30 +11,16 @@ import { LoginService } from '@services/login/login.service';
 })
 export class ErrorNotFoundComponent implements OnInit {
   isLoggedIn: boolean = false;
-  user: User = {
-    id: undefined,
-    name: '',
-    username: '',
-    password: '',
-    userRoles: [],
-    surname: '',
-    email: '',
-    birthDate: new Date(),
-    height: undefined,
-    phone: '',
-    authorities: [
-      {
-        authority: ' ',
-      },
-    ],
-  };
+  // user?: User;
+  userRole: string | undefined;
+
   constructor(public loginService: LoginService) {}
 
   ngOnInit(): void {
-    this.user = this.loginService.getUser();
+    this.userRole = this.loginService.getCurrentUserRole();
     this.loginService.loginStatusSubject.subscribe(() => {
       this.isLoggedIn = this.loginService.isLoggedIn();
-      this.user = this.loginService.getUser();
+      this.userRole = this.loginService.getCurrentUserRole();
     });
   }
 }

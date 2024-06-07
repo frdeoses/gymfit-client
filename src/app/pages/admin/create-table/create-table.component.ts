@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ResponseHTTP, Training, TrainingTable, User } from '@interfaces/index';
+import {
+  ResponseHTTP,
+  Training,
+  TrainingTable,
+  UserRsDto,
+} from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
 
 import { TablesService } from '@services/tables.service';
 import { TrainingService } from '@services/training.service';
@@ -41,9 +47,17 @@ export class CreateTableComponent implements OnInit {
 
   table?: TrainingTable;
 
-  trainingTypes: string[] = [];
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
   listTraining: Training[] = [];
-  users: User[] = [];
+  users: UserRsDto[] = [];
 
   constructor(
     private tableService: TablesService,
@@ -66,19 +80,8 @@ export class CreateTableComponent implements OnInit {
       }
     );
 
-    this.trainingService.allTrainingType().subscribe(
-      (response: ResponseHTTP<string[]>) => {
-        this.trainingTypes = response.body;
-        console.log(this.trainingTypes);
-      },
-      (error) => {
-        console.error(error);
-        Swal.fire('Error:', 'Error al cargar los tipos de ejercicios');
-      }
-    );
-
     this.userService.allRoleUser().subscribe(
-      (response: ResponseHTTP<User[]>) => {
+      (response: ResponseHTTP<UserRsDto[]>) => {
         this.users = response.body;
         console.log(this.users);
       },
@@ -114,7 +117,7 @@ export class CreateTableComponent implements OnInit {
       (error) => {
         console.error(error);
         const message = error.error.error || 'Error en el sistema';
-        Swal.fire('Error', error, 'error');
+        Swal.fire('Error', message, 'error');
       }
     );
   }
