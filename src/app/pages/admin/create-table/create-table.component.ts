@@ -1,9 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TablesService } from 'src/app/services/tables/tables.service';
-import * as _ from 'lodash';
-import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import {
+  ResponseHTTP,
+  Training,
+  TrainingTable,
+  UserRsDto,
+} from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
+
+import { TablesService } from '@services/tables.service';
+import { TrainingService } from '@services/training.service';
+import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-table',
@@ -11,52 +23,110 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-table.component.css'],
 })
 export class CreateTableComponent implements OnInit {
-  table = {
-    idUser: '123',
-    name: '',
-    description: '',
-    creationDate: new Date(),
-    typeTraining: 'Pecho',
-    initDate: new Date(),
-    endDate: undefined,
-    trainingDuration: undefined,
-    breakTime: undefined,
-    observation: '',
-  };
+  myForm: FormGroup = this.fb.group(
+    {
+      name: ['', Validators.required],
+      typeTraining: ['', Validators.required],
+      description: [''],
+      breakTime: [undefined],
+      trainingDuration: [undefined],
+      listTraining: [undefined],
+      initDate: [undefined, [Validators.required]],
+      endDate: [undefined, [Validators.required]],
+      user: [''],
+      observation: [''],
+      // Agrega las otras propiedades y validaciones aquí
+    },
+    {
+      validators: [
+        this.validatorService.validarFecha('initDate'),
+        this.validatorService.validarFecha('endDate'),
+      ],
+    }
+  );
+
+  table?: TrainingTable;
+
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
+  listTraining: Training[] = [];
+  users: UserRsDto[] = [];
 
   constructor(
     private tableService: TablesService,
-    private snack: MatSnackBar,
+    private userService: UserService,
+    private trainingService: TrainingService,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.trainingService.listTraining().subscribe(
+      (response: ResponseHTTP<Training[]>) => {
+        this.listTraining = response.body;
+        console.log(this.listTraining);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error!!', 'Error al cargar los ejercicios', 'error');
+      }
+    );
+
+    this.userService.allRoleUser().subscribe(
+      (response: ResponseHTTP<UserRsDto[]>) => {
+        this.users = response.body;
+        console.log(this.users);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire('Error:', 'Error al cargar los usuarios', 'error');
+      }
+    );
+  }
 
   formSubmit() {
-    debugger;
-    if (_.isEmpty(this.table.name) || _.isNull(this.table)) {
-      this.snack.open('El titulo es obligatorio introducirlo!!', '', {
-        duration: 3000,
-      });
-      return;
-    }
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.table = {
+      ...this.table,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.table) return;
 
     this.tableService.createTable(this.table).subscribe(
-      (data: any) => {
-        this.table.name = '';
-        this.table.description = '';
+      (response: ResponseHTTP<TrainingTable>) => {
         Swal.fire(
-          'Tabla creada!!',
-          'La tabla a sido creada con éxito',
+          'Tabla de entrenamiento creada:',
+          `La table de entrenamiento '${response.body.name}' ha sido creado con éxito`,
           'success'
         );
 
         this.router.navigate(['/admin/tables']);
+        this.myForm.reset();
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error', 'Error al crear la tabla', 'error');
+        const message = error.error.error || 'Error en el sistema';
+        Swal.fire('Error', message, 'error');
       }
     );
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }

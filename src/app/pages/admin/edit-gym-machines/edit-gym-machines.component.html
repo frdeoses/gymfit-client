@@ -1,0 +1,286 @@
+<div *ngIf="!editMode" class="bootstrap-wrapper" style="padding-top: 20px">
+  <div class="container">
+    <mat-card>
+      <div class="row ml10">
+        <div class="col-md-10" style="display: flex; align-items: flex-end">
+          <div class="ml10" style="padding: 4px">
+            <img
+              src="../../../../assets/image/bench-press.png"
+              alt=""
+              class="profile-image"
+            />
+          </div>
+          <mat-card-title>
+            Consultar Máquina:
+            <span>
+              {{ myForm.controls["name"].value }}
+            </span>
+          </mat-card-title>
+        </div>
+
+        <div
+          class="col-md-2"
+          style="display: flex; align-items: flex-end; justify-content: center"
+        >
+          <button
+            *ngIf="rolLoginUser === 'ADMIN'"
+            mat-icon-button
+            color="primary"
+            class="ml20"
+          >
+            <mat-icon color="primary" (click)="modeEdit()" mat-list-icon
+              >edit</mat-icon
+            >
+          </button>
+          <button
+            class="ml10"
+            color="warn"
+            [disabled]="likeAdd"
+            (click)="like()"
+            mat-icon-button
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <mat-divider></mat-divider>
+        </div>
+
+        <br />
+
+        <div class="col-md-8">
+          <mat-card-title class="mt10">Nombre</mat-card-title>
+          <mat-card-content class="">
+            <b>
+              <i>
+                {{ myForm.controls["name"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="gymMachine" class="col-md-2 text-center">
+          <mat-card-subtitle class="mt20">Fecha de creación:</mat-card-subtitle>
+          <mat-card-content>
+            <b>
+              {{ gymMachine.creationDate | date : "dd/MM/yy " }}
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="gymMachine" class="col-md-2 text-center">
+          <mat-card-subtitle class="mt20"
+            >Última modificación:</mat-card-subtitle
+          >
+          <mat-card-content>
+            <b>
+              {{ gymMachine.lastUpdateDate | date : "dd/MM/yy " }}
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div class="col-md-6 text-center">
+          <mat-card-title class="mt10">Modelo</mat-card-title>
+          <mat-card-content class="">
+            <b>
+              <i>
+                {{ myForm.controls["model"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div class="col-md-3 text-center">
+          <mat-card-title class="mt10">Nº de maquinas</mat-card-title>
+          <mat-card-content class="">
+            <b>
+              <i>
+                {{ myForm.controls["numMachine"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div class="col-md-3 text-center">
+          <mat-card-title class="mt10">Me gusta</mat-card-title>
+          <mat-card-content class="">
+            <span>
+              <b>
+                {{ gymMachine?.like || 0 }}
+              </b>
+            </span>
+          </mat-card-content>
+        </div>
+
+        <div class="col-md-12">
+          <mat-card-title class="mt10">Descripción</mat-card-title>
+          <mat-card-content class="">
+            <span *ngIf="!gymMachine?.description">
+              {{ getMessage("description") }}
+            </span>
+            <b>
+              <i>
+                {{ myForm.controls["description"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
+
+        <div *ngIf="gymMachine" class="col-md-12 text-center">
+          <mat-card-title class="mt10">Músculos ejercitados</mat-card-title>
+          <mat-card-content class="">
+            <span *ngIf="!gymMachine?.exercisedArea">
+              {{ getMessage("exercisedArea") }}
+            </span>
+            <b>
+              <i>
+                {{ myForm.controls["exercisedArea"].value }}
+              </i>
+            </b>
+          </mat-card-content>
+        </div>
+      </div>
+
+      <div class="col-md-12 text-center">
+        <mat-card-title class="mt10">Video explicativo:</mat-card-title>
+
+        <img style="width: 40%" src="../../../../assets/gif/bench-press.gif" />
+
+        <div class="container text-center">
+          <a
+            mat-fab
+            matTooltip="Ver la máquina en YouTube"
+            color="accent"
+            href="http://youtube.com/watch?v=SiCC4ophcjI"
+          >
+            <mat-icon>ondemand_video</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<!-- Modo edición    -->
+<mat-card *ngIf="editMode">
+  <div class="bootstrap-wrapper">
+    <div class="row">
+      <div class="col-md-12">
+        <u>
+          <mat-card-title class="text-center mt20">
+            Editar Máquina</mat-card-title
+          >
+        </u>
+      </div>
+      <div class="col-md-8 offset-md-2">
+        <form [formGroup]="myForm" (ngSubmit)="editGymMachine()">
+          <mat-form-field class="w100 mt20" appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input
+              formControlName="name"
+              type="text"
+              name="name"
+              placeholder="Introduzca el título.."
+              required
+              matInput
+            />
+
+            <mat-error *ngIf="isValidField('name')">
+              {{ getFieldError("name") }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w100 mt10" appearance="fill">
+            <mat-label>Modelo</mat-label>
+            <input
+              formControlName="model"
+              type="text"
+              name="model"
+              placeholder="Introduzca el modelo de la máquina.."
+              required
+              matInput
+            />
+
+            <mat-error *ngIf="isValidField('model')">
+              {{ getFieldError("model") }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- hideToggle -->
+          <mat-expansion-panel
+            class="w100 mt10"
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                ¿Hay más maquinas de este modelo?
+              </mat-panel-title>
+              <mat-panel-description>
+                Desplegar en caso afirmativo
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+              <mat-label>Numero de maquina:</mat-label>
+              <input
+                matInput
+                formControlName="numMachine"
+                name="numMachine"
+                type="number"
+                placeholder="Introduzca el numero de maquinas con el mismo modelo..."
+              />
+            </mat-form-field>
+          </mat-expansion-panel>
+
+          <mat-form-field class="w100 mt20" appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              formControlName="description"
+              type="text"
+              name="descripción"
+              placeholder="Introduzca la descripción"
+              matInput
+              rows="8"
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="w100" appearance="fill">
+            <mat-label>Zona de trabajo</mat-label>
+            <input
+              formControlName="exercisedArea"
+              type="text"
+              name="exercisedArea"
+              placeholder="Introduzca el area de la zona que trabaja.."
+              matInput
+            />
+          </mat-form-field>
+
+          <div class="container text-center">
+            <button
+              [routerLink]="'/admin/gym-machines/' + gymMachine?.id"
+              (click)="modeConsult()"
+              mat-raised-button
+              color="accent"
+            >
+              <mat-icon>cancel</mat-icon>
+              Cancelar
+            </button>
+
+            <button
+              mat-raised-button
+              class="ml20"
+              color="primary"
+              [disabled]="!myForm.valid"
+            >
+              <mat-icon>save</mat-icon>
+
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</mat-card>

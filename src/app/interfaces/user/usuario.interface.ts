@@ -1,26 +1,14 @@
-import { IAuthority } from '../security/authority.interface';
-import { IRol } from '../security/rol.interface';
-import { IFatPercentage } from './fatPercentage.interface';
-import { IWeight } from './weight.interface';
+import { Authority } from '../security/authority.interface';
+import { Rol } from '../security/rol.interface';
+import { AnthropometricData } from './anthropometric-data.interface';
+import { PersonalData } from './personal-data.interface';
 
-export interface IUser {
+export interface User {
   id?: string;
   username: string;
-  password: string;
-  // userRols: String[];
-  name: string;
-  surname: string;
-  email: string;
-  phone: string;
-  birthDate: Date;
+  personalData: PersonalData;
   registrationDate?: Date;
-  height?: number;
   enabled?: boolean;
-  authorities: IAuthority[];
-  userRols?: IRol[];
-  listUserWeight?: IWeight[];
-  listFatPercentage?: IFatPercentage[];
-  accountNonExpired?: boolean;
-  accountNonLocked?: boolean;
-  credentialsNonExpired?: boolean;
+  authorities: Authority[];
+  anthropometricData: AnthropometricData;
 }

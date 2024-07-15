@@ -1,0 +1,9 @@
+.example-header-image{
+    background-image: url('/assets/image/training.png');
+    background-size: cover;
+
+}
+
+.flex{
+    display: flex;
+}

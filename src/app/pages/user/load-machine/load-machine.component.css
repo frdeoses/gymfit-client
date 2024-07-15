@@ -1,0 +1,8 @@
+.cursorHand{
+    cursor: pointer;
+}
+
+.example-header-image{
+    background-image: url('../../../../assets/image/gym-machine.png');
+    background-size: cover;
+}

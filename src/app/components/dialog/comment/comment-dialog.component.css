@@ -1,0 +1,13 @@
+.w100{
+    width: 100%;
+}
+
+span{
+    color: crimson;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+.ml90{
+    margin-left: 90px !important;
+}

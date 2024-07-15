@@ -2,6 +2,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@interfaces/*": ["./src/app/interfaces/*"],
+      "@services/*": ["./src/app/services/*"]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -20,7 +24,7 @@
     "typeRoots": [
       "node_modules/@types"
      ],
-    "types" : ["lodash"],
+    "types" : ["lodash","jest",],
     "module": "es2020",
     "lib": [
       "es2020",

@@ -1,3 +1,49 @@
 .w100{
     width: 100%;
 }
+
+.profile-image{
+    max-width: 150px;
+    max-height: 150px;
+    border: 2px solid gainsboro;
+    border-radius: 50%;
+}
+
+h1{
+    font-style: oblique;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.content{
+    text-align: end;
+    font-style: oblique;
+    font-family: fantasy;
+    text-decoration: overline;
+}
+
+.titleComment{
+    font-style: italic;
+    height: 15px;
+    margin-top: 50px;
+}
+
+span{
+    color: crimson;
+    font-style: oblique;
+}
+
+.cardComment{
+    background-color: aliceblue;
+    padding: 5px;
+}
+
+.example-header-image{
+    background-image: url('../../../../assets/image/membership.png');
+    background-size: cover;
+}
+
+p{
+    font-family: "IBM Plex Serif Regular",serif;
+    font-size: initial;
+    font-weight: bold;
+}

@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { EventService } from 'src/app/services/event/event.service';
-import Swal from 'sweetalert2';
-import * as _ from 'lodash';
 import { Router } from '@angular/router';
+
+import { Event, ResponseHTTP } from '@interfaces/index';
+
+import { EventService } from '@services/event.service';
+import { ValidatorService } from '@services/validator.service';
+
+import * as _ from 'lodash';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-event',
@@ -11,28 +17,28 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-event.component.css'],
 })
 export class CreateEventComponent implements OnInit {
-  events: any = [];
+  myForm: FormGroup = this.fb.group({
+    title: ['', Validators.required],
+    description: [''],
+    published: [true],
+  });
+  events: Event[] = [];
 
-  eventData = {
-    title: '',
-    description: '',
-    activo: true,
-    // type: {
-    //   name: '',
-    // },
-  };
+  eventData?: Event;
 
   constructor(
     private eventService: EventService,
     private snack: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService
   ) {}
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(
-      (data: any) => {
-        this.events = data;
-        console.log(data);
+      (response: ResponseHTTP<Event[]>) => {
+        this.events = response.body;
+        console.log(response);
       },
       (error) => {
         console.error(error);
@@ -44,6 +50,17 @@ export class CreateEventComponent implements OnInit {
   saveEvent() {
     console.log(this.eventData);
 
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+
+    this.eventData = {
+      ...this.eventData,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+    };
+
+    if (!this.eventData) return;
+
     if (_.isEmpty(this.eventData.title) || _.isNull(this.eventData.title)) {
       this.snack.open('El titulo es obligatorio introducirlo...', '', {
         duration: 3000,
@@ -53,28 +70,34 @@ export class CreateEventComponent implements OnInit {
     }
 
     this.eventService.createEvent(this.eventData).subscribe(
-      (data: any) => {
-        console.log(data);
+      (response: ResponseHTTP<Event>) => {
+        console.log(response);
         Swal.fire(
           'Evento creado',
-          'El evento ha sido creado con exito!!',
+          'El evento ha sido creado con éxito!!',
           'success'
         );
-        this.eventData = {
-          activo: true,
-          description: '',
-          title: '',
-          // type: {
-          //   name: '',
-          // },
-        };
 
+        this.myForm.reset();
+
+        // FIXME: Revisar si las notificaciones
         this.router.navigate(['/admin/events']);
       },
       (error) => {
         console.error(error);
-        Swal.fire('Error', 'Error al crear el evento!!', 'error');
+        const message =
+          error.error.error ||
+          'Error en el sistema al crear el siguiente evento';
+        Swal.fire('Error:', message, 'error');
       }
     );
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
   }
 }

@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { EventService } from 'src/app/services/event/event.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { EventService } from '@services/event.service';
+import { ViewModeService } from '@services/view-mode.service';
+
+import { ResponseHTTP, Event } from '@interfaces/index';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -7,24 +13,48 @@ import Swal from 'sweetalert2';
   templateUrl: './view-events.component.html',
   styleUrls: ['./view-events.component.css'],
 })
-export class ViewEventsComponent implements OnInit {
-  events: any = [];
-  constructor(private eventService: EventService) {}
+export class ViewEventsComponent implements OnInit, OnDestroy {
+  events: Event[] = [];
+  subscription: Subscription = new Subscription();
+
+  constructor(
+    private eventService: EventService,
+
+    private viewModeService: ViewModeService
+  ) {}
 
   ngOnInit(): void {
     this.eventService.listEvents().subscribe(
-      (data: any) => {
-        this.events = data;
-        console.log(data);
+      (response: ResponseHTTP<Event[]>) => {
+        this.events = response.body;
+        console.log(response);
       },
       (error) => {
         console.error(error);
         Swal.fire('Error!!', 'Error al cargar los eventos...', 'error');
       }
     );
+
+    this.subscription = this.eventService.refresh$.subscribe(() => {
+      this.eventService.listEvents().subscribe(
+        (response: ResponseHTTP<Event[]>) => {
+          this.events = response.body;
+          console.log(response);
+        },
+        (error) => {
+          console.error(error);
+          Swal.fire('Error!!', 'Error al cargar los eventos...', 'error');
+        }
+      );
+    });
   }
 
-  deleteEvent(eventId: any) {
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    console.log('Observable cerrado');
+  }
+
+  deleteEvent(eventId: string) {
     Swal.fire({
       title: 'Eliminar evento',
       text: '¿Estas seguro de eliminar el evento?',
@@ -37,28 +67,11 @@ export class ViewEventsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.eventService.deleteEvent(eventId).subscribe(
-          () => {
-            // this.events = this.events.filter((event: any) => {
-            //   event.id != eventId;
-            // });
-
+          (response: ResponseHTTP<string>) => {
             Swal.fire(
-              'Examen eliminado',
-              'El examen ha sido eliminado correctamente...',
+              'Evento eliminado',
+              'El evento ha sido eliminado correctamente...',
               'success'
-            );
-
-            // TODO: RECARGAR TODOS LOS EVENTOS NUEVAMENTE
-            // window.location.reload();
-            this.eventService.listEvents().subscribe(
-              (data: any) => {
-                this.events = data;
-                console.log(data);
-              },
-              (error) => {
-                console.error(error);
-                Swal.fire('Error!!', 'Error al cargar los eventos...', 'error');
-              }
             );
           },
           (error) => {
@@ -68,5 +81,19 @@ export class ViewEventsComponent implements OnInit {
         );
       }
     });
+  }
+
+  /**
+   * Entrar en modo edición
+   */
+  modeEdit() {
+    this.viewModeService.modeEdit('yes');
+  }
+
+  /**
+   * Entrar en modo consulta
+   */
+  modeConsult() {
+    this.viewModeService.modeEdit('no');
   }
 }

@@ -1,0 +1,137 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import {
+  GymMachine,
+  ResponseHTTP,
+  Training,
+  UserRsDto,
+} from '@interfaces/index';
+import { TrainingTypes } from '@interfaces/trainingTypes.enum';
+import { LoginService } from '@services/login/login.service';
+
+import { MachineService } from '@services/machine.service';
+import { TrainingService } from '@services/training.service';
+import { UserService } from '@services/user.service';
+import { ValidatorService } from '@services/validator.service';
+
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-create-training',
+  templateUrl: './create-training.component.html',
+  styleUrls: ['./create-training.component.css'],
+})
+export class CreateTrainingComponent implements OnInit {
+  training?: Training;
+
+  myForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    description: [''],
+    typeTraining: [''],
+    exercisedArea: [''],
+    user: [undefined, []],
+    gymMachine: [undefined, []],
+    numRepetitions: [undefined, []],
+    numSeries: [undefined, []],
+    caloriesBurned: [undefined, []],
+    supervised: [undefined, []],
+    // Agrega las otras propiedades y validaciones aquí
+  });
+
+  users: UserRsDto[] = [];
+
+  trainingTypes: TrainingTypes[] = [
+    TrainingTypes.ABS,
+    TrainingTypes.BRAZO,
+    TrainingTypes.ESPALDA,
+    TrainingTypes.HOMBRO,
+    TrainingTypes.PECHO,
+    TrainingTypes.PIERNAS,
+  ];
+
+  gymMachines: GymMachine[] = [];
+
+  constructor(
+    private trainingService: TrainingService,
+    private loginService: LoginService,
+    private machineService: MachineService,
+    private userService: UserService,
+    private fb: FormBuilder,
+    private validatorService: ValidatorService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.machineService.listGymMachines().subscribe(
+      (response: ResponseHTTP<GymMachine[]>) => {
+        this.gymMachines = response.body;
+        console.log(this.gymMachines);
+      },
+      (error) => {
+        console.error(error);
+        Swal.fire(
+          'Error:',
+          'Error al cargar las maquinas de ejercicios',
+          'error'
+        );
+      }
+    );
+
+    this.userService.allRoleUser().subscribe(
+      (response: ResponseHTTP<UserRsDto[]>) => {
+        this.users = response.body;
+        console.log(this.users);
+      },
+      (error) => {
+        console.error(error);
+        const message = error.error.error || 'Error en el sistema';
+
+        Swal.fire('Error', message, 'error');
+      }
+    );
+  }
+
+  createTraining() {
+    this.myForm.markAllAsTouched();
+
+    const formValues = this.myForm.value; // Obtén todos los valores del formulario
+    this.training = {
+      ...this.training,
+      ...formValues, // Actualiza el objeto user con los valores del formulario
+      userId: this.loginService.getUser().id,
+    };
+
+    if (!this.training) return;
+
+    this.trainingService.createTraining(this.training).subscribe(
+      (trainingData: ResponseHTTP<Training>) => {
+        Swal.fire(
+          'Entrenamiento creado:',
+          `El entrenamiento '${trainingData.body.name}' ha sido creado con éxito`,
+          'success'
+        );
+
+        this.router.navigate(['/admin/trainings']);
+
+        this.myForm.reset();
+      },
+      (error) => {
+        console.error(error);
+        const message =
+          error.error.error ||
+          'Error en el sistema al intentar crear un ejercido...';
+        Swal.fire('Error:', message, 'error');
+      }
+    );
+  }
+
+  isValidField(field: string) {
+    return this.validatorService.isValidField(this.myForm, field);
+  }
+
+  getFieldError(field: string) {
+    return this.validatorService.getFieldError(field, this.myForm);
+  }
+}

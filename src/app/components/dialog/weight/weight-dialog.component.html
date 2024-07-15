@@ -1,0 +1,45 @@
+<h1 class="text-center" mat-dialog-title>Introducir peso trabajado</h1>
+<div mat-dialog-content>
+  <p>Introduce con que peso vas a trabajar...</p>
+  <form [formGroup]="myForm">
+    <mat-form-field class="w100" appearance="fill">
+      <mat-label>Serie</mat-label>
+      <input
+        required
+        name="serie"
+        type="number"
+        matInput
+        formControlName="serie"
+      />
+      <mat-error *ngIf="isValidField('serie')">
+        {{ getFieldError("serie") }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="w100 mt10" appearance="fill">
+      <mat-label>Peso</mat-label>
+      <input
+        required
+        name="weight"
+        type="number"
+        matInput
+        formControlName="weight"
+      />
+      <mat-error *ngIf="isValidField('weight')">
+        {{ getFieldError("weight") }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="w100" style="justify-content: center" mat-dialog-actions>
+  <button mat-button color="accent" (click)="onNoClick()">Cancel</button>
+  <button
+    class="ml90"
+    mat-button
+    color="primary"
+    (click)="validateFields()"
+    [mat-dialog-close]="workedWeights"
+  >
+    Añadir
+  </button>
+</div>

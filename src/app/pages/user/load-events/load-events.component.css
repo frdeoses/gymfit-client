@@ -1,0 +1,8 @@
+.example-header-image{
+    background-image: url('../../../../assets/image/evento.png');
+    background-size: cover;
+}
+
+.cursorHand{
+    cursor: pointer;
+}

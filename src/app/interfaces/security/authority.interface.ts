@@ -1,3 +1,3 @@
-export interface IAuthority {
+export interface Authority {
   authority?: string;
 }

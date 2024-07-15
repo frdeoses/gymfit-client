@@ -1,0 +1,37 @@
+<br />
+<br />
+
+<div class="bootstrap-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <div style="display: block">
+          <canvas
+            baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [type]="'bar'"
+          >
+          </canvas>
+        </div>
+      </div>
+
+      <br />
+      <div class="col-md-6 text-center">
+        <div style="display: block">
+          <canvas
+            baseChart
+            [datasets]="linealChartData"
+            [labels]="barChartLabels"
+            [options]="linealChartOptions"
+            [legend]="linealChartLegend"
+            [type]="'line'"
+          >
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

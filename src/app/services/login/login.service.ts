@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { ILoginData } from 'src/app/interfaces/login.interface';
-import { IUser } from 'src/app/interfaces/user/usuario.interface';
+import { Observable, Subject } from 'rxjs';
+
 import baseUrl from '../helper';
+
+import { UserRsDto, LoginData } from '@interfaces/index';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class LoginService {
 
   // Generar el token
 
-  public generateToken(loginData: ILoginData) {
+  public generateToken(loginData: LoginData) {
     return this.http.post(`${baseUrl[0]}/generate-token`, loginData);
   }
 
@@ -40,6 +41,8 @@ export class LoginService {
   public logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('modeView');
+    // localStorage.clear();
 
     return true;
   }
@@ -49,11 +52,11 @@ export class LoginService {
     return localStorage.getItem('token');
   }
 
-  public setUser(user: IUser) {
+  public setUser(user: UserRsDto) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  public getUser() {
+  public getUser(): UserRsDto {
     let userStr = localStorage.getItem('user');
 
     if (userStr != null) {
@@ -61,33 +64,36 @@ export class LoginService {
     }
     this.logout();
 
-    let userEmpty = {
-      id: undefined,
-      name: '',
+    return {
+      id: '',
       username: '',
-      password: '',
-      userRols: [],
-      surname: '',
-      email: '',
       birthDate: new Date(),
-      height: undefined,
+      caloriesBurned: 0,
+      email: '',
+      height: 0,
+      listUserWeight: [],
+      listFatPercentage: [],
+      heartRate: 0,
+      name: '',
       phone: '',
-      authorities: [
-        {
-          authority: ' ',
-        },
-      ],
-    };
-    return userEmpty;
+      surname: '',
+      userRoles: [],
+      weight: 0,
+    } as UserRsDto;
   }
 
-  public getUserRoles() {
-    let user = this.getUser();
+  public getCurrentUserRole(): string {
+    const user: UserRsDto = this.getUser();
 
-    return user.authorities[0].authority;
+    if (user.userRoles.length > 0) {
+      const [firstRol] = user.userRoles;
+      return firstRol.nameRole || '';
+    }
+
+    return '';
   }
 
-  public getCurrentUser() {
-    return this.http.get(`${baseUrl[0]}/current-user`);
+  public getCurrentUser(): Observable<UserRsDto> {
+    return this.http.get<UserRsDto>(`${baseUrl[0]}/current-user`);
   }
 }

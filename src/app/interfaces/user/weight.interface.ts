@@ -1,7 +1,4 @@
-export interface IWeight {
-
-    // id?: string;
-    date?: Date;
-    weight?: number;
-
+export interface Weight {
+  date?: Date;
+  weightData?: number;
 }

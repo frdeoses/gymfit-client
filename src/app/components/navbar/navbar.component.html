@@ -1,55 +1,135 @@
-<mat-toolbar color="primary">
-  <a
-    [routerLink]="'/'"
+<mat-toolbar class="toolbar">
+  <button
     mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
+    class="toolbar-icon"
+    (click)="toggleSidebar()"
+    *ngIf="isSmallScreen && isLogin"
   >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <a [routerLink]="'/'" mat-icon-button class="toolbar-icon">
     <mat-icon>sports_gymnastics</mat-icon>
   </a>
 
   <span>GYMFIT!!</span>
-  <span class="example-spacer"></span>
+  <span class="toolbar-spacer"></span>
+
   <a
-    *ngIf="!loginService.isLoggedIn()"
+    class="auth-link"
+    *ngIf="!isLogin && !isSmallScreen"
     [routerLink]="'/login'"
     mat-icon-button
-    class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
   >
     Iniciar sesión
   </a>
 
-  <a
-    *ngIf="!loginService.isLoggedIn()"
-    [routerLink]="'/register'"
+  <button
+    *ngIf="!isLogin && isSmallScreen"
     mat-icon-button
-    class="example-icon favorite-icon mr20 ml70"
-    aria-label="Example icon-button with heart icon"
+    class="auth-link favorite-icon"
+    routerLink="/admin/profile"
   >
-    Registrar
-  </a>
+    <mat-icon>supervised_user_circle</mat-icon>
+  </button>
 
   <a
-    *ngIf="loginService.isLoggedIn()"
+    class="auth-link"
+    *ngIf="!isLogin && !isSmallScreen"
+    [routerLink]="'/register'"
+    mat-icon-button
+  >
+    Registrarse
+  </a>
+
+  <button
+    *ngIf="!isLogin && isSmallScreen"
+    mat-icon-button
+    class="auth-link favorite-icon"
+    routerLink="/admin/profile"
+  >
+    <mat-icon>person_add</mat-icon>
+  </button>
+
+  <button
+    *ngIf="isLogin && role === 'ADMIN'"
+    mat-button
+    mat-icon-button
+    [matBadge]="newNotificationsCount"
+    [matBadgeHidden]="newNotificationsCount === 0"
+    matBadgeColor="warn"
+    class="mr20"
+    routerLink="/admin/notification"
+  >
+    <mat-icon mat-list-icon>notifications</mat-icon>
+  </button>
+
+  <button
+    *ngIf="isLogin && role === 'USER'"
+    mat-button
+    mat-icon-button
+    [matBadge]="newNotificationsCount"
+    [matBadgeHidden]="newNotificationsCount === 0"
+    matBadgeColor="warn"
+    class="mr20"
+    routerLink="/user-dashboard/notification"
+  >
+    <mat-icon mat-list-icon>notifications</mat-icon>
+  </button>
+
+  <button
+    *ngIf="isLogin && role === 'ADMIN' && !isSmallScreen"
+    mat-button
+    mat-icon-button
+    class="auth-link"
+    routerLink="/admin/profile"
+  >
+    admin
+  </button>
+
+  <button
+    *ngIf="isLogin && role === 'ADMIN' && isSmallScreen"
+    mat-icon-button
+    class="auth-link favorite-icon"
+    routerLink="/admin/profile"
+  >
+    <mat-icon>person_outline</mat-icon>
+  </button>
+
+  <button
+    *ngIf="isLogin && role === 'USER'"
+    mat-button
+    mat-icon-button
+    class="auth-link"
+    routerLink="/user-dashboard/profile"
+  >
+    {{ user!.username }}
+  </button>
+
+  <button
+    *ngIf="isLogin && role === 'USER' && isSmallScreen"
+    mat-icon-button
+    class="auth-link favorite-icon"
+    routerLink="/admin/profile"
+  >
+    <mat-icon>person</mat-icon>
+  </button>
+
+  <a
+    *ngIf="isLogin && !isSmallScreen"
     (click)="logout()"
     mat-icon-button
-    style="margin-right: 50px"
-    class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
+    class="auth-link"
   >
     Cerrar sesión
   </a>
 
-  <button
-    *ngIf="loginService.isLoggedIn()"
-    mat-button
+  <a
+    *ngIf="isLogin && isSmallScreen"
+    (click)="logout()"
     mat-icon-button
-    style="margin-right: 10px"
-    class="example-icon favorite-icon"
-    routerLink="'/admin/profile'"
-    aria-label="Example icon-button with heart icon"
+    class="auth-link favorite-icon"
   >
-    {{ user.username }}
-  </button>
+    <mat-icon>exit_to_app</mat-icon>
+  </a>
 </mat-toolbar>
